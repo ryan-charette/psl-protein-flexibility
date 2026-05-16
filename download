@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+.env
+.python-version
+
+# Raw third-party data and generated artifacts
+MDG_bfactor-main/
+data/processed/
+analysis/
+external/persistent_sheaf_Laplacians/
+third_party/persistent_sheaf_Laplacians/
+patches/
+*.npy
+*.npz
+
+# Generated run outputs. Curated snapshots under results/metrics are tracked.
+results/runs/
+results/hayes_protocol/
+results/hayes_protocol_*/
+results/biological_validation/
+!results/metrics/
+!results/metrics/*.csv
+
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
