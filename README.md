@@ -250,24 +250,6 @@ python scripts/run_protocol_exactness_checks.py --root . --only controls --n-est
 
 Do not treat random residue-level pooled PCC as protein-independent generalization. In these data, random residue splits produce high pooled raw-B-factor PCCs for PSL+annotation models, but the same predictions have substantially lower mean per-protein PCC. Classical structural and simple graph features also show the same pooled-metric jump under random residue splits. This is why the manuscript reports random-residue scores as Hayes-style comparability checks rather than as the primary result.
 
-## Manuscript
-
-The LaTeX source is in `paper/manuscript.tex`. It uses only standard LaTeX packages and TikZ figures, so it can be compiled with:
-
-```bash
-cd paper
-pdflatex manuscript.tex
-pdflatex manuscript.tex
-```
-
-## GitHub upload
-
-See `docs/github_upload.md`. Final repository URL:
-
-```text
-https://github.com/ryan-charette/psl-protein-flexibility
-```
-
 ## Citation
 
 Use `CITATION.cff` when citing this repository (https://github.com/ryan-charette/psl-protein-flexibility). Please also cite the PSL and MDG_bfactor papers listed in the manuscript.
