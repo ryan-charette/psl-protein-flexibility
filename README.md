@@ -26,25 +26,12 @@ The repository is intentionally structured to keep the main protein-level genera
 ```text
 .
 |-- README.md
-|-- pyproject.toml
 |-- requirements.txt
-|-- environment.yml
 |-- CITATION.cff
 |-- LICENSE
 |-- NOTICE.md
 |-- data/
 |   `-- README.md
-|-- docs/
-|   |-- methodology.md
-|   |-- rf_results.md
-|   |-- baseline_results.md
-|   |-- biological_validation_results.md
-|   |-- protocol_comparison.md
-|   |-- reproducibility.md
-|   `-- github_upload.md
-|-- paper/
-|   |-- manuscript.tex
-|   `-- manuscript.pdf
 |-- results/
 |   `-- metrics/
 |-- scripts/
