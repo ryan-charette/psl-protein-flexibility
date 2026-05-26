@@ -1,7 +1,5 @@
 # PSL Protein Flexibility
 
-This repository accompanies the manuscript "Protocol-Dependent Evaluation of Persistent Sheaf Laplacian Descriptors for Explainable Protein Flexibility Prediction".
-
 The project evaluates persistent sheaf Laplacian (PSL) descriptors for residue-level crystallographic B-factor prediction. It emphasizes protein-level validation, Hayes-style protocol comparability, SHAP attribution diagnostics, and biological validation against solvent exposure, packing, termini, and secondary-structure annotations.
 
 ## Main claims reproduced by this repository
