@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite the accompanying manuscript."
-title: "Protocol-Dependent Evaluation of Persistent Sheaf Laplacian Descriptors for Explainable Protein Flexibility Prediction"
+title: "Evaluating Persistent Sheaf Laplacian Descriptors for Protein Flexibility Prediction"
 authors:
   - family-names: Charette
     given-names: Ryan
@@ -11,7 +11,7 @@ url: "https://github.com/ryan-charette/psl-protein-flexibility"
 repository-code: "https://github.com/ryan-charette/psl-protein-flexibility"
 preferred-citation:
   type: preprint
-  title: "Protocol-Dependent Evaluation of Persistent Sheaf Laplacian Descriptors for Explainable Protein Flexibility Prediction"
+  title: "Evaluating Persistent Sheaf Laplacian Descriptors for Protein Flexibility Prediction"
   authors:
     - family-names: Charette
       given-names: Ryan
