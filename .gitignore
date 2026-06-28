@@ -8,6 +8,7 @@ __pycache__/
 
 # Environments
 .venv/
+.tox/
 .env
 .python-version
 
