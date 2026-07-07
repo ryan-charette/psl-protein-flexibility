@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "psl-protein-flexibility"
 version = "0.1.0"
-description = "Persistent sheaf Laplacian descriptors for protein flexibility prediction."
+description = "Self-contained persistent sheaf Laplacian descriptors for protein flexibility analysis."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -32,9 +32,11 @@ dependencies = [
   "scipy>=1.10",
 ]
 
+[project.scripts]
+psl-flexibility = "psl_flexibility.cli:main"
+
 [project.optional-dependencies]
 analysis = [
-  "gudhi>=3.9",
   "matplotlib>=3.7",
   "pandas>=2.0",
   "scikit-learn>=1.3",

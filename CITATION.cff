@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-message: "If you use this repository, please cite the accompanying manuscript."
-title: "Evaluating Persistent Sheaf Laplacian Descriptors for Protein Flexibility Prediction"
+message: "If you use this software, please cite the repository and accompanying JOSS manuscript."
+title: "psl-protein-flexibility: Self-contained persistent sheaf Laplacian descriptors for protein flexibility analysis"
 authors:
   - family-names: Charette
     given-names: Ryan
@@ -10,8 +10,8 @@ license: MIT
 url: "https://github.com/ryan-charette/psl-protein-flexibility"
 repository-code: "https://github.com/ryan-charette/psl-protein-flexibility"
 preferred-citation:
-  type: preprint
-  title: "Evaluating Persistent Sheaf Laplacian Descriptors for Protein Flexibility Prediction"
+  type: article
+  title: "psl-protein-flexibility: Self-contained persistent sheaf Laplacian descriptors for protein flexibility analysis"
   authors:
     - family-names: Charette
       given-names: Ryan

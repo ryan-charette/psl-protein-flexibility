@@ -44,7 +44,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from psl_flexibility.vendor.PSL import PSL  # noqa: E402
+from psl_flexibility.native_psl import PSL  # noqa: E402
 
 DATASET_DIR = ROOT / "MDG_bfactor-main" / "MDG_bfactor-main" / "datasets"
 PDB_DIR = DATASET_DIR / "365"

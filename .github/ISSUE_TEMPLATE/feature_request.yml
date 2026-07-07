@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest an improvement to the package, examples, or documentation.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Research or user need
+      description: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the API, command, documentation, or workflow change.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Mention existing workarounds or related tools if relevant.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - PDB parsing
+        - PSL feature generation
+        - Toy examples
+        - Benchmark reproduction
+        - Documentation
+        - Packaging or CI
+        - Other
+    validations:
+      required: true
