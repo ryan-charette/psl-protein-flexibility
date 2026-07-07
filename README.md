@@ -258,5 +258,5 @@ protein-grouped metrics separately for that reason.
 
 ## Citation
 
-Use `CITATION.cff` when citing this repository. The JOSS manuscript source is
+Use `CITATION.cff` when citing this repository. The manuscript source is
 in `paper/paper.md`, with references in `paper/paper.bib`.
