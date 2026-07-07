@@ -1,22 +1,30 @@
 # Notice and Third-Party Components
 
-This repository contains original analysis scripts, manuscript material, and curated metric snapshots for the PSL protein-flexibility study.
+This repository contains original software, analysis scripts, manuscript
+material, synthetic toy examples, and curated metric snapshots for PSL-based
+protein-flexibility analysis.
 
-## Upstream PSL implementation
+## Native PSL implementation
 
-The feature-generation scripts require the research implementation from:
+The maintained feature-generation path is implemented in
+`src/psl_flexibility/native_psl.py`. It reproduces the minimum PSL functionality
+needed by this project for local protein point clouds: distance-threshold
+simplicial complexes, center-labeled or constant sheaves, and degree 0, 1, and
+2 Laplacian matrices at fixed radii.
 
-- Xiaoqi Wei, `weixiaoqimath/persistent_sheaf_Laplacians`
-- https://github.com/weixiaoqimath/persistent_sheaf_Laplacians
-
-The upstream README describes the project as a pedagogical Python implementation of persistent sheaf Laplacians and notes that `charges=None` with `constant=True` computes persistent Laplacians.
-
-The upstream repository did not expose an explicit open-source license at the time this package was prepared. For publication-readiness and redistribution hygiene, this repository therefore does **not** redistribute the upstream `PSL.py` implementation. Instead, `src/psl_flexibility/vendor/PSL.py` is a small loader that imports a local copy supplied by the user. Clone the upstream repository into `external/persistent_sheaf_Laplacians/` or set `PSL_UPSTREAM_DIR` to the directory containing `PSL.py`.
+No third-party `PSL.py` source file is copied, vendored, or required at runtime.
+The implementation is informed by the persistent sheaf Laplacian literature
+cited in `paper/paper.md`.
 
 ## External data
 
-Raw protein structures, B-factor labels, and annotation tables are expected from the MDG_bfactor project and are not included in this repository. Place those files locally under `MDG_bfactor-main/` as described in `data/README.md`.
+Raw protein structures, B-factor labels, and annotation tables used for the full
+benchmark analyses are expected from the MDG_bfactor project and are not
+included in this repository. Place those files locally under
+`MDG_bfactor-main/` as described in `data/README.md`.
 
 ## Generated artifacts
 
-Generated PSL matrices (`*.npy`) and full prediction CSVs can be regenerated from the scripts and should not be committed unless intentionally stored with Git LFS.
+Generated PSL matrices (`*.npy`), feature CSVs, toy-demo outputs, and full
+prediction tables can be regenerated from the scripts and should not be
+committed unless intentionally stored with Git LFS.

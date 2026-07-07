@@ -1,40 +1,151 @@
 # PSL Protein Flexibility
 
-This repository accompanies the manuscript "Evaluating Persistent Sheaf Laplacian Descriptors for Protein Flexibility Prediction".
+`psl-protein-flexibility` generates persistent sheaf Laplacian (PSL)
+descriptors from protein C-alpha geometry for residue-level flexibility
+modeling. The package can be used on a directory of ordinary PDB files, writes
+per-residue feature tables with residue identifiers and B-factors, and includes
+a small synthetic demo that runs without downloading the MDG_bfactor benchmark
+dataset.
 
-The project evaluates persistent sheaf Laplacian (PSL) descriptors for residue-level crystallographic B-factor prediction. It emphasizes protein-level validation, Hayes-style protocol comparability, SHAP attribution diagnostics, and biological validation against solvent exposure, packing, termini, and secondary-structure annotations.
+The repository also contains the scripts and metric snapshots used for the
+accompanying protein-flexibility study, but the maintained software path is now
+self-contained: no upstream `PSL.py` file or external research-code checkout is
+required.
 
-## Main claims reproduced by this repository
+## What the software does
 
-The curated metric snapshots in `results/metrics/` summarize the final analyses:
+- Parses C-alpha coordinates and B-factors from PDB files.
+- Builds local center-labeled or constant-sheaf PSL descriptors around each
+  residue at user-selected radii.
+- Uses a native distance-threshold simplicial complex implementation with
+  degree 0, 1, and 2 Laplacian accessors.
+- Writes reviewer-friendly CSV outputs containing protein ID, residue metadata,
+  raw B-factor, within-protein z-scored B-factor, and PSL feature columns.
+- Provides a bundled toy demo with synthetic PDB files and a tiny
+  leave-one-protein-out ridge-regression smoke test.
 
-| Analysis | Main result |
-|---|---:|
-| Main center-labeled PSL, grouped protein CV, within-protein normalized B | mean per-protein PCC 0.602; pooled PCC 0.571 |
-| PSL+SHAP attribution model | absolute-attribution PCC 0.482; top-20% Jaccard 0.338 |
-| Baseline, aligned 274-protein subset | PSL 0.608, classical structural 0.575, simple graph 0.629, classical+PSL 0.627 |
-| Hayes Table 1-style PSL-only audit | pooled OLS 0.520-0.555; per-protein OLS 0.707 |
-| Hayes blind-style raw-B protein split | GBDT 0.605; RF 0.600 mean per-protein PCC |
-| Hayes random residue raw-B split | GBDT 0.853; RF 0.898 pooled PCC |
-| Random-residue aggregation audit | mean per-protein PCC only 0.606 and 0.636 |
-| Split-dependence controls | classical and graph features also reach pooled random-residue PCC near 0.85 |
+## Quick start
 
-The repository is intentionally structured to keep the main protein-level generalization result separate from raw-B-factor protocol comparability checks.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -U pip
+pip install -e ".[test]"
+pytest
+```
+
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+## Run the toy demo
+
+The demo uses three synthetic PDB files under `examples/toy_proteins/`.
+
+```bash
+python scripts/run_toy_demo.py
+```
+
+This writes:
+
+```text
+data/toy/processed/
+|-- toy_psl_features.csv
+|-- toy_demo_metrics.csv
+|-- toy_demo_summary.json
+|-- feature_config.json
+`-- feature_names.json
+```
+
+The demo is a smoke test, not a scientific benchmark. It verifies that a fresh
+checkout can parse PDB files, compute PSL features, and run a small grouped
+modeling workflow without the full MDG_bfactor data.
+
+## Generate features for your own proteins
+
+Place PDB files in a directory and run:
+
+```bash
+python scripts/compute_psl_features.py \
+  --pdb-dir path/to/pdb_files \
+  --out-dir data/my_psl_features \
+  --radii 6,9,12 \
+  --sheaf center_labeled \
+  --stats both
+```
+
+The same functionality is available after installation as:
+
+```bash
+psl-flexibility features \
+  --pdb-dir path/to/pdb_files \
+  --out-dir data/my_psl_features
+```
+
+Important options:
+
+| Option | Meaning |
+|---|---|
+| `--radii 6,9,12` | Neighborhood radii in Angstrom. |
+| `--sheaf center_labeled` | Label the target residue as 0 and neighbors as 1. Use `constant` for a constant-sheaf baseline. |
+| `--stats both` | Write max, min, mean, median, standard deviation, and zero-eigenvalue count. |
+| `--degrees 0` | PSL degrees to summarize. Degrees `1` and `2` are available for exploratory use. |
+| `--p-widths 0.0` | Optional distance-weight damping values for sensitivity checks. |
+
+The main CSV output is `psl_features.csv`. Each row is one C-alpha residue with
+the columns:
+
+```text
+protein_id,residue_index,chain_id,residue_number,insertion_code,residue_name,
+b_factor,z_b_factor,<PSL feature columns...>
+```
+
+## Python API
+
+```python
+from pathlib import Path
+
+from psl_flexibility.features import FeatureConfig, feature_names, features_for_residues
+from psl_flexibility.structure import parse_ca_pdb
+
+records = parse_ca_pdb(Path("examples/toy_proteins/toy_alpha.pdb"))
+config = FeatureConfig(radii=(6.0, 9.0, 12.0), sheaf="center_labeled", stats="both")
+features = features_for_residues(records, config)
+names = feature_names(config)
+```
+
+## Native PSL implementation
+
+The original analysis depended on a separate research implementation of
+persistent sheaf Laplacians. To keep this repository redistributable and useful
+for JOSS review, the needed feature-generation path is now implemented natively
+in `psl_flexibility.native_psl`.
+
+The native implementation intentionally focuses on the repository's required
+use case: local protein point clouds and spectral summaries at fixed radii. It
+accepts the small compatibility surface used by the original scripts
+(`build_filtration`, `build_simplicial_pair`, `build_matrices`, `psl_0`,
+`psl_1`, and `psl_2`) and constructs a Euclidean distance-threshold
+Vietoris-Rips style complex. `filtration_type="alpha"` is accepted by the
+compatibility class as an alias, but no external GUDHI or upstream `PSL.py`
+dependency is required.
 
 ## Repository layout
 
 ```text
 .
 |-- README.md
-|-- requirements.txt
-|-- CITATION.cff
-|-- LICENSE
-|-- NOTICE.md
-|-- data/
-|   `-- README.md
-|-- results/
-|   `-- metrics/
+|-- pyproject.toml
+|-- paper/
+|   |-- paper.md
+|   `-- paper.bib
+|-- examples/
+|   `-- toy_proteins/
 |-- scripts/
+|   |-- compute_psl_features.py
+|   |-- run_toy_demo.py
 |   |-- generate_psl_features.py
 |   |-- psl_variant_experiment.py
 |   |-- run_rf.py
@@ -44,17 +155,25 @@ The repository is intentionally structured to keep the main protein-level genera
 |   `-- run_biological_validation.py
 |-- src/
 |   `-- psl_flexibility/
+|       |-- cli.py
+|       |-- demo.py
+|       |-- features.py
 |       |-- metrics.py
+|       |-- native_psl.py
 |       |-- paths.py
-|       `-- vendor/PSL.py
-`-- tests/
+|       `-- structure.py
+|-- tests/
+`-- results/
+    `-- metrics/
 ```
 
-Large derived files are not tracked. Generated PSL matrices, full prediction tables, and raw third-party data should stay outside Git history.
+Generated feature matrices, prediction tables, and toy-demo outputs should stay
+out of Git history.
 
-## Data and third-party code requirements
+## Reproducing the manuscript analyses
 
-The scripts expect the MDG_bfactor project to be placed at the repository root:
+The full study used the MDG_bfactor dataset, which is not redistributed here.
+To reproduce those benchmark analyses, place the dataset at:
 
 ```text
 MDG_bfactor-main/
@@ -69,42 +188,7 @@ MDG_bfactor-main/
       features-blind-prediction/*.csv
 ```
 
-PSL feature generation also requires the upstream PSL research implementation. To avoid redistributing third-party code without explicit licensing terms, this repository ships a loader and expects the upstream `PSL.py` to be supplied locally:
-
-```bash
-git clone https://github.com/weixiaoqimath/persistent_sheaf_Laplacians.git \
-  external/persistent_sheaf_Laplacians
-```
-
-Alternatively, set `PSL_UPSTREAM_DIR` to a directory containing `PSL.py`. Raw structures, annotation tables, and generated PSL matrices are not redistributed here. See `data/README.md` and `docs/attribution.md` for provenance.
-
-## Environment setup
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -U pip
-pip install -r requirements.txt
-pip install -e .
-```
-
-Optional XGBoost experiments require:
-
-```bash
-pip install xgboost
-```
-
-Run the lightweight tests:
-
-```bash
-pytest
-```
-
-These tests do not require the external MDG_bfactor data or upstream PSL implementation; feature-generation scripts require both.
-
-## Reproducing the main analyses
-
-### 1. Generate center-labeled PSL features
+Generate the main center-labeled PSL feature set:
 
 ```bash
 python scripts/psl_variant_experiment.py \
@@ -117,9 +201,7 @@ python scripts/psl_variant_experiment.py \
   --out-dir data/processed/features_psl_labeled_6_9_12_both
 ```
 
-The center-labeled construction assigns label 0 to the target C-alpha atom and label 1 to neighboring C-alpha atoms in the local neighborhood. The primary descriptor uses degree-0 PSL spectra at 6, 9, and 12 Angstrom and summarizes each spectrum by max, min, mean, median, standard deviation, and zero-eigenvalue count.
-
-### 2. Main protein-level RF evaluation
+Run the main grouped protein-level Random Forest evaluation:
 
 ```bash
 python scripts/run_rf.py \
@@ -135,106 +217,30 @@ python scripts/run_rf.py \
   --no-shap
 ```
 
-### 3. SHAP attribution benchmark
+Additional scripts reproduce the baseline comparisons, biological validation,
+SHAP attribution workflow, and Hayes-style protocol checks described in
+`paper/paper.md`.
 
-```bash
-python scripts/run_rf.py \
-  --feature-source psl \
-  --psl-dir data/processed/features_psl_labeled_6_9_12_both \
-  --run-name psl_labeled_6_9_12_both_shap_25tree \
-  --folds 5 \
-  --n-estimators 25 \
-  --max-depth 8 \
-  --min-samples-leaf 2 \
-  --max-features sqrt \
-  --n-jobs 1
-```
+## Curated metric snapshots
 
-### 4. Baseline comparisons
+The tracked files under `results/metrics/` summarize the manuscript analyses:
 
-```bash
-python scripts/run_baselines.py \
-  --psl-dir data/processed/features_psl_labeled_6_9_12_both \
-  --folds 5 \
-  --n-estimators 1000 \
-  --max-depth 12 \
-  --min-samples-leaf 2 \
-  --max-features sqrt \
-  --n-jobs 1
-```
+| Analysis | Main result |
+|---|---:|
+| Main center-labeled PSL, grouped protein CV, within-protein normalized B | mean per-protein PCC 0.602; pooled PCC 0.571 |
+| PSL+SHAP attribution model | absolute-attribution PCC 0.482; top-20% Jaccard 0.338 |
+| Baseline, aligned 274-protein subset | PSL 0.608, classical structural 0.575, simple graph 0.629, classical+PSL 0.627 |
+| Hayes Table 1-style PSL-only audit | pooled OLS 0.520-0.555; per-protein OLS 0.707 |
+| Hayes blind-style raw-B protein split | GBDT 0.605; RF 0.600 mean per-protein PCC |
+| Hayes random residue raw-B split | GBDT 0.853; RF 0.898 pooled PCC |
+| Random-residue aggregation audit | mean per-protein PCC only 0.606 and 0.636 |
+| Split-dependence controls | classical and graph features also reach pooled random-residue PCC near 0.85 |
 
-### 5. Biological validation
-
-```bash
-python scripts/run_biological_validation.py
-```
-
-### 6. Hayes-style protocol comparability
-
-Generate the two feature variants used for comparability:
-
-```bash
-python scripts/psl_variant_experiment.py \
-  --root . --dataset 365 --sheaf center_labeled \
-  --radii 6,9,12 --stat4 median --degrees 0 \
-  --out-dir data/processed/features_psl_labeled_6_9_12_median
-```
-
-```bash
-python scripts/psl_variant_experiment.py \
-  --root . --dataset 365 --sheaf center_labeled \
-  --radii 7,10,13 --stat4 std --degrees 0 \
-  --out-dir data/processed/features_psl_labeled_7_10_13_std
-```
-
-Run the protocol checks:
-
-```bash
-python scripts/hayes_protocol_runner.py \
-  --root . \
-  --psl-dir data/processed/features_psl_labeled_6_9_12_median \
-  --mode table1-lr \
-  --out-dir results/hayes_protocol
-```
-
-```bash
-python scripts/hayes_protocol_runner.py \
-  --root . \
-  --psl-dir data/processed/features_psl_labeled_7_10_13_std \
-  --mode blind-protein-kfold \
-  --feature-source annotation+psl \
-  --target raw \
-  --model gbdt \
-  --folds 10 \
-  --align bfactor-subsequence \
-  --out-dir results/hayes_protocol
-```
-
-```bash
-python scripts/hayes_protocol_runner.py \
-  --root . \
-  --psl-dir data/processed/features_psl_labeled_7_10_13_std \
-  --mode blind-atom-kfold \
-  --feature-source annotation+psl \
-  --target raw \
-  --model gbdt \
-  --folds 10 \
-  --align bfactor-subsequence \
-  --out-dir results/hayes_protocol
-```
-
-Final metric-audit scripts:
-
-```bash
-python scripts/run_protocol_exactness_checks.py --root . --only table1
-python scripts/run_protocol_exactness_checks.py --root . --only random --n-estimators 500 --folds 10 --max-depth 0
-python scripts/run_protocol_exactness_checks.py --root . --only controls --n-estimators 200 --folds 10
-```
-
-## Interpreting the protocol checks
-
-Do not treat random residue-level pooled PCC as protein-independent generalization. In these data, random residue splits produce high pooled raw-B-factor PCCs for PSL+annotation models, but the same predictions have substantially lower mean per-protein PCC. Classical structural and simple graph features also show the same pooled-metric jump under random residue splits. This is why the manuscript reports random-residue scores as Hayes-style comparability checks rather than as the primary result.
+Random residue-level pooled PCC should not be interpreted as
+protein-independent generalization. The manuscript and analysis scripts report
+protein-grouped metrics separately for that reason.
 
 ## Citation
 
-Use `CITATION.cff` when citing this repository (https://github.com/ryan-charette/psl-protein-flexibility). Please also cite the PSL and MDG_bfactor papers listed in the manuscript.
+Use `CITATION.cff` when citing this repository. The JOSS manuscript source is
+in `paper/paper.md`, with references in `paper/paper.bib`.

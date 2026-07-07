@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+.pytest_tmp/
 .ruff_cache/
 .mypy_cache/
 
@@ -15,6 +16,7 @@ __pycache__/
 # Raw third-party data and generated artifacts
 MDG_bfactor-main/
 data/processed/
+data/toy/processed/
 analysis/
 external/persistent_sheaf_Laplacians/
 third_party/persistent_sheaf_Laplacians/

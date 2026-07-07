@@ -12,7 +12,7 @@ small experiment harness for the most publication-relevant PSL variants:
 
 The center-labeled option follows the localized construction described in
 Hayes et al.: for each residue neighborhood, the center atom receives label 0
-and neighboring atoms receive label 1.  In the Wei PSL implementation this is
+and neighboring atoms receive label 1. In the native implementation this is
 represented with charges=[0,1,1,...] and constant=False.
 
 Example:
@@ -23,8 +23,7 @@ Example:
         --evaluate
 
 Notes:
-  - Requires the same dependencies as your existing PSL feature generator,
-    especially gudhi.
+  - Uses the native PSL implementation shipped in ``src/psl_flexibility``.
   - Evaluation uses 5-fold CV by protein and within-protein z-scored
     C-alpha B-factors.
 """
@@ -63,21 +62,11 @@ class Config:
 
 
 def import_psl(root: Path):
-    """Import PSL from the existing repository layout."""
-    candidate_dirs = [
-        root / "src" / "psl_flexibility" / "vendor",
-        root / "analysis",
-        root / "scripts",
-    ]
-    for d in candidate_dirs:
-        if (d / "PSL.py").exists():
-            sys.path.insert(0, str(d))
-            from PSL import PSL  # type: ignore
-            return PSL
-    raise FileNotFoundError(
-        "Could not find PSL.py under analysis/, src/psl_flexibility/vendor/, or scripts/. "
-        "Run this from the unpacked psls/ repository or pass --root correctly."
-    )
+    """Import the native PSL class from the repository package."""
+    sys.path.insert(0, str(root / "src"))
+    from psl_flexibility.native_psl import PSL
+
+    return PSL
 
 
 def parse_ca_pdb(path: Path) -> tuple[np.ndarray, np.ndarray]:

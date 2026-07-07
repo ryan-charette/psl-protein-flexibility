@@ -1,0 +1,11 @@
+HEADER    SYNTHETIC TOY C-ALPHA STRUCTURE
+ATOM      1  CA  VAL A   1       0.000   0.000   0.000  1.00 26.00           C
+ATOM      2  CA  ILE A   2       3.600   0.200   0.200  1.00 19.00           C
+ATOM      3  CA  THR A   3       7.200  -0.100   0.100  1.00 14.00           C
+ATOM      4  CA  PHE A   4      10.800   0.100   0.300  1.00 17.00           C
+ATOM      5  CA  TYR A   5       0.300   4.400   0.500  1.00 22.00           C
+ATOM      6  CA  ASN A   6       3.900   4.700   0.700  1.00 13.00           C
+ATOM      7  CA  GLU A   7       7.500   4.500   0.500  1.00 15.00           C
+ATOM      8  CA  LYS A   8      11.100   4.800   0.800  1.00 25.00           C
+TER
+END
