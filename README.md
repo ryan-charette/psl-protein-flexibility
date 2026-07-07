@@ -138,6 +138,10 @@ dependency is required.
 .
 |-- README.md
 |-- pyproject.toml
+|-- CONTRIBUTING.md
+|-- SUPPORT.md
+|-- GOVERNANCE.md
+|-- CHANGELOG.md
 |-- paper/
 |   |-- paper.md
 |   `-- paper.bib
@@ -169,6 +173,18 @@ dependency is required.
 
 Generated feature matrices, prediction tables, and toy-demo outputs should stay
 out of Git history.
+
+## Community and maintenance
+
+This is currently a single-maintainer research software project with public
+issue tracking, CI, tests, and documented contribution paths.
+
+- Use `CONTRIBUTING.md` for development setup, pull request expectations, data
+  policy, and release checklist.
+- Use `SUPPORT.md` for help and bug-reporting expectations.
+- Use `GOVERNANCE.md` for project scope, decision making, and release process.
+- Use `CODE_OF_CONDUCT.md` for conduct expectations.
+- Use `CHANGELOG.md` for release notes and notable source-level changes.
 
 ## Reproducing the manuscript analyses
 

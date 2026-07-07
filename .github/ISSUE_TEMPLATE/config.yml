@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Support guidelines
+    url: https://github.com/ryan-charette/psl-protein-flexibility/blob/main/SUPPORT.md
+    about: Read the support policy before opening a question.
