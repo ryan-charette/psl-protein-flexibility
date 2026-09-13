@@ -1,0 +1,111 @@
+{
+  "acquisition_check": {
+    "command": [
+      "scripts/fetch_data.py",
+      "--archive",
+      "C:\\Users\\ryana\\Downloads\\_Archives\\MDG_bfactor-main.zip",
+      "--data-root",
+      "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\reproduction-check\\acquired\\MDG_bfactor-main",
+      "--figure-dir",
+      "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\psl-protein-flexibility\\data\\raw\\figures"
+    ],
+    "method": "Fresh safe extraction from the original local archive; every benchmark PDB hash checked against the frozen protein manifest; existing RCSB case files verified. No network download was attempted.",
+    "result": {
+      "benchmark": {
+        "archive_sha256": "297e4480a21d69c5f81d7a4ca0827b9b460cb6198f38a37218b1c76f6f7e2693",
+        "existing_files": 0,
+        "selected_archive_members": 718,
+        "verified_protein_sources": 364,
+        "written_files": 718
+      },
+      "figures": {
+        "1ULR": {
+          "sha256": "9d8fa6b8dd35db1afd5267c6362405a8a05a153e89e7ed9a377f7b1d46fc8edc",
+          "status": "existing_verified"
+        },
+        "1X3O": {
+          "sha256": "d2397b637afa3e4f73a94c372700c3c82d82e870dedf657a0039cfc2bc88cb20",
+          "status": "existing_verified"
+        }
+      },
+      "protein_manifest_sha256": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880",
+      "status": "verified",
+      "upstream_commit": "c987feb2c45c785799685c03d270ea8053e5706d",
+      "upstream_repository": "fenghon1/MDG_bfactor",
+      "upstream_url": "https://github.com/fenghon1/MDG_bfactor/archive/c987feb2c45c785799685c03d270ea8053e5706d.zip"
+    }
+  },
+  "audit_script_tests": [
+    "Complete synthetic two-mode, two-protocol evaluation passes independent metric and fold audit",
+    "Changed per-protein PCC is rejected even after updating its output hash",
+    "Traversal, absolute and drive-qualified archive members are rejected"
+  ],
+  "counts": {
+    "n_clusters": 349,
+    "n_edges": 16,
+    "n_proteins": 364,
+    "n_residues": 78400,
+    "n_source_files": 364
+  },
+  "files": {
+    "audit.csv": {
+      "byte_identical": true,
+      "frozen_sha256": "0bc4dd773d05ace9a5d2ba626d5ac69a313917a7b22dc3e6ef6767ed26119e7e",
+      "regenerated_sha256": "0bc4dd773d05ace9a5d2ba626d5ac69a313917a7b22dc3e6ef6767ed26119e7e"
+    },
+    "folds.csv": {
+      "byte_identical": true,
+      "frozen_sha256": "a57ba3bec897859f63f36768201d470dfb63988311eacb363823d823e50d8d74",
+      "regenerated_sha256": "a57ba3bec897859f63f36768201d470dfb63988311eacb363823d823e50d8d74"
+    },
+    "proteins.csv": {
+      "byte_identical": true,
+      "frozen_sha256": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880",
+      "regenerated_sha256": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880"
+    },
+    "residues.csv": {
+      "byte_identical": true,
+      "frozen_sha256": "9176fe82b51e126e72c0f30a147f5a85ce9fa8bb995ed8c5097a49509613cc1c",
+      "regenerated_sha256": "9176fe82b51e126e72c0f30a147f5a85ce9fa8bb995ed8c5097a49509613cc1c"
+    },
+    "sequence_edges.csv": {
+      "byte_identical": true,
+      "frozen_sha256": "498ec7f54be02e7844086d806014bb6669466a2fdbb6c7a28109536368a0b212",
+      "regenerated_sha256": "498ec7f54be02e7844086d806014bb6669466a2fdbb6c7a28109536368a0b212"
+    }
+  },
+  "historical_evidence": "Original clustering and preprocessing amendments deliberately retained only in frozen study directory; absent from fresh output.",
+  "network_acquisition_check": {
+    "archive_identity_note": "Commit-named GitHub archive bytes differ from the original main-named local ZIP; all committed benchmark PDB member hashes match exactly.",
+    "checked_at_utc": "2026-09-13T11:49:03.315568+00:00",
+    "command": [
+      "python",
+      "scripts/fetch_data.py",
+      "--data-root",
+      "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\reproduction-check\\network-acquired\\MDG_bfactor-main",
+      "--skip-figures"
+    ],
+    "downloaded_archive_sha256": "7775fa97b18bd625dc1d5c86da175ac7ddf21948658f4ea96bc91e82fb9d8a9d",
+    "fetch_script_sha256": "aa31815e45783fa6ac72b187f9d7559fb3b53e2982f85dd37efeddbce4cdfce9",
+    "method": "Actual urllib HTTPS download from the commit-pinned GitHub URL, validated redirect, safe extraction into an empty scratch directory, and all364 member source hashes checked; automatic approval review permitted retrieval.",
+    "selected_archive_members": 718,
+    "status": "verified",
+    "subsequent_read_only_verification": {
+      "benchmark": {
+        "status": "existing_verified",
+        "verified_protein_sources": 364
+      },
+      "protein_manifest_sha256": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880",
+      "status": "verified",
+      "upstream_commit": "c987feb2c45c785799685c03d270ea8053e5706d",
+      "upstream_repository": "fenghon1/MDG_bfactor",
+      "upstream_url": "https://github.com/fenghon1/MDG_bfactor/archive/c987feb2c45c785799685c03d270ea8053e5706d.zip"
+    },
+    "upstream_commit": "c987feb2c45c785799685c03d270ea8053e5706d",
+    "upstream_url": "https://github.com/fenghon1/MDG_bfactor/archive/c987feb2c45c785799685c03d270ea8053e5706d.zip",
+    "verified_protein_sources": 364,
+    "written_files": 718
+  },
+  "preparation": "python scripts/prepare_dataset.py --data-root <absolute existing raw directory> --out-dir <fresh work/reproduction-check/dataset>",
+  "status": "verified"
+}

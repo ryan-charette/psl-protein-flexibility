@@ -16,6 +16,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--raw',type=Path,default=ROOT/'data/raw/MDG_bfactor-main')
     p.add_argument('--workers',type=int,default=4)
+    p.add_argument('--out',type=Path,default=ROOT/'results/study/pilot_recheck',help='New pilot outputs; original planning snapshot remains intact')
     args=p.parse_args();frames={};info=[];excluded=[]
     for line in (args.raw/'datasets/list-365.txt').read_text().splitlines():
         if not line.strip():continue
@@ -30,8 +31,8 @@ def main():
     table['stratum']=np.minimum(np.arange(len(table))*3//len(table),2)
     selected=set(table.groupby('stratum',group_keys=False).apply(lambda g:g.sort_values('hash').head(2)).protein_id)
     selected.add('1ULR')
-    out=ROOT/'data/pilot_features';out.mkdir(parents=True,exist_ok=True)
-    result=ROOT/'results/study';result.mkdir(parents=True,exist_ok=True)
+    out=ROOT/'data/pilot_features/current';out.mkdir(parents=True,exist_ok=True)
+    result=args.out;result.mkdir(parents=True,exist_ok=True)
     plan={'selection':'Two seeded-hash records from each maximum-support-size tercile, plus preset hero 1ULR',
           'proteins':sorted(selected),'eligible_proteins':len(table),'eligible_residues':int(table.n_residues.sum()),
           'maximum_support':int(table.max_support.max()),'degree1_budget_seconds':21600,'projection_safety_factor':2.,
@@ -40,7 +41,10 @@ def main():
     table.to_csv(result/'pilot_sampling_frame.csv',index=False)
     timings=[];start=time.perf_counter()
     for pid in sorted(selected):
-        row=generate_one((pid,frames[pid],str(out),True,'pilot-v1'))
+        # A pilot can be repeated after a parser or numerical implementation change.
+        import hashlib
+        signature=hashlib.sha256((ROOT/'scripts/generate_study_features.py').read_bytes()+(ROOT/'src/psl_flexibility/sheaf.py').read_bytes()+frames[pid].to_csv(index=False).encode()).hexdigest()
+        row=generate_one((pid,frames[pid],str(out),True,signature))
         timings.append(row);print(json.dumps(row),flush=True)
         pd.DataFrame(timings).to_csv(result/'pilot_timing.csv',index=False)
     perres=[t['seconds']/t['n_residues'] for t in timings if not t['cached']]

@@ -73,7 +73,8 @@ def safe_members(archive: zipfile.ZipFile, expected: dict[str, str], annotations
     seen = set()
     for info in archive.infolist():
         name = info.filename
-        if "\\" in name or "\x00" in name or ":" in name or name.startswith("/"):
+        original = info.orig_filename
+        if "\\" in original or "\x00" in original or ":" in original or original.startswith("/"):
             raise ValueError(f"Unsafe archive path: {name!r}")
         parts = PurePosixPath(name).parts
         if not parts or any(part in {"..", "."} for part in parts):
