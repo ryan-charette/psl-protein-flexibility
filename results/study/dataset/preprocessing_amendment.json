@@ -1,0 +1,243 @@
+{
+  "after_residues": 78400,
+  "altloc_records_discarded": 0,
+  "before_residues": 78223,
+  "changed_protein_ids": [
+    "1CCR",
+    "1OB4",
+    "1OB7",
+    "1U9C",
+    "1VRZ",
+    "2AH1",
+    "2BF9",
+    "2DKO",
+    "2WW7",
+    "2X25",
+    "3A0M",
+    "3BED",
+    "3FE7",
+    "3FMY",
+    "3HP4",
+    "3L41",
+    "3MEA",
+    "3MGN",
+    "3OQY",
+    "3QPA",
+    "3R6D",
+    "4DPZ",
+    "4FR9",
+    "4G14"
+  ],
+  "changes": [
+    {
+      "after_residues": 111,
+      "before_residues": 109,
+      "protein_id": "1CCR"
+    },
+    {
+      "after_residues": 16,
+      "before_residues": 5,
+      "protein_id": "1OB4"
+    },
+    {
+      "after_residues": 16,
+      "before_residues": 5,
+      "protein_id": "1OB7"
+    },
+    {
+      "after_residues": 221,
+      "before_residues": 220,
+      "protein_id": "1U9C"
+    },
+    {
+      "after_residues": 21,
+      "before_residues": 13,
+      "protein_id": "1VRZ"
+    },
+    {
+      "after_residues": 939,
+      "before_residues": 937,
+      "protein_id": "2AH1"
+    },
+    {
+      "after_residues": 36,
+      "before_residues": 35,
+      "protein_id": "2BF9"
+    },
+    {
+      "after_residues": 253,
+      "before_residues": 252,
+      "protein_id": "2DKO"
+    },
+    {
+      "after_residues": 150,
+      "before_residues": 132,
+      "protein_id": "2WW7"
+    },
+    {
+      "after_residues": 168,
+      "before_residues": 167,
+      "protein_id": "2X25"
+    },
+    {
+      "after_residues": 148,
+      "before_residues": 142,
+      "protein_id": "3A0M"
+    },
+    {
+      "after_residues": 261,
+      "before_residues": 257,
+      "protein_id": "3BED"
+    },
+    {
+      "after_residues": 91,
+      "before_residues": 88,
+      "protein_id": "3FE7"
+    },
+    {
+      "after_residues": 66,
+      "before_residues": 65,
+      "protein_id": "3FMY"
+    },
+    {
+      "after_residues": 183,
+      "before_residues": 182,
+      "protein_id": "3HP4"
+    },
+    {
+      "after_residues": 220,
+      "before_residues": 219,
+      "protein_id": "3L41"
+    },
+    {
+      "after_residues": 166,
+      "before_residues": 165,
+      "protein_id": "3MEA"
+    },
+    {
+      "after_residues": 348,
+      "before_residues": 272,
+      "protein_id": "3MGN"
+    },
+    {
+      "after_residues": 234,
+      "before_residues": 232,
+      "protein_id": "3OQY"
+    },
+    {
+      "after_residues": 197,
+      "before_residues": 196,
+      "protein_id": "3QPA"
+    },
+    {
+      "after_residues": 221,
+      "before_residues": 215,
+      "protein_id": "3R6D"
+    },
+    {
+      "after_residues": 109,
+      "before_residues": 108,
+      "protein_id": "4DPZ"
+    },
+    {
+      "after_residues": 141,
+      "before_residues": 133,
+      "protein_id": "4FR9"
+    },
+    {
+      "after_residues": 15,
+      "before_residues": 5,
+      "protein_id": "4G14"
+    }
+  ],
+  "excluded_input_counts": {
+    "CA": 16,
+    "MPT": 2,
+    "PLM": 1
+  },
+  "final_policy": {
+    "CCD_checked_date": "2026-09-13",
+    "CCD_sources": {
+      "CA": "https://www.rcsb.org/ligand/CA",
+      "DAL": "https://www.rcsb.org/ligand/DAL",
+      "DAR": "https://www.rcsb.org/ligand/DAR",
+      "DAS": "https://www.rcsb.org/ligand/DAS",
+      "DCY": "https://www.rcsb.org/ligand/DCY",
+      "DGL": "https://www.rcsb.org/ligand/DGL",
+      "DIV": "https://www.rcsb.org/ligand/DIV",
+      "DLE": "https://www.rcsb.org/ligand/DLE",
+      "DLY": "https://www.rcsb.org/ligand/DLY",
+      "DPN": "https://www.rcsb.org/ligand/DPN",
+      "DPR": "https://www.rcsb.org/ligand/DPR",
+      "DTR": "https://www.rcsb.org/ligand/DTR",
+      "DVA": "https://www.rcsb.org/ligand/DVA",
+      "MPT": "https://www.rcsb.org/ligand/MPT",
+      "PLM": "https://www.rcsb.org/ligand/PLM"
+    },
+    "D_peptide_codes": [
+      "DAL",
+      "DAR",
+      "DAS",
+      "DCY",
+      "DGL",
+      "DIV",
+      "DLE",
+      "DLY",
+      "DPN",
+      "DPR",
+      "DTR",
+      "DVA"
+    ],
+    "D_peptide_exception": "geometry retained; sequence X; no inferred L-amino-acid parent mapping",
+    "excluded_nonpolymer_codes": [
+      "CA",
+      "MPT",
+      "PLM"
+    ],
+    "fallback": "unrecognized residue names excluded, no generic carbon-atom fallback",
+    "mapping_source": "Bio.Data.PDBData.protein_letters_3to1_extended, installed Biopython version recorded",
+    "nonpolymer_names": {
+      "CA": "calcium ion",
+      "MPT": "beta-mercaptopropionic acid",
+      "PLM": "palmitic acid"
+    }
+  },
+  "modified_input_counts": {
+    "1AC": 1,
+    "23F": 8,
+    "4CF": 2,
+    "AIB": 20,
+    "AKZ": 1,
+    "ALY": 1,
+    "CSW": 1,
+    "CSX": 1,
+    "DAL": 6,
+    "DAR": 6,
+    "DAS": 6,
+    "DCY": 12,
+    "DGL": 6,
+    "DIV": 4,
+    "DLE": 12,
+    "DLY": 1,
+    "DPN": 4,
+    "DPR": 12,
+    "DTR": 12,
+    "DVA": 5,
+    "HYP": 12,
+    "M3L": 3,
+    "MEQ": 1,
+    "MIR": 2,
+    "MLY": 12,
+    "MLZ": 6,
+    "MSE": 232,
+    "PHL": 3,
+    "PM3": 1,
+    "PRS": 6,
+    "SEP": 1,
+    "TH6": 6,
+    "TRQ": 2,
+    "TYC": 1
+  },
+  "previous_policy": "20 standard residues plus MSE/SEC/PYL/UNK only",
+  "timing": "before prediction model fitting; audited chemical identity without model scores"
+}

@@ -297,6 +297,8 @@ def run_evaluation(
         raise ValueError("Modes and their constituent blocks must be nonempty and unique")
     manifest_dir, feature_dir, out_dir = Path(manifest_dir), Path(feature_dir), Path(out_dir)
     dataset_config = json.loads((manifest_dir / "dataset_config.json").read_text())
+    if dataset_config.get("complete") is not True:
+        raise ValueError("Dataset preparation/partitions are incomplete; no models will be fitted")
     proteins, exclusions = load_study(manifest_dir, feature_dir, modes, cohort=cohort,
                                       feature_columns=feature_columns, exclude_feature_columns=exclude_feature_columns,
                                       missing=missing)

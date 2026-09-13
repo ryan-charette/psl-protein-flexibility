@@ -58,6 +58,20 @@ def test_calcium_ions_not_protein_and_altloc_tie(tmp_path):
     assert audit["excluded_nonprotein_ca"] == 1
 
 
+def test_modified_peptide_geometry_retained_nonpolymer_excluded(tmp_path):
+    path = tmp_path / "modified.pdb"
+    path.write_text(atom(1, 1, name="ALA", bfactor=10) + atom(2, 2, name="HYP", bfactor=20) +
+                    atom(3, 3, name="DIV", bfactor=30) + atom(4, 4, name="DTR", bfactor=40) +
+                    atom(5, 5, name="PLM", bfactor=50) + atom(6, 6, name="MPT", bfactor=60) +
+                    atom(7, 7, name="ZZZ", bfactor=70))
+    frame, audit = read_structure(path)
+    assert frame["residue_name"].tolist() == ["ALA", "HYP", "DIV", "DTR"]
+    assert frame["amino_acid"].tolist() == ["A", "P", "X", "X"]
+    assert frame["x"].tolist() == [1, 2, 3, 4]
+    assert audit["n_modified_residues_retained"] == 3
+    assert audit["excluded_unrecognized_or_nonpolymer_ca"] == 3
+
+
 def test_similarity_uses_sequence_and_shorter_coverage():
     result = sequence_similarity("AAAAACCCCC", "CCCCC")
     assert result["identity"] == 1
@@ -84,6 +98,15 @@ def test_short_fragments_do_not_bridge_but_complete_duplicates_group():
     assert groups["A"] != groups["B"]
     assert groups["C"] == groups["D"]
     assert len(edges) == 1 and edges.iloc[0]["edge_type"] == "exact_complete_record"
+
+
+def test_unknown_complete_duplicates_require_resolved_residue_names():
+    chains = {"A": {"A": "XXX"}, "B": {"A": "XXX"}, "C": {"A": "XXX"}}
+    tokens = {"A": {"A": ("X:DIV", "X:DTR", "X:DLY")},
+              "B": {"Q": ("X:DIV", "X:DTR", "X:DLY")},
+              "C": {"A": ("X:DIV", "X:DIV", "X:DIV")}}
+    groups, _ = cluster_sequences(chains, exact_chain_tokens=tokens)
+    assert groups["A"] == groups["B"] != groups["C"]
 
 
 def test_folds_are_order_independent_and_keep_groups_intact():

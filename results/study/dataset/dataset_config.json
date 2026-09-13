@@ -2,6 +2,7 @@
   "alignment": {
     "coverage_numerator": "aligned residue pairs",
     "exact_duplicate_control": "identical complete-record multisets of observed chain sequences grouped regardless length",
+    "exact_unknown_control": "unknown positions use their explicit three-letter residue names, not a shared X token",
     "extend_gap_score": -0.5,
     "grouping": "connected components of protein pairs with any qualifying chain pair",
     "identity_denominator": "aligned residue pairs, excluding gap columns",
@@ -18,28 +19,33 @@
     "unknown_identity": "X-X is not counted as an identity"
   },
   "annotations": "legacy annotation columns do not establish residue identity; excluded from primary modeling",
+  "audit_files_sha256": {
+    "preprocessing_amendment.json": "5cba19c0d7e7231fa846f8fee13cffc173a4c526f30cdcfe4a53d687fefd93eb",
+    "proteins_original_clustering.csv": "ee8d35a1fdc8c71a3d7c395585618cc1ee184b0c681eeb2b10db94c217d5daec"
+  },
   "biopython_version": "1.88",
   "chain_length_audit": {
     "maximum": 602,
     "median": 109.0,
-    "minimum": 1,
-    "n_chains": 561,
-    "n_chains_under50": 104,
+    "minimum": 4,
+    "n_chains": 565,
+    "n_chains_under50": 108,
     "n_multichain_records": 119,
     "n_records_all_chains_under50": 47
   },
+  "complete": true,
   "fold_policy": "descending group residue count, seeded SHA256 tie order; least-loaded fold, numeric tie order",
   "manifest_sha256": {
-    "folds.csv": "ef9884cc75d85444449374ec3226679b6be76d3b70b6ad42de7a66894efebf49",
-    "proteins.csv": "ee8d35a1fdc8c71a3d7c395585618cc1ee184b0c681eeb2b10db94c217d5daec",
-    "residues.csv": "d60c048c895f668a8ac582e2b3f2c678d11984fbead85a0a9b553bb967171105",
-    "sequence_edges.csv": "0aef7c93491da6e8bc46210b8f3c84d39bd341cd27d734cf9181666e7fa82f11"
+    "folds.csv": "a57ba3bec897859f63f36768201d470dfb63988311eacb363823d823e50d8d74",
+    "proteins.csv": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880",
+    "residues.csv": "9176fe82b51e126e72c0f30a147f5a85ce9fa8bb995ed8c5097a49509613cc1c",
+    "sequence_edges.csv": "498ec7f54be02e7844086d806014bb6669466a2fdbb6c7a28109536368a0b212"
   },
-  "n_clusters": 348,
-  "n_edges": 17,
+  "n_clusters": 349,
+  "n_edges": 16,
   "n_folds": 5,
   "n_proteins": 364,
-  "n_residues": 78223,
+  "n_residues": 78400,
   "n_source_files": 364,
   "protocol_amendment": {
     "amended_rule": "identity>=30%, coverage>=80% of each chain,>=50 aligned pairs; exact whole-record sequence duplicates also grouped",
@@ -50,8 +56,55 @@
     "timing": "before fitting any prediction model; based only on observed sequences"
   },
   "residue_key": "model_id|chain_id|residue_number|insertion_code; blank chain='_', blank insertion='.'",
+  "residue_policy": {
+    "CCD_checked_date": "2026-09-13",
+    "CCD_sources": {
+      "CA": "https://www.rcsb.org/ligand/CA",
+      "DAL": "https://www.rcsb.org/ligand/DAL",
+      "DAR": "https://www.rcsb.org/ligand/DAR",
+      "DAS": "https://www.rcsb.org/ligand/DAS",
+      "DCY": "https://www.rcsb.org/ligand/DCY",
+      "DGL": "https://www.rcsb.org/ligand/DGL",
+      "DIV": "https://www.rcsb.org/ligand/DIV",
+      "DLE": "https://www.rcsb.org/ligand/DLE",
+      "DLY": "https://www.rcsb.org/ligand/DLY",
+      "DPN": "https://www.rcsb.org/ligand/DPN",
+      "DPR": "https://www.rcsb.org/ligand/DPR",
+      "DTR": "https://www.rcsb.org/ligand/DTR",
+      "DVA": "https://www.rcsb.org/ligand/DVA",
+      "MPT": "https://www.rcsb.org/ligand/MPT",
+      "PLM": "https://www.rcsb.org/ligand/PLM"
+    },
+    "D_peptide_codes": [
+      "DAL",
+      "DAR",
+      "DAS",
+      "DCY",
+      "DGL",
+      "DIV",
+      "DLE",
+      "DLY",
+      "DPN",
+      "DPR",
+      "DTR",
+      "DVA"
+    ],
+    "D_peptide_exception": "geometry retained; sequence X; no inferred L-amino-acid parent mapping",
+    "excluded_nonpolymer_codes": [
+      "CA",
+      "MPT",
+      "PLM"
+    ],
+    "fallback": "unrecognized residue names excluded, no generic carbon-atom fallback",
+    "mapping_source": "Bio.Data.PDBData.protein_letters_3to1_extended, installed Biopython version recorded",
+    "nonpolymer_names": {
+      "CA": "calcium ion",
+      "MPT": "beta-mercaptopropionic acid",
+      "PLM": "palmitic acid"
+    }
+  },
   "seed": 20260913,
-  "structure_policy": "first model; recognized protein C-alpha atoms; altloc highest occupancy then blank/A/lexical; duplicate coordinates excluded",
+  "structure_policy": "first model; curated protein/D-peptide C-alpha atoms; altloc highest occupancy then blank/A/lexical; duplicate coordinates excluded",
   "subcohort_policy": "nested 60 then20, equal protein-count length terciles, seeded SHA256 within tercile; force1ULR/1X3O",
   "target": "C-alpha B-factor standardized within the entire protein record, ddof=0; used as target only"
 }

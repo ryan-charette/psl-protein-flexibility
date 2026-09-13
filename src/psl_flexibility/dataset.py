@@ -9,12 +9,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 from typing import Callable
 
 import numpy as np
 import pandas as pd
 from Bio.Align import PairwiseAligner, substitution_matrices
+from Bio.Data.PDBData import protein_letters_3to1_extended
 
 
 SEED = 20260913
@@ -34,14 +36,32 @@ ALIGNMENT_CONFIG = {
     "tie_policy": "first optimal alignment returned by the pinned Biopython version",
     "grouping": "connected components of protein pairs with any qualifying chain pair",
     "exact_duplicate_control": "identical complete-record multisets of observed chain sequences grouped regardless length",
+    "exact_unknown_control": "unknown positions use their explicit three-letter residue names, not a shared X token",
     "limitation": "short proteins and fragmentary homologs can remain undetected; not all-family independence",
 }
-AA_CODES = dict(zip(
+CANONICAL_AA_CODES = dict(zip(
     "ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL".split(),
     "ARNDCQEGHILKMFPSTWYV",
     strict=True,
 ))
+AA_CODES = {**CANONICAL_AA_CODES, **protein_letters_3to1_extended}
 AA_CODES.update({"MSE": "M", "SEC": "X", "PYL": "X", "UNK": "X"})
+D_PEPTIDE_NAMES = set("DIV DAL DPN DVA DCY DPR DGL DTR DAR DLE DAS DLY".split())
+# RCSB CCD classifies these explicit exceptions as D-PEPTIDE LINKING. Preserve
+# their geometry without asserting equivalence to an L-amino-acid sequence.
+AA_CODES.update({name: "X" for name in D_PEPTIDE_NAMES})
+NONPOLYMER_NAMES = {"CA", "PLM", "MPT"}
+RESIDUE_POLICY = {
+    "mapping_source": "Bio.Data.PDBData.protein_letters_3to1_extended, installed Biopython version recorded",
+    "D_peptide_exception": "geometry retained; sequence X; no inferred L-amino-acid parent mapping",
+    "D_peptide_codes": sorted(D_PEPTIDE_NAMES),
+    "excluded_nonpolymer_codes": sorted(NONPOLYMER_NAMES),
+    "CCD_sources": {name: f"https://www.rcsb.org/ligand/{name}"
+                    for name in sorted(D_PEPTIDE_NAMES | NONPOLYMER_NAMES)},
+    "CCD_checked_date": "2026-09-13",
+    "nonpolymer_names": {"CA": "calcium ion", "PLM": "palmitic acid", "MPT": "beta-mercaptopropionic acid"},
+    "fallback": "unrecognized residue names excluded, no generic carbon-atom fallback",
+}
 RESIDUE_COLUMNS = [
     "protein_id", "row_index", "residue_key", "model_id", "chain_id", "residue_number",
     "insertion_code", "residue_name", "amino_acid", "altloc", "occupancy", "atom_serial",
@@ -70,7 +90,9 @@ def read_structure(path: Path, protein_id: str | None = None) -> tuple[pd.DataFr
 
     Alternate conformers are selected by highest occupancy, then blank, A, and
     lexical altloc order. A repeated identical residue/altloc key is an error.
-    HETATM calcium ions are excluded through the recognized amino-acid names.
+    Curated modified amino acids and verified D-peptide residues are retained.
+    Calcium and nonpolymer CA-name atoms are explicitly excluded, including
+    benchmark records whose original HETATM designation was changed to ATOM.
     """
     path = Path(path)
     protein_id = protein_id or protein_id_from_path(path)
@@ -81,6 +103,8 @@ def read_structure(path: Path, protein_id: str | None = None) -> tuple[pd.DataFr
     seen_altloc: set[tuple] = set()
     discarded_models = 0
     unsupported = 0
+    excluded_names: Counter = Counter()
+    modified_records: Counter = Counter()
     for line_number, line in enumerate(path.read_text(encoding="utf-8", errors="strict").splitlines(), 1):
         if line.startswith("MODEL"):
             saw_model = True
@@ -96,9 +120,13 @@ def read_structure(path: Path, protein_id: str | None = None) -> tuple[pd.DataFr
             discarded_models += 1
             continue
         name = line[17:20].strip().upper()
-        if name not in AA_CODES:
+        element = line[76:78].strip().upper()
+        if name in NONPOLYMER_NAMES or name not in AA_CODES or element not in {"", "C"}:
             unsupported += 1
+            excluded_names[name] += 1
             continue
+        if name not in CANONICAL_AA_CODES:
+            modified_records[name] += 1
         try:
             chain = line[21].strip() or "_"
             number = int(line[22:26])
@@ -146,6 +174,10 @@ def read_structure(path: Path, protein_id: str | None = None) -> tuple[pd.DataFr
     audit = {
         "model_id": selected_model, "explicit_model_records": saw_model,
         "excluded_other_model_ca": discarded_models, "excluded_nonprotein_ca": unsupported,
+        "excluded_unrecognized_or_nonpolymer_ca": unsupported,
+        "excluded_residue_counts_json": json.dumps(dict(excluded_names), sort_keys=True),
+        "modified_input_record_counts_json": json.dumps(dict(modified_records), sort_keys=True),
+        "n_modified_residues_retained": int((~frame["residue_name"].isin(CANONICAL_AA_CODES)).sum()),
         "discarded_altloc_ca": len(seen_altloc) - len(records),
         "bfactor_mean": float(values.mean()), "bfactor_std": scale,
     }
@@ -194,6 +226,7 @@ def cluster_sequences(
     minimum_aligned_pairs: int = 50,
     reciprocal: bool = True,
     exact_duplicates: bool = True,
+    exact_chain_tokens: dict[str, dict[str, tuple[str, ...]]] | None = None,
     progress: Callable[[int, int], None] | None = None,
 ) -> tuple[dict[str, str], pd.DataFrame]:
     """Connect whole proteins if any observed-chain pair meets both cutoffs."""
@@ -212,11 +245,14 @@ def cluster_sequences(
 
     aligner = make_aligner()
     rows = []
-    signatures: dict[tuple[str, ...], str] = {}
+    signatures: dict[tuple, str] = {}
     if exact_duplicates:
         for protein in ids:
-            signature = tuple(sorted(chains[protein].values()))
-            if signature in signatures and not any("X" in sequence for sequence in signature):
+            resolved = exact_chain_tokens is not None
+            signature = (tuple(sorted(exact_chain_tokens[protein].values())) if resolved
+                         else tuple(sorted(tuple(sequence) for sequence in chains[protein].values())))
+            known = resolved or not any("X" in sequence for sequence in signature)
+            if signature in signatures and known:
                 other = signatures[signature]
                 union(other, protein)
                 length = sum(map(len, signature))
@@ -321,6 +357,12 @@ def prepare_dataset(
     import Bio
 
     data_root, out_dir = Path(data_root).resolve(), Path(out_dir).resolve()
+    previous_residues = None
+    if (out_dir / "residues.csv").exists():
+        previous_residues = pd.read_csv(out_dir / "residues.csv", keep_default_na=False)
+        original_proteins = out_dir / "proteins_original_clustering.csv"
+        if not original_proteins.exists() and (out_dir / "proteins.csv").exists():
+            original_proteins.write_bytes((out_dir / "proteins.csv").read_bytes())
     pdb_dir = data_root / "datasets" / "365"
     paths = sorted(pdb_dir.glob("*.pdb"))
     if not paths:
@@ -369,9 +411,32 @@ def prepare_dataset(
     proteins = proteins.merge(cohort.drop(columns="n_residues"), on="protein_id", validate="one_to_one")
     # These score-independent inputs can be generated while sequence grouping runs.
     out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "dataset_config.json").write_text(json.dumps({"complete": False, "status": "preparing partitions"}) + "\n")
     proteins.to_csv(out_dir / "proteins.csv", index=False)
     residues.to_csv(out_dir / "residues.csv", index=False)
     pd.DataFrame(audit_rows).to_csv(out_dir / "audit.csv", index=False)
+    if previous_residues is not None:
+        changed = []
+        comparison_columns = ["residue_key", "x", "y", "z", "b_factor", "amino_acid"]
+        for protein, new_rows in residues.groupby("protein_id", sort=True):
+            before = previous_residues[previous_residues["protein_id"] == protein][comparison_columns].reset_index(drop=True)
+            after = new_rows[comparison_columns].reset_index(drop=True)
+            if not before.equals(after):
+                changed.append({"protein_id": protein, "before_residues": len(before), "after_residues": len(after)})
+        amendment_path = out_dir / "preprocessing_amendment.json"
+        if changed or not amendment_path.exists():
+            amendment = {
+                "timing": "before prediction model fitting; audited chemical identity without model scores",
+                "previous_policy": "20 standard residues plus MSE/SEC/PYL/UNK only",
+                "final_policy": RESIDUE_POLICY, "changed_protein_ids": [r["protein_id"] for r in changed],
+                "changes": changed, "before_residues": len(previous_residues), "after_residues": len(residues),
+                "modified_input_counts": dict(sum((Counter(json.loads(r["modified_input_record_counts_json"]))
+                                                   for r in protein_rows), Counter())),
+                "excluded_input_counts": dict(sum((Counter(json.loads(r["excluded_residue_counts_json"]))
+                                                   for r in protein_rows), Counter())),
+                "altloc_records_discarded": sum(r["discarded_altloc_ca"] for r in protein_rows),
+            }
+            amendment_path.write_text(json.dumps(amendment, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return finalize_partitions(out_dir, folds=folds, seed=seed, progress=progress)
 
 
@@ -383,11 +448,19 @@ def finalize_partitions(
     import Bio
 
     out_dir = Path(out_dir)
+    (out_dir / "dataset_config.json").write_text(json.dumps({"complete": False, "status": "preparing partitions"}) + "\n")
     proteins = pd.read_csv(out_dir / "proteins.csv", dtype={"protein_id": str})
     residues = pd.read_csv(out_dir / "residues.csv", dtype={"protein_id": str})
     audit_table = pd.read_csv(out_dir / "audit.csv", dtype={"protein_id": str})
     chains = {row.protein_id: json.loads(row.chain_sequences_json) for row in proteins.itertuples()}
-    clusters, edges = cluster_sequences(chains, progress=progress)
+    exact_tokens = {}
+    for protein, frame in residues.groupby("protein_id", sort=True):
+        exact_tokens[protein] = {
+            chain: tuple(row.amino_acid if row.amino_acid != "X" else f"X:{row.residue_name}"
+                         for row in group.sort_values("row_index").itertuples())
+            for chain, group in frame.groupby("chain_id", sort=True)
+        }
+    clusters, edges = cluster_sequences(chains, progress=progress, exact_chain_tokens=exact_tokens)
     edges.to_csv(out_dir / "sequence_edges.csv", index=False)
     sizes = dict(zip(proteins["protein_id"], proteins["n_residues"], strict=True))
     ordinary = balanced_folds(sizes, {p: p for p in sizes}, folds, seed)
@@ -397,12 +470,14 @@ def finalize_partitions(
     fold_table["protein_fold"] = fold_table["protein_id"].map(ordinary)
     fold_table["cluster_fold"] = fold_table["protein_id"].map(grouped)
     metadata = {
+        "complete": True,
         "seed": seed, "n_folds": folds, "n_source_files": len(audit_table), "n_proteins": len(proteins),
         "n_residues": len(residues), "n_clusters": len(set(clusters.values())), "n_edges": len(edges),
         "biopython_version": Bio.__version__, "alignment": ALIGNMENT_CONFIG,
         "fold_policy": "descending group residue count, seeded SHA256 tie order; least-loaded fold, numeric tie order",
         "target": "C-alpha B-factor standardized within the entire protein record, ddof=0; used as target only",
-        "structure_policy": "first model; recognized protein C-alpha atoms; altloc highest occupancy then blank/A/lexical; duplicate coordinates excluded",
+        "structure_policy": "first model; curated protein/D-peptide C-alpha atoms; altloc highest occupancy then blank/A/lexical; duplicate coordinates excluded",
+        "residue_policy": RESIDUE_POLICY,
         "residue_key": "model_id|chain_id|residue_number|insertion_code; blank chain='_', blank insertion='.'",
         "subcohort_policy": "nested 60 then20, equal protein-count length terciles, seeded SHA256 within tercile; force1ULR/1X3O",
         "annotations": "legacy annotation columns do not establish residue identity; excluded from primary modeling",
@@ -425,6 +500,9 @@ def finalize_partitions(
     if original.exists():
         metadata["protocol_amendment"]["original_edge_file_sha256"] = sha256_file(original)
         metadata["protocol_amendment"]["original_n_edges"] = len(pd.read_csv(original))
+    for filename in ["proteins_original_clustering.csv", "preprocessing_amendment.json"]:
+        if (out_dir / filename).exists():
+            metadata.setdefault("audit_files_sha256", {})[filename] = sha256_file(out_dir / filename)
     metadata["manifest_sha256"] = {name: sha256_file(out_dir / name)
                                    for name in ["proteins.csv", "residues.csv", "folds.csv", "sequence_edges.csv"]}
     (out_dir / "dataset_config.json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
