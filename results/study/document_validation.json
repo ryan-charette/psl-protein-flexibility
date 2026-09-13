@@ -109,7 +109,7 @@
     "Figure manifest hashes verified",
     "Case predictions, attributions, backgrounds, cameras, residue mapping, color limits and clipping counts unchanged",
     "Frozen numerical outputs and scientific modules unchanged",
-    "README hero PDF contains no text",
+    "README hero revised with panel titles, PCC annotation and labeled blue-white-red scales; visually inspected",
     "Documented figure regeneration and manuscript build commands completed"
   ],
   "source_files_checked_unchanged": 99

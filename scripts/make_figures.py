@@ -183,10 +183,18 @@ def persistence_figure():
 def hero_figure(pid='1ULR',readme=False):
     data=pd.read_csv(STUDY/f'cases/{pid}_values.csv',keep_default_na=False);audit=check_case_inputs(pid,render=True)
     if readme:
-        fig,axs=plt.subplots(1,3,figsize=(10.8,3.6))
-        fig.subplots_adjust(left=0,right=1,bottom=0,top=1,wspace=0)
-        for ax,name in zip(axs,('observed','predicted','shap')):
+        fig=plt.figure(figsize=(10.8,4.8))
+        for k,(name,label) in enumerate((('observed','Observed B-factor'),('predicted','Held-out prediction'),('shap','Sheaf contribution'))):
+            ax=fig.add_axes([k/3,.21,1/3,.72])
             ax.imshow(plt.imread(OUT/f'renders/{pid}_{name}.png'));ax.axis('off')
+            ax.set_title(label,fontsize=13,fontweight='bold',pad=12)
+        corr=np.corrcoef(data.z_b_factor,data.prediction_z)[0,1]
+        fig.text(.5,.185,f'Protein PCC = {corr:.3f}',ha='center',fontsize=10,color=GRAY)
+        for left,width,label,field in [(.10,.46,'Within-protein standard deviations','observed'),(.79,.20,'Signed SHAP, B-factor z units','shap')]:
+            limit=audit['rendering'][field]['mapping']['color_limits'][1]
+            cax=fig.add_axes([left,.11,width,.018])
+            fig.colorbar(ScalarMappable(norm=TwoSlopeNorm(vmin=-limit,vcenter=0,vmax=limit),cmap=CMAP),cax=cax,orientation='horizontal',ticks=[-limit,0,limit],format='%.2g')
+            cax.set_xlabel(label,fontsize=9,labelpad=3);cax.tick_params(labelsize=9,pad=2,length=3)
         save(fig,'readme_hero');return
     fig=plt.figure(figsize=(7.0,5.6))
     top=.94;bottom=.43
@@ -212,7 +220,7 @@ def hero_figure(pid='1ULR',readme=False):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    for flag in ('theory','results','cases','all'):p.add_argument('--'+flag,action='store_true')
+    for flag in ('theory','results','cases','hero','all'):p.add_argument('--'+flag,action='store_true')
     p.add_argument('--rerender',action='store_true',help='Re-render saved case values without refitting or recomputing SHAP')
     args=p.parse_args()
     if args.rerender:
@@ -221,11 +229,13 @@ def main():
         frames={pid:pd.read_csv(STUDY/f'cases/{pid}_values.csv',keep_default_na=False) for pid in ids}
         audits={pid:check_case_inputs(pid) for pid in ids}
         render_cases(frames,audits,STUDY/'cases',OUT/'renders',ROOT/'data/raw/figures')
+    if args.hero:hero_figure(readme=True)
     if args.theory or args.all:theory_figures()
     if args.results or args.all:performance_figure();persistence_figure()
     if args.cases or args.all:hero_figure();hero_figure('1X3O');hero_figure(readme=True)
+    previous=json.loads((STUDY/'figure_manifest.json').read_text(encoding='utf-8')) if (STUDY/'figure_manifest.json').exists() else {}
     manifest={'source_sha256':{str(p.relative_to(ROOT)).replace('\\','/'):sha256_file(p) for p in [Path(__file__),ROOT/'scripts/summarize_study.py',ROOT/'scripts/render_protein.py',ROOT/'src/psl_flexibility/sheaf.py']},
-        'data_sha256':{**SOURCES,'results/study/dataset/residues.csv':sha256_file(STUDY/'dataset/residues.csv')},
+        'data_sha256':{**previous.get('data_sha256',{}),**SOURCES,'results/study/dataset/residues.csv':sha256_file(STUDY/'dataset/residues.csv')},
         'exports_sha256':{str(p.relative_to(ROOT)).replace('\\','/'):sha256_file(p) for p in OUT.iterdir() if p.suffix in {'.pdf','.svg','.png'}}}
     (STUDY/'figure_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
 
