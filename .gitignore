@@ -56,3 +56,9 @@ results/study/predictions/
 results/study/shap_full/
 *.joblib
 paper/build/
+
+# Full-coordinate/prediction outputs are regenerated, not redistributed
+results/study/dataset/residues.csv
+results/study/**/predictions.csv.gz
+results/study/**/models/
+data/pilot_features/

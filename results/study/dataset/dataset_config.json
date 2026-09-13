@@ -1,0 +1,57 @@
+{
+  "alignment": {
+    "coverage_numerator": "aligned residue pairs",
+    "exact_duplicate_control": "identical complete-record multisets of observed chain sequences grouped regardless length",
+    "extend_gap_score": -0.5,
+    "grouping": "connected components of protein pairs with any qualifying chain pair",
+    "identity_denominator": "aligned residue pairs, excluding gap columns",
+    "identity_threshold": 0.3,
+    "library": "Bio.Align.PairwiseAligner",
+    "limitation": "short proteins and fragmentary homologs can remain undetected; not all-family independence",
+    "minimum_aligned_pairs": 50,
+    "mode": "local",
+    "open_gap_score": -10.0,
+    "reciprocal_sequence_coverage_threshold": 0.8,
+    "sequence_source": "observed first-model C-alpha residues, separately by chain",
+    "substitution_matrix": "BLOSUM62",
+    "tie_policy": "first optimal alignment returned by the pinned Biopython version",
+    "unknown_identity": "X-X is not counted as an identity"
+  },
+  "annotations": "legacy annotation columns do not establish residue identity; excluded from primary modeling",
+  "biopython_version": "1.88",
+  "chain_length_audit": {
+    "maximum": 602,
+    "median": 109.0,
+    "minimum": 1,
+    "n_chains": 561,
+    "n_chains_under50": 104,
+    "n_multichain_records": 119,
+    "n_records_all_chains_under50": 47
+  },
+  "fold_policy": "descending group residue count, seeded SHA256 tie order; least-loaded fold, numeric tie order",
+  "manifest_sha256": {
+    "folds.csv": "ef9884cc75d85444449374ec3226679b6be76d3b70b6ad42de7a66894efebf49",
+    "proteins.csv": "ee8d35a1fdc8c71a3d7c395585618cc1ee184b0c681eeb2b10db94c217d5daec",
+    "residues.csv": "d60c048c895f668a8ac582e2b3f2c678d11984fbead85a0a9b553bb967171105",
+    "sequence_edges.csv": "0aef7c93491da6e8bc46210b8f3c84d39bd341cd27d734cf9181666e7fa82f11"
+  },
+  "n_clusters": 348,
+  "n_edges": 17,
+  "n_folds": 5,
+  "n_proteins": 364,
+  "n_residues": 78223,
+  "n_source_files": 364,
+  "protocol_amendment": {
+    "amended_rule": "identity>=30%, coverage>=80% of each chain,>=50 aligned pairs; exact whole-record sequence duplicates also grouped",
+    "observed_failure": "one connected component for all364 proteins, preventing five-fold grouped evaluation",
+    "original_edge_file_sha256": "15c2c4a19303accb8490e703bc0b53183a6e11ea628b6bb860b83492c7550fb8",
+    "original_n_edges": 3434,
+    "original_rule": "local alignment identity>=30%, coverage>=80% of shorter chain, any chain pair",
+    "timing": "before fitting any prediction model; based only on observed sequences"
+  },
+  "residue_key": "model_id|chain_id|residue_number|insertion_code; blank chain='_', blank insertion='.'",
+  "seed": 20260913,
+  "structure_policy": "first model; recognized protein C-alpha atoms; altloc highest occupancy then blank/A/lexical; duplicate coordinates excluded",
+  "subcohort_policy": "nested 60 then20, equal protein-count length terciles, seeded SHA256 within tercile; force1ULR/1X3O",
+  "target": "C-alpha B-factor standardized within the entire protein record, ddof=0; used as target only"
+}
