@@ -1,33 +1,56 @@
-# Data Directory
+# Study data
 
-This repository does not track raw benchmark structures, generated PSL feature
-matrices, prediction tables, or toy-demo outputs.
+The study uses the benchmark structures distributed with
+[MDG_bfactor](https://github.com/fenghon1/MDG_bfactor/tree/c987feb2c45c785799685c03d270ea8053e5706d).
+The committed protein manifest records the source files and their SHA-256
+hashes. Full-atom RCSB structures for 1ULR and 1X3O provide the molecular
+renderings; the rendering code checks their residue identities and C-alpha
+coordinates against the benchmark before assigning colors.
 
-For the bundled synthetic demo, run:
+From the repository root, after installing `requirements.txt`, acquire the
+recorded inputs and run the study in this order:
 
 ```bash
-python scripts/run_toy_demo.py
+python scripts/fetch_data.py
+python scripts/prepare_dataset.py
+python scripts/generate_study_features.py --degree1
+python scripts/augment_upper_features.py
+python scripts/run_evaluations.py
+python scripts/explain_cases.py
+python scripts/make_figures.py --all
 ```
 
-The demo reads PDB files from `examples/toy_proteins/` and writes generated
-outputs to `data/toy/processed/`, which is intentionally ignored by Git.
+These commands run the full benchmark, including the degree-one persistence
+comparisons. They require substantially more time than the toy example.
+`fetch_data.py --archive path/to/MDG_bfactor.zip` can use a local copy of the
+upstream archive. `fetch_data.py --verify-only` checks existing inputs without
+downloading or writing them. Source mismatches cause an error.
 
-For the full manuscript reproduction, place the external MDG_bfactor dataset at:
+The default layout is:
 
 ```text
-MDG_bfactor-main/
-  MDG_bfactor-main/
-    datasets/
-    features/
+data/
+  raw/MDG_bfactor-main/datasets/   # Benchmark structures and annotations
+  raw/figures/                    # Full-atom 1ULR and 1X3O structures
+  features/                      # Per-protein feature matrices and provenance
+  processed/mpl-cache/            # Local plotting cache
+  toy/processed/                 # Optional synthetic smoke-demo outputs
+results/study/
+  dataset/                       # Audited manifest, residue table and frozen folds
+  core/                          # Main evaluations, predictions and saved models
+  d1/                            # Degree-one endpoint and persistence comparisons
+  cases/                         # Keyed SHAP values, background samples and audits
+paper/figures/                    # Reproducible static figures
 ```
 
-To generate PSL features for your own PDB files, use:
+Raw downloads, feature matrices, fitted models, large residue/prediction
+tables and disposable caches are ignored by Git. The repository retains the
+audited source manifest and folds, compact results, case-study explanations
+and figure provenance needed to inspect the reported analyses. Reproduction
+rebuilds the larger files locally. `run_evaluations.py --resume` reuses only
+completed evaluations whose recorded input hashes still agree.
 
-```bash
-python scripts/compute_psl_features.py \
-  --pdb-dir path/to/pdb_files \
-  --out-dir data/my_psl_features
-```
-
-The PSL implementation used by these commands is native to this repository;
-no external `PSL.py` checkout is needed.
+For a quick local smoke test, run `python scripts/run_toy_demo.py`. This uses
+the three artificial chains in `examples/toy_proteins/` and the legacy
+center-weighted graph descriptor. Its metrics do not measure performance on
+the research benchmark; see the [example notes](../examples/README.md).

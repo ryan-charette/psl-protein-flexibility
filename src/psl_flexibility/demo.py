@@ -1,4 +1,8 @@
-"""Bundled synthetic-data demo."""
+"""Synthetic smoke fixture for the historical center-weighted graph descriptor.
+
+This demo preserves the legacy feature names for regression checks. It does not
+use the corrected alpha-complex sheaf operators or evaluate the study's claims.
+"""
 
 from __future__ import annotations
 
@@ -24,7 +28,7 @@ TOY_PDB_DIR = ROOT / "examples" / "toy_proteins"
 
 
 def run_toy_demo(out_dir: Path) -> dict[str, float | int | str]:
-    """Run a small end-to-end feature-generation and regression demo."""
+    """Exercise legacy graph features and ridge regression on three toy chains."""
 
     config = FeatureConfig(radii=(4.0, 6.0, 8.0), sheaf="center_labeled", stats="both")
     names = feature_names(config)
@@ -47,6 +51,8 @@ def run_toy_demo(out_dir: Path) -> dict[str, float | int | str]:
     spearmans = np.asarray([row["spearman"] for row in metrics], dtype=float)
     rmses = np.asarray([row["rmse"] for row in metrics], dtype=float)
     summary: dict[str, float | int | str] = {
+        "data_role": "synthetic_smoke_fixture",
+        "descriptor": "legacy_center_weighted_graph_d0",
         "pdb_dir": str(TOY_PDB_DIR),
         "out_dir": str(out_dir),
         "n_proteins": len(records_and_features),
