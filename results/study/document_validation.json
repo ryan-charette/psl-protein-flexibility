@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "renderer": "PyMuPDF 1.28.2",
+  "dpi": 150,
+  "documents": {
+    "manuscript": {
+      "path": "paper/manuscript.pdf",
+      "sha256": "8d25049783f1fa7d545f3b7db8ce8025eec4cededd27770edcb5d5eb08891c9f",
+      "pages": 18,
+      "visually_reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "documented_build_matches_reviewed_render_exactly": true,
+      "missing_content_markers": false
+    },
+    "supplement": {
+      "path": "paper/supplement.pdf",
+      "sha256": "489a82f0a9fc66501d9284bda0b74670eba654cfc9c36eed21ba35f137a6fbae",
+      "pages": 8,
+      "visually_reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "documented_build_matches_reviewed_render_exactly": true,
+      "missing_content_markers": false
+    }
+  },
+  "source_sha256": {
+    "paper/generated_case_results.tex": "0eb618037d32291ee4dfc2e49899063bd27d670042a6171b23ce1cd5dd9fdf9a",
+    "paper/generated_main_results.tex": "c852b77797f484d7b08c483a6796bf7d6be6546442e5fa51fac98150b8b42119",
+    "paper/generated_persistence_results.tex": "5a0516db9951c6bf20d10818b72e3dd8a87ceca721cf8d89fb89d373c2a3ee16",
+    "paper/generated_results.tex": "9f6b83a6a7ac55d860797fd29a4c6da23ec68c8f0045c7b9bf1111b8d01068fa",
+    "paper/generated_supplement_results.tex": "2f7534487d20670c16eae5350e5e67933a46492eae63ba27e811f781d9a07c8e",
+    "paper/manuscript.tex": "98b8c7393c86099c25fb17c4e4d95dfbb9ae8e3ea5da078ea1a2fdf9906f5473",
+    "paper/supplement.tex": "c19dd6d2a07802771df453b36f334cf4c98cf7b27a013b796a791339e2396c41",
+    "paper/references.bib": "20e037d4d6ebc02118e0dcbd10775c7e01546ccceb3290e1a4eb31cd0b0c78eb"
+  },
+  "checks": [
+    "All 26 document pages visually inspected at 150 dpi",
+    "Figures also inspected separately and at final printed size",
+    "No TeX box, citation or missing-reference warnings",
+    "Documented Tectonic 0.17 build exited successfully; nonfatal Fontconfig notice did not alter rendered pages",
+    "Final build pixels match the reviewed preflight PDFs on every page"
+  ]
+}

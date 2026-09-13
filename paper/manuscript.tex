@@ -1,0 +1,336 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{graphicx,booktabs,array,tabularx}
+\usepackage[small,bf]{caption}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{placeins}
+\definecolor{ink}{HTML}{18354A}
+\definecolor{accent}{HTML}{177E89}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=accent,urlcolor=accent}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{1em}
+\setlength{\textfloatsep}{12pt plus 3pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}[proposition]{Corollary}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\calpha}{C$_\alpha$}
+\newcommand{\angstrom}{\text{\AA}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\del}{\operatorname{del}}
+\newcommand{\lk}{\operatorname{lk}}
+% The analysis pipeline writes this file. Values are never copied from an old draft.
+\input{generated_results.tex}
+\newcommand{\paperfigure}[3]{%
+\begin{figure}[tbp]\centering
+\includegraphics[width=\linewidth]{figures/#1.pdf}
+\caption{#2}\label{#3}\end{figure}}
+
+\title{\color{ink}\bfseries Interpreting Local Sheaf Spectra for Protein B-Factor Prediction}
+\author{Ryan Charette\\\small Independent researcher}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+Local spectral descriptors offer a connection between molecular geometry and residue-level crystallographic displacement, but their interpretation depends on the operator actually computed. This study characterizes two distinct center-labeled constructions and evaluates their predictive information under sequence-cluster-held-out validation. A previously used native construction is a weighted contact-graph Laplacian: its universal center introduces an explicit spectral mode, and its largest eigenvalue reduces to neighborhood size. For a rank-one cellular sheaf with a zero center label, the cochain complex instead separates into a vertex-deletion block and an augmented, geometrically weighted link block. These identities clarify which spectral summaries describe packing, neighbor organization, and local topology. A corrected alpha-complex analysis separates a fixed spatial support from the filtration scale, and a degree-one experiment uses genuine pairs of complexes and a Schur-complement persistent operator. \AbstractEmpiricalResults\ Interventional TreeSHAP explanations are computed for held-out proteins using the evaluated model, then mapped to residue coordinates with explicit feature and scale labels. The contribution is a mathematical interpretation and controlled empirical assessment of these descriptors, rather than a claim that spectral complexity alone establishes biological mechanism or superior prediction. The target remains relative crystallographic B-factor, with the limitations of that observable kept separate from properties of the representation.
+\end{abstract}
+\vspace{3pt}
+\noindent\textbf{Keywords:} cellular sheaves; persistent Laplacians; alpha complexes; protein geometry; B-factors; feature attribution
+
+\section{Introduction}
+Protein structures are commonly represented as lists of atomic coordinates, yet many useful questions concern relationships: which residues constrain one another, how a neighborhood is organized, and which parts of a molecule have comparatively high positional disorder. A contact count describes one aspect of those relationships. A graph spectrum describes a richer arrangement of contacts. A cellular sheaf adds a rule for comparing local assignments across cells, while a filtration records how a representation changes as a geometric scale is varied. Each additional construction introduces mathematical structure. Whether it introduces additional information relevant to a biological target is an empirical question.
+
+Crystallographic B-factors provide a practical setting in which to examine that question. Elastic-network models connect residue contacts to collective fluctuations through graph-based operators \citep{haliloglu1997,atilgan2001}. Flexibility--rigidity indices use distance-dependent neighborhood interactions \citep{nguyen2016}. Persistent homology and related spectral methods describe molecular organization across scales \citep{xia2014,wang2020}. These approaches make geometry accessible to computation, but their names do not by themselves specify the quantity measured. In particular, a feature computed from a matrix called a sheaf Laplacian can behave like a familiar packing statistic under a particular choice of labels and neighborhood.
+
+The present work began with a research implementation for local persistent sheaf Laplacian (PSL) descriptors and B-factor prediction. Examining the native computational path revealed a distinction between two operations that had been grouped under that terminology. One increases contact-edge weights when vertex labels differ; the other places vertex labels in face-to-coface restriction maps. For a zero-labeled center, the former strengthens center--neighbor coupling and the latter removes an entire class of couplings. These constructions cannot support the same mathematical interpretation. Moreover, changing edge weights with a parameter is different from computing a persistent operator for a pair of nested complexes. This distinction motivates treating the existing native descriptor as an explicit graph baseline and analyzing a separately specified sheaf construction.
+
+Three questions organize the study. First, what parts of the local geometry can be read directly from each operator? Second, do the corresponding spectral summaries add predictive information beyond a predefined collection of simple graph and packing features when detected related protein sequences are held out together? Third, does degree-one persistence supply information beyond that available from degree-zero spectra and endpoint scales? These questions do not require every increasingly elaborate representation to improve accuracy. A mathematical reduction, a well-supported null comparison, and a localized explanation of when a descriptor succeeds or fails can each clarify its scientific value.
+
+We therefore combine an operator audit with controlled experiments and residue-level visualization. The mathematical analysis establishes an explicit spectrum for the native universal-center graph and a block decomposition for the zero-centered sheaf. The latter is a specialization of established weighted-complex and sheaf constructions, presented for its consequences in this application rather than as a new general theory. The experiments distinguish identity, geometric, and center-zero restrictions; use a common prediction model; and evaluate incremental performance on the same held-out proteins. The visual analysis follows the same separation: observed B-factor, predicted B-factor, and signed model contributions appear as distinct quantities on the same structure.
+
+\paperfigure{fig1_protein}{The predetermined principal protein 1ULR. (a,b) Observed within-protein normalized B-factor and the held-out graph-plus-center-zero prediction on the same structure and color scale. (c) The signed sum of TreeSHAP contributions from the 24 center-zero spectral features, excluding graph contributions and the background expectation. Teal contributions lower and orange contributions raise this model's output. (d) Observed and predicted residue profiles show agreement and local errors. (e) The alpha complex at radius 4~\AA\ within the fixed 13~\AA\ support of chain A residue 43. Attributions explain the evaluated model; they are neither experimental measurements nor contributions assigned to neighboring residues.}{fig:protein}
+
+\section{Related work and the prediction target}
+\subsection{Crystallographic displacement and geometric prediction}
+For an isotropic atomic displacement parameter $U_{\mathrm{iso}}$, the crystallographic convention is $B=8\pi^2 U_{\mathrm{iso}}$. If $u$ denotes a three-dimensional isotropic displacement vector, then $U_{\mathrm{iso}}=\mathbb{E}\|u\|^2/3$. The definition of displacement therefore matters when converting between B-factors and fluctuation amplitudes. B-factors also reflect static disorder and aspects of structure determination, including refinement, occupancy, resolution, and crystal packing. Their normalization is consequential when comparing structures \citep{carugo2018}. We use the term flexibility as a motivation for the task, while defining the actual response as a within-protein B-factor profile.
+
+Geometry-based models have a long history in this setting. The Gaussian network model uses a contact-network Laplacian and its inverse-mode structure to describe equilibrium fluctuations \citep{haliloglu1997}; the anisotropic network model retains direction-dependent information \citep{atilgan2001}. Kernel-based rigidity descriptors aggregate nearby interactions without requiring a hard contact cutoff \citep{nguyen2016}. Graphlet-based work also demonstrates that local graph organization is a meaningful comparator for atomic displacement prediction \citep{praznikar2023}. Our graph baseline is a supervised predictor built from simple structural summaries, not a reimplementation of an elastic-network dynamical model. Comparing it with PSL descriptors isolates a representation question under the same regressor.
+
+Feng and colleagues developed multiscale differential-geometric descriptors and released the structural collection used here \citep{feng2025}. Their use of curvature has a specific differential-geometric definition. The eigenvalue statistics considered in this paper are instead called spectral summaries: no sectional, Gaussian, mean, or discrete Ricci curvature is implied. Hayes and colleagues applied persistent sheaf Laplacians to protein B-factors \citep{hayes2025}. Their subsequent correction changed the reported average comparison with the Gaussian network model from 32\% to 20\%, following correction of a dataset-aggregation error \citep{hayes2025correction}. We cite the corrected record and do not treat either percentage as a result of the present experiment. An extension to protein--nucleic-acid complexes \citep{hayes2026} and an application to mutation-associated stability and solubility \citep{ren2026} establish a broader context for PSL-based molecular descriptors, with different targets and evaluation protocols.
+
+\subsection{From sheaf theory to local spectra}
+Spectral sheaf theory relates cellular cohomology to positive-semidefinite Laplacians \citep{hansen2019}. A sheaf specifies vector spaces on cells and compatible linear maps across face relations. It is the compatibility of these maps, together with the cell incidence signs and chosen inner products, that supports a cochain complex and a Hodge-type interpretation. Weighted boundary operators provide a related perspective, including the effects of vanishing vertex weights \citep{renwu2021}. Wei and Wei extend the spectral construction to pairs of sheaves on nested complexes and supply geometric rank-one examples \citep{wei2025}.
+
+Persistent Laplacians have their own algorithmic foundations. M\'emoli, Wan, and Wang develop Schur-complement formulations and analyze their relation to persistent Betti numbers \citep{memoli2022}. Our numerical construction uses that linear-algebraic principle in the sheaf cochain setting. It does not interpret arbitrary differences between spectra as a persistent Laplacian. Related empirical work evaluates higher-order persistent spectral representations across data-science problems \citep{davies2023}; this supports studying their value through controlled comparisons rather than assuming that higher degree is necessarily better.
+
+Local topology is also connected classically to vertex links. A recent preprint of Liu, Feng, and Liu develops local Laplacians and identifies a persistent local operator with a shifted-degree link operator \citep{liu2026}. Our center-zero decomposition should be read alongside that work: it retains both a deletion contribution and an augmented link contribution, with the geometric weights inherited from the specified restriction maps. The application-level question is which of these contributions a residue descriptor contains and whether it helps explain B-factor variation. We make no priority claim for deletion/link decompositions or for local persistent spectral analysis in general.
+
+\subsection{What an explanation explains}
+SHAP values allocate a model output among input features under a specified coalition value function \citep{lundberg2017}. TreeSHAP makes these calculations practical for tree ensembles \citep{lundberg2020}. An explanation is consequently conditional on the trained model, input representation, and background distribution. Correlated geometric features may divide credit between alternative summaries of the same environment. An intervention in a feature-attribution game is also not a physically realizable perturbation of atomic coordinates. We use SHAP to describe model behavior and compare contributions by geometric scale; we do not equate attribution with molecular causation.
+
+\section{Local complexes and cellular sheaves}
+\subsection{Two geometric scales}
+Let $P=\{x_1,\ldots,x_n\}\subset\R^3$ be the observed \calpha\ coordinates in an analyzed structure, and let $c$ denote a target residue. The corrected representation first selects the fixed support
+\begin{equation}
+P_c=\{x_j:\|x_j-x_c\|\leq R\},\qquad R=13\,\angstrom.
+\label{eq:support}
+\end{equation}
+Within this point set, $K_a$ is the alpha complex at ball radius $a$. Alpha complexes are subcomplexes of a Delaunay triangulation and describe the union of restricted balls through a finite simplicial representation \citep{edelsbrunner1994}. All vertices of $P_c$ are present at the nonnegative scales considered here, and $K_a\subseteq K_b$ for $a\leq b$. The support radius chooses which residues can participate; the alpha radius chooses which simplices appear among those residues. Varying them together would confound two different operations.
+
+An oriented $q$-simplex is written $\sigma=[v_0,\ldots,v_q]$, using a fixed vertex ordering. A face is obtained by deleting vertices, and a simplicial complex contains every face of each of its simplices. The incidence number $[\sigma:\tau]$ for a codimension-one face is the sign of the corresponding deletion. These signs ensure cancellation when two consecutive coboundaries are composed. For implementation, GUDHI alpha values are squared radii \citep{gudhi}; a filtration threshold $a$ in angstroms is therefore implemented at $a^2$. This is independent of the edge-length scale introduced below.
+
+\subsection{Restriction maps and the energy of an assignment}
+A rank-one cellular sheaf $\mathcal S$ attaches $\R$ to each simplex. For $\sigma\subseteq\tau$, write $\rho_{\sigma\tau}:\mathcal S(\sigma)\to\mathcal S(\tau)$ for the restriction map. The maps satisfy $\rho_{\tau\upsilon}\rho_{\sigma\tau}=\rho_{\sigma\upsilon}$ and $\rho_{\sigma\sigma}=\Id$. In the geometric family, let $q_v$ be a vertex label and define
+\begin{equation}
+F(\sigma)=\prod_{\{u,v\}\subseteq\sigma}\frac{\|x_u-x_v\|}{\ell_0},\qquad
+\rho_{\sigma\tau}=\frac{F(\sigma)}{F(\tau)}\prod_{v\in\tau\setminus\sigma}q_v,
+\quad \ell_0=1\,\angstrom.
+\label{eq:restrictions}
+\end{equation}
+The empty product gives $F(v)=1$. Distinct coordinate points make $F$ positive, and the length reference makes its values dimensionless. Both the geometric ratios and label products telescope under composition. Zero labels are allowed because no label is divided out. The construction follows the rank-one family of \citet{wei2025}; choosing a zero center has a specific algebraic effect examined below.
+
+We compare three sheaves on the same alpha complexes. The \emph{identity} sheaf has every restriction equal to one. The \emph{geometric} sheaf uses Equation~\eqref{eq:restrictions} with all $q_v=1$. The \emph{center-zero} sheaf uses $q_c=0$ and $q_v=1$ for $v\ne c$. Identity restrictions and constant vertex labels are distinct choices: the latter still retain distance-dependent factors. These labels are markers of a distinguished residue, not estimates of atomic charges.
+
+The cochain space $C^q(K;\mathcal S)=\bigoplus_{\dim\sigma=q}\mathcal S(\sigma)$ contains one scalar per $q$-simplex. In the orthonormal simplex bases used numerically,
+\begin{equation}
+(d_q z)_\tau=\sum_{\substack{\sigma\subset\tau\\\dim\sigma=q}}[\sigma:\tau]\rho_{\sigma\tau}z_\sigma,
+\qquad d_{q+1}d_q=0.
+\label{eq:coboundary}
+\end{equation}
+For an edge $[u,v]$, its degree-zero row is $(-q_v/r_{uv},q_u/r_{uv})$, where $r_{uv}=\|x_u-x_v\|/\ell_0$. Thus
+\begin{equation}
+z^T L_0 z=\|d_0z\|^2
+=\sum_{[u,v]\in K}\frac{(q_u z_v-q_v z_u)^2}{r_{uv}^2},
+\qquad L_0=d_0^T d_0.
+\label{eq:energy}
+\end{equation}
+This energy quantifies disagreement of sheaf assignments. It is not asserted to be a physical elastic energy. If both labels equal one, it is the energy of an inverse-square-weighted graph. If $q_c=0$, an edge $[c,v]$ contributes $z_c^2/r_{cv}^2$ and contains no cross-term involving $z_v$. A zero label therefore does not mean that a residue is removed from the point cloud or declared mechanically rigid.
+
+In general,
+\begin{equation}
+L_q=d_q^Td_q+d_{q-1}d_{q-1}^T,
+\qquad d_{-1}=0.
+\label{eq:laplacian}
+\end{equation}
+Positive semidefiniteness follows from the sum of two squared norms. Its kernel is the intersection of the cocycle space with the orthogonal complement of coboundaries and represents sheaf cohomology \citep{hansen2019}. Identity-sheaf nullities recover ordinary Betti numbers. Other restrictions require the corresponding sheaf interpretation; zero eigenvalues must not automatically be called connected components or loops of the underlying unweighted complex.
+
+\paperfigure{fig2_pipeline}{From a residue neighborhood to local spectra. (a) The fixed 13~\AA\ support around residue 43 of chain A in 1ULR contains 41 \calpha\ vertices; orange identifies the center. (b,c) Alpha complexes at ball radii 3 and 4~\AA\ retain those vertices while adding edges and triangles. (d) Compatible center-zero restrictions define a cochain complex. The figure's $d_{ij}=\|x_i-x_j\|/(1~\angstrom)$ is the dimensionless distance denoted $r_{ij}$ in the text. (e) The degree-zero center-zero Laplacian at $a=4$~\AA, with local-vertex indices on both axes. (f) Ordered eigenvalues at the two scales. These are geometric operators and spectra, prior to fitting a B-factor model.}{fig:pipeline}
+
+\section{What the local spectra contain}
+\subsection{The native descriptor is a universal-center graph}
+The retained native descriptor builds a distance-threshold graph on a neighborhood of radius $r$, using the same $r$ as the edge cutoff. The center is consequently adjacent to every selected neighbor. At its evaluated parameter value $p=0$, an edge has weight $1+|q_u-q_v|$. Center-zero labeling gives weight two on center edges and weight one on edges between neighbors. Let $H$ be this neighbor-induced unweighted graph, with $m$ vertices and Laplacian $L_H$. For $m\geq1$, the native matrix is
+\begin{equation}
+L_{\mathrm{native}}=
+\begin{pmatrix}2m&-2\mathbf1^T\\-2\mathbf1&L_H+2I_m\end{pmatrix}.
+\label{eq:native}
+\end{equation}
+It is a valid weighted graph Laplacian, but it is different from Equation~\eqref{eq:energy}. This classification is about the inspected implementation, not about all algorithms bearing the PSL name.
+
+\begin{proposition}[Native spectrum]
+If $0=\lambda_1\leq\lambda_2\leq\cdots\leq\lambda_m$ is the spectrum of $L_H$, counting all zero eigenvalues, then
+\begin{equation}
+\spec(L_{\mathrm{native}})=\{0,2(m+1)\}\cup\{\lambda_j+2:2\leq j\leq m\}.
+\label{eq:native-spectrum}
+\end{equation}
+The native nullity is one and its largest eigenvalue is $2(m+1)$.
+\label{prop:native}
+\end{proposition}
+\begin{proof}
+The all-ones vector is in the kernel. The vector $(m,-\mathbf1)^T$ is an eigenvector with eigenvalue $2(m+1)$. Every neighbor vector $v\perp\mathbf1$ satisfying $L_Hv=\lambda v$ lifts to $(0,v)^T$, which has eigenvalue $\lambda+2$. These subspaces have dimensions $1$, $1$, and $m-1$ and are mutually orthogonal, so they exhaust the matrix. Since an unweighted graph on $m$ vertices has $\lambda_{\max}(L_H)\leq m$, none of the latter eigenvalues exceeds $2(m+1)$. All are positive, proving the nullity claim.
+\end{proof}
+
+The largest eigenvalue is therefore a rescaled neighborhood count, not an independent topological measurement. The mean of the $m$ positive eigenvalues is
+\begin{equation}
+\overline\lambda_+=4+\frac{2|E(H)|}{m}.
+\label{eq:native-mean}
+\end{equation}
+The remaining summaries need not collapse to counts. The supplement gives two realizable neighborhoods with the same number of vertices and neighbor edges but different minimum, median, and standard deviation of the positive spectrum. Thus the descriptor contains both redundant packing summaries and graph-organizational information. A solitary center has matrix $[0]$. The stated formulas apply at native attenuation parameter $p=0$; distance-dependent reweighting changes the matrix and is not a persistence operation.
+
+\subsection{The center-zero sheaf separates deletion and link}
+Let $D=\del_cK=\{\sigma\in K:c\notin\sigma\}$ and $J=\lk_cK=\{\sigma:c\notin\sigma,\ \sigma\cup\{c\}\in K\}$. The deletion includes all simplices avoiding $c$. The link includes those that become simplices when $c$ is added. These are generally different: a triangle between neighboring residues can belong to the deletion without being a face of a tetrahedron incident to the center.
+
+\begin{proposition}[Center-zero block decomposition]
+Order each cochain basis into simplices avoiding $c$ and simplices containing $c$, and assume the center-zero restrictions in Equation~\eqref{eq:restrictions}. Then
+\begin{equation}
+C^\bullet(K;\mathcal S)=C^\bullet(D;\mathcal S|_D)\oplus C^\bullet_c(K;\mathcal S)
+\label{eq:split}
+\end{equation}
+is an orthogonal direct sum of cochain complexes. Consequently every $L_q$ is block diagonal in that ordering. The second complex is a one-degree shift of an augmented link cochain complex with the weights induced by $F(\{c\}\cup\sigma)$.
+\label{prop:split}
+\end{proposition}
+\begin{proof}
+A face containing $c$ cannot be contained in a simplex avoiding it. Conversely, if a face avoids $c$ and its coface contains $c$, their restriction map includes the factor $q_c=0$. Both cross-block entries therefore vanish. A $q$-simplex containing $c$ is uniquely $\{c\}\cup\sigma$ for a $(q-1)$-simplex of $J$; the center vertex itself corresponds to the empty simplex. Put $c$ first in the orientation. Incidence signs within this block agree, up to a uniform degree sign, with those of the augmented link. The induced restriction from $\sigma$ to $\tau$ has geometric factor $F(\{c\}\cup\sigma)/F(\{c\}\cup\tau)$. A signed permutation of the orthonormal bases yields the claimed shifted weighted complex and preserves its spectrum. Taking the adjoints and products in Equation~\eqref{eq:laplacian} preserves the block structure.
+\end{proof}
+
+The word \emph{augmented} is essential. The center coordinate acts as a degree-minus-one link cochain, and its map into link vertices contributes to the degree-zero link Laplacian. Omitting it changes both spectra and kernel counts. Nor may the geometric weights be discarded: a diagonal change of coordinates can identify cohomology without preserving eigenvalues under fixed Euclidean inner products. This decomposition therefore identifies a weighted link block, not an unconditional equality with an ordinary unweighted graph spectrum.
+
+At degree zero the result becomes especially transparent:
+\begin{equation}
+L_0=\left[\sum_{v:\,[c,v]\in K}r_{cv}^{-2}\right]\oplus L_{0,D}^{\mathrm{geom}}.
+\label{eq:center-zero-degree0}
+\end{equation}
+The center contributes one inverse-square packing scalar; the remaining spectrum describes the geometric graph on the deletion. Unlike the native construction, the center no longer couples all selected neighbors. Its alpha-complex adjacency can also vary with $a$ even though the support remains fixed. At degree one, the two blocks describe the deletion's edge-space operator and an augmented weighted degree-zero link operator. Consequently, some information carried by a degree-one center-zero spectrum concerns the connectivity around the center rather than ordinary one-dimensional holes alone.
+
+For nonzero neighbor labels and positive geometric factors, the degree-zero nullity is $\beta_0(D)$ plus one if the center has no incident edge. At degree one, the cohomological decomposition is
+\begin{equation}
+\dim\ker L_1=\beta_1(D)+\widetilde\beta_0(J).
+\label{eq:nullity}
+\end{equation}
+These identities concern the zero-centered sheaf and ordinary topology of its deletion and link after an invertible weighted cochain identification. They do not identify its positive eigenvalues with topological invariants. The supplement gives the augmentation convention, limiting cases, and the distinction between a cochain isomorphism and a spectral equivalence.
+
+\paperfigure{fig3_decomposition}{Two center-label constructions on an illustrative five-point geometry. (a) The center is at $(0,0,0)$ and four neighbors at $(\pm2,0,0)$ and $(0,\pm2,0)$~\AA. The native contact radius and the alpha radius are both 3~\AA\ in this example. (b,c) The native graph Laplacian couples the center to every neighbor; the geometric center-zero degree-zero sheaf Laplacian separates a center scalar from the deletion graph. (d) Their spectra are $\{0,4,4,6,10\}$ and $\{0,0.25,0.25,0.5,1\}$, respectively. (e) The center scalar is an inverse-square packing sum, with $d_{cj}=\|x_c-x_j\|/(1~\angstrom)$. The augmented weighted link gives the higher-degree generalization. Matrix colors describe algebraic entries, not mechanical components.}{fig:decomposition}
+
+\subsection{A persistent pair and its Schur complement}
+For $K_a\subseteq K_b$, equip both complexes with the same restriction rule and the same inner products on shared stalks. Let $D_q^b$ be the matrix of $d_q$ on $K_b$. Order its columns into old $q$-simplices in $K_a$ and new $q$-simplices in $K_b\setminus K_a$:
+\begin{equation}
+D_q^b=[A\ B],\qquad Q=I-BB^\dagger.
+\label{eq:partition}
+\end{equation}
+Here $B^\dagger$ is the Moore--Penrose inverse. The admissible $(q+1)$-cochains are those whose adjoint coboundary has no component on new $q$-simplices; this space is $\ker B^T$. Its orthogonal projector is $Q$. Restricting the adjoint to that space gives the persistent upper term $A^TQA$. Therefore
+\begin{equation}
+L_q^{a,b}=A^T(I-BB^\dagger)A+D_{q-1}^a(D_{q-1}^a)^T.
+\label{eq:persistent}
+\end{equation}
+If $H=(D_q^b)^TD_q^b$ is partitioned by the same column ordering, then
+\begin{equation}
+A^TQA=H_{AA}-H_{AB}H_{BB}^\dagger H_{BA}.
+\label{eq:schur}
+\end{equation}
+This is a generalized Schur complement, not the difference of two independently computed Laplacians. A singular $H_{BB}$ is expected when its columns are dependent; replacing its pseudoinverse with an ordinary inverse would be incorrect. The projector expression also supplies an independent numerical reference for the implemented Schur form. These definitions follow the persistent sheaf and persistent Laplacian constructions \citep{wei2025,memoli2022}.
+
+There is a useful boundary case. All alpha scales here share the same vertices. At degree zero there are no new zero-simplices, so $B$ has no columns and $Q=I$. There is no lower term. Hence
+\begin{equation}
+L_0^{a,b}=(D_0^b)^TD_0^b=L_0^{b,b}.
+\label{eq:degree0-redundant}
+\end{equation}
+The lower endpoint is redundant in this particular setting. Calling a degree-zero width sweep an independent test of persistence would therefore be misleading: it only resamples upper-endpoint graphs. Degree one has new edges between scales, so its constraint space can change nontrivially. This observation motivates the degree-one experiment, rather than simply increasing the number of nominal width parameters.
+
+The center-zero split also survives persistence. Old and new simplex columns and admissible cochains separate by the same center-membership rule, so the projector and Schur complement respect the two blocks. This yields a practical verification: the union of deletion- and center-containing-block spectra must equal the complete spectrum. It does not imply that the two feature blocks are statistically independent or that their SHAP values add to separately fitted models' explanations.
+
+\section{Experimental design}
+\subsection{Structures, residue identity, and normalized targets}
+The source collection is the publicly released MDG\_bfactor structural dataset \citep{feng2025}. The analysis begins from its documented protein list and reparses structures; historical arrays are not silently treated as equivalent to regenerated features. Each observed residue retains its structure identifier, chain, residue number, insertion code, residue name, and selected \calpha\ atom. These identifiers connect coordinates, targets, sequence positions, feature rows, predictions, and rendered colors. A row number alone is not a residue identifier, and an experimental B-factor is not used as an identity key.
+
+The inclusion audit records missing structures, unusable atoms, alternate conformers, nonfinite values, coordinate degeneracies, and exclusions needed for a defined target. The final counts are \StudyProteins\ analyzed proteins and \StudyResidues\ residues, assigned to \StudyClusters\ sequence clusters. Exact data provenance, residue-selection rules, exclusion counts, and sequence-clustering details are included with the regenerated results and supplementary audit. The distinction between the source collection's nominal size and the retained cohort prevents manuscript counts from drifting away from the computation.
+
+For the retained residues of protein $p$, define
+\begin{equation}
+y_{ip}=\frac{B_{ip}-\mu_p}{s_p},\qquad
+\mu_p=\frac{1}{n_p}\sum_iB_{ip},\quad
+s_p^2=\frac{1}{n_p}\sum_i(B_{ip}-\mu_p)^2.
+\label{eq:target}
+\end{equation}
+The population standard deviation is used consistently. A constant target has no defined Pearson correlation and must be handled by the declared eligibility policy, not assigned an artificial perfect or zero correlation. This response asks the model to predict relative positions within a protein's displacement profile. Computing held-out response labels from their own B-factors is part of defining the test outcome; those labels and normalization statistics are not provided as predictor inputs. The model does not estimate the held-out protein's absolute B-factor scale.
+
+\subsection{Sequence clusters and held-out evaluation}
+The primary design assigns detected related structures to the same fold. Observed \calpha\ sequences are compared chain by chain using local alignment with BLOSUM62, gap opening score $-10$, and gap extension score $-0.5$. A chain pair qualifies when at least 50 nongap residue pairs align, identity is at least 30\%, and coverage reaches at least 80\% of each chain. A qualifying chain pair links the two complete protein entries. Entries with exactly identical complete multisets of observed chain sequences are also linked, regardless of size. Connected components of the resulting graph define clusters. This transitive closure prevents indirectly linked entries from straddling training and test folds.
+
+The minimum aligned length and reciprocal coverage are a documented protocol amendment made before accessing prediction outcomes. An initial rule based on 30\% identity and 80\% coverage of the shorter chain connected the entire collection through short auxiliary-chain fragments, including chains of only one to six residues. That graph could not define a usable held-cluster experiment and did not represent the intended full-sequence relatedness criterion. The amendment and both graphs are retained in the audit. It is an operational grouping rule rather than a guarantee of remote evolutionary independence: entries made entirely of chains shorter than 50 residues can be grouped through exact complete-sequence duplication but do not qualify for the alignment-based link. The supplement defines identity denominators, unknown residues, and deterministic fold assignment.
+
+Five folds are formed at cluster level. All residues of every protein in a held-out cluster are predicted by a model trained on the other clusters. This addresses a concrete source of optimistic generalization but does not certify remote-fold independence: local alignment can miss relationships, observed sequences can be incomplete, and sequence and structural similarity are different concepts. A secondary five-fold analysis groups by protein without sequence clustering. Its purpose is to show the sensitivity to related-structure sharing under a common feature/model design. Random residue splitting is not the primary estimate of transfer to unseen proteins.
+
+\subsection{Feature families and fixed models}
+Seven degree-zero comparisons constitute the core benchmark: graph features; native spectra; graph plus native spectra; corrected center-zero spectra; graph plus identity spectra; graph plus geometric spectra; and graph plus center-zero spectra. The same eligible structures, response rows, folds, and regressor are used for each comparison. The graph baseline has 13 features: contact counts and counts divided by $n_p-1$ at 6, 8, 10, and 12~\AA; clustering coefficients in the center's contact neighborhood at 8 and 12~\AA; and mean distances to the nearest 4, 8, and 12 nonself neighbors. It therefore includes neighborhood organization and nearest-neighbor geometry in addition to contact counts. Identity-versus-geometric comparisons separately examine the effect of distance-weighted restrictions. The complete ordered feature definition is recorded in the supplementary methods and configuration.
+
+Native spectra use neighborhood/edge radii 6, 9, and 12~\AA, center-edge weight two, and the native parameter $p=0$. Corrected spectra use the fixed 13~\AA\ support and alpha radii $a\in\{3,4,5,6\}$~\AA. At each scale, eigenvalues are summarized by the maximum, minimum, mean, median, and population standard deviation of the positive spectrum, together with its numerical zero count. Empty positive spectra give zero-valued positive-spectrum summaries, while the kernel count remains separate. An absent degree-one cochain space is recorded as an empty operator, not as an arbitrary topological feature. Numerical tolerances and audit diagnostics accompany the outputs.
+
+Degree-zero ablations retain all 13 graph features while restricting the center-zero additions to nullities, positive-spectrum summaries, or one alpha scale. Their common response and folds permit paired comparisons with the full multiscale graph-plus-center-zero model. These ablations assess the chosen spectral summaries and scales under the same learner.
+
+All benchmark models are Random Forest regressors \citep{breiman2001} with 200 trees, maximum depth 12, minimum leaf size two, square-root feature subsampling, and bootstrap sampling. The random seed is 20260913. The model configuration is fixed across feature families rather than chosen separately to favor a representation. It defines a controlled comparison under a finite computational budget, not a claim to have optimized the best possible predictor. The number of features changes between families, so square-root subsampling also changes the absolute number examined at a split; this remains part of the stated common learning rule.
+
+\subsection{A bounded degree-one persistence experiment}
+The degree-one analysis evaluates the persistent pairs $(a,b)=(3,4),(5,6)$~\AA\ for identity, geometric, and center-zero sheaves, all on the same fixed support. Static lower-endpoint controls use $(3,3),(5,5)$; static upper-endpoint controls use $(4,4),(6,6)$. Each of these three additions has 12 spectral features and is appended to the same graph-plus-degree-zero baseline for its sheaf. Upper-endpoint controls are needed because a gain over a lower-endpoint static model could otherwise reflect simply accessing larger-scale triangles. Both endpoints are stated because a width alone does not identify the compared complexes. The paired design asks whether the constrained pair operator provides predictive information beyond its corresponding static endpoint descriptions. The degree-zero upper-endpoint identity in Equation~\eqref{eq:degree0-redundant} provides a negative control for interpreting this experiment.
+
+Degree-one operators are larger than degree-zero matrices and require the edge and triangle structure, including elimination of new-edge directions. A label-free timing pilot sampled two proteins from each tercile of maximum local support size, plus the fixed principal case. A conservative projection using the slowest pilot cost per residue, four workers, and a factor-of-two allowance supported evaluating the full eligible cohort within the declared six-hour feature-computation budget. The full cohort was therefore selected before model evaluation. Actual completion, matrix diagnostics, and runtime are reported with the experiment. Measuring a spectral change establishes that two operators differ, not that the change captures a biologically distinct mechanism.
+
+\subsection{Performance, uncertainty, and paired differences}
+The primary summary is the mean of within-protein Pearson correlations between held-out predictions and normalized targets. Each protein receives equal weight in this estimand, whereas a pooled residue correlation weights longer proteins more heavily and combines across-protein offsets. We also report within-protein Spearman correlation and RMSE on the normalized target. Pearson correlation measures profile agreement and is insensitive to positive affine recalibration; RMSE therefore supplies a complementary assessment of amplitude and offset. A zero predictor has a defined normalized-target RMSE even though its constant prediction does not have a defined Pearson correlation.
+
+The principal incremental comparison is graph plus center-zero versus graph alone. For protein $p$, the paired difference is $\delta_p=r_p^{\mathrm{graph+center}}-r_p^{\mathrm{graph}}$. Confidence intervals for means and paired differences use 2,000 resamples of whole sequence clusters, retaining all protein results within each sampled cluster. This respects the grouping used to limit dependence. The reported estimand remains a protein mean; resampling clusters changes the uncertainty model, not the per-protein weights in the original point estimate. These intervals are conditional on the frozen fitted models and do not include retraining variability. The supplement records handling of undefined metrics. Overlap of two separate confidence intervals is not used as a test of their difference. Comparisons across many descriptors are presented as an organized empirical study rather than a sequence of independent confirmatory discoveries.
+
+\subsection{Held-out attribution and structural visualization}
+We explain the actual graph-plus-center-zero forest used for each held-out fold. Interventional TreeSHAP uses 100 distinct training-fold residues as background, sampled without replacement with the training seed plus the held-out fold identifier. No residue from a held-out cluster supplies the background distribution. Explained and background feature vectors are supplied in 32-bit floating-point precision to match scikit-learn's prediction path; geometric operators and stored source features use 64-bit precision. For an input vector $x$ and feature subset $S$, the interventional coalition value is
+\begin{equation}
+v_x(S)=\mathbb E_{Z\sim\mathcal B_{\mathrm{train}}}[f(x_S,Z_{\bar S})],
+\label{eq:shap-game}
+\end{equation}
+and the Shapley value is
+\begin{equation}
+\phi_j(x)=\sum_{S\subseteq M\setminus\{j\}}
+\frac{|S|!(|M|-|S|-1)!}{|M|!}
+\{v_x(S\cup\{j\})-v_x(S)\}.
+\label{eq:shap}
+\end{equation}
+The background expectation $\phi_0$ is a model expectation, not the prediction at an all-zero feature vector. Local accuracy gives $f(x)=\phi_0+\sum_j\phi_j(x)$; an external check requires the maximum absolute reconstruction error to be below $10^{-6}$ for the explained predictions. All 200 fitted trees participate in the explanation. The sum of all signed attributions is therefore not an independent validation score. Absolute attribution magnitude answers another question---how strongly a prediction departs from baseline through its feature contributions---and need not increase monotonically with flexibility.
+
+Protein 1ULR is the designated principal case and 1X3O the companion case. Their selection is fixed independently of the newly computed prediction scores. Each rendered residue is joined by its full structural identity to the held-out prediction and attribution table. Missing residues remain missing; chain gaps are not filled with interpolated explanation values. Signed feature-group contributions are summed over their specified members and labeled by family or alpha scale. These grouped sums explain one fitted model, rather than estimating the performance of a model retrained after removing that group. Coordinate views share the same camera and clear scales, while residue profiles reveal local errors that can be visually obscured in a three-dimensional rendering.
+
+\section{Results}
+\subsection{Operator characterization precedes empirical interpretation}
+The analytic identities assign packing and deletion/link interpretations before prediction models are fitted. Numerical verification tests matrix equality, consecutive-coboundary cancellation, limiting cases, and persistent nullities against independently formed operators. Symmetry and positive semidefiniteness alone are insufficient, since many incompatible constructions satisfy both. The following diagnostics distinguish the proven identities from their floating-point realization.
+
+\input{generated_main_results.tex}
+
+\paperfigure{fig4_performance}{Core held-out performance on the same 364 structures. (a) Mean per-protein Pearson correlations under sequence-controlled folds and the protein-only sensitivity split. (b) Paired changes relative to the graph baseline under sequence-controlled folds. Intervals in both panels are 95\% cluster-bootstrap intervals conditional on fitted models. (c) Each point compares one protein's graph prediction with its graph-plus-center-zero prediction; the two predetermined cases are marked. (d) The distribution of those paired changes, with zero and the mean marked. The common response, cohort, folds, and forest settings make these comparisons about the added representation under the stated learner.}{fig:performance}
+
+\input{generated_persistence_results.tex}
+
+\paperfigure{fig5_persistence}{Degree-one comparisons, degree-zero ablations, and feature-generation cost. (a) Paired changes in mean protein PCC when adding lower-endpoint, persistent, or upper-endpoint degree-one summaries to the corresponding graph-plus-degree-zero model, separately for identity, geometric, and center-zero sheaves. Each addition has 12 features; scale pairs are shown in angstroms. (b) Persistent-minus-upper-endpoint paired changes isolate the comparison with static upper-scale summaries. (c) Graph-plus-center-zero degree-zero models retaining all summaries, nullities only, positive-spectrum summaries only, or one alpha scale. Performance intervals are 95\% cluster-bootstrap intervals conditional on fitted models. (d) Summed worker minutes for feature generation, rather than elapsed wall time. The initial degree-zero run preceded the modified-residue amendment; the degree-one timing includes degree-zero repairs for the 24 affected structures, and upper-endpoint controls are timed separately.}{fig:persistence}
+
+\input{generated_case_results.tex}
+
+\section{Discussion}
+\subsection{Representation complexity and biological information}
+The principal empirical comparison limits the predictive claim supported by the center-zero construction. Adding its degree-zero spectra to graph geometry changes mean protein PCC from \GraphPCC\ to \CombinedPCC, with paired increment $\DeltaPCC$ and 95\% interval $[\DeltaCILow,\DeltaCIHigh]$. The interval includes zero, so this experiment does not resolve a mean gain under the fixed evaluation. It also does not establish equivalence: small benefits and small losses remain compatible with that interval, and no equivalence margin was specified. The protein-only sensitivity analysis gives the same qualitative conclusion. Center-zero spectra alone perform less well than the graph baseline, emphasizing the need to assess incremental information against explicit geometric controls.
+
+The mathematics explains why standalone spectral prediction need not demonstrate a new source of information. The native maximum records neighborhood size, its positive mean records neighbor-edge density, and other summaries retain graph organization beyond those counts. The center-zero degree-zero operator combines an inverse-square center packing term with the deletion graph's weighted spectrum. Both representations can therefore exploit local geometry already partly described by the graph features. Their small paired increments measure usefulness to the chosen forest, rather than independence of the representations or a physical effect of the center label.
+
+Identity and all-one geometric additions have slightly higher mean PCC than the center-zero addition in this experiment, with positive paired intervals relative to graph alone. These exploratory comparisons motivate examining the restriction rule itself, including the coupling removed by a zero center, rather than assuming that localization by a label improves prediction. The comparison remains conditional on the chosen summaries, scales, and regressor. The mathematical decomposition is useful regardless of which variant attains the largest point estimate: it identifies what was added and which simpler descriptors should be tested alongside it.
+
+\subsection{What persistence can establish here}
+Persistence is an operation on a compatible pair, not a synonym for using multiple scales. On a fixed vertex set, the degree-zero persistent upper operator is exactly the upper-endpoint graph operator. The redundancy is mathematical, not a failure of the dataset or regressor. A genuine test in this setting must therefore examine a degree where the lower complex omits cells present in the upper complex. In degree one, new edges create the constraint that distinguishes the Schur-complement operator from a static spectrum.
+
+The degree-one comparisons do not resolve a predictive advantage of the persistent additions over either static endpoint control: every matched interval includes zero for identity, geometric, and center-zero sheaves. This is a result about the selected summaries and prediction task, rather than evidence that persistence contains no information. The descriptor audit records different positive-spectrum summary vectors for most neighborhoods, even though those differences provide little resolved incremental value to the fitted forests. Algebraic distinctness and predictive usefulness are separate questions. The endpoint controls are essential to distinguish a benefit of the constrained pair operator from a benefit of simply accessing larger-scale simplices.
+
+The deletion/link characterization suggests more focused follow-up work than indiscriminate feature expansion. One can compare block-specific spectra, examine residues where center-link connectivity changes, or inspect the stability of the smallest positive eigenvalues under controlled coordinate perturbations. These are hypotheses motivated by the mathematics, not conclusions of the current experiments. Any attempt to attribute a scalar eigenvalue to a particular molecular motion would require additional dynamical or physical evidence.
+
+\subsection{Explanations at the level of residues}
+The signed residue maps complement the mean comparison. A positive contribution from a sheaf scale can be offset by graph contributions, and the prediction combines both with its background expectation. Consequently, a striking local attribution remains compatible with a small mean incremental gain across proteins. Signed views and residue profiles preserve the direction of these contributions and expose prediction errors that an unsigned structural heat map could hide.
+
+The decomposition describes the descriptor before fitting; SHAP describes how the fitted forest uses it. An exact spectral identity does not identify which summary the model uses, while a large attribution does not establish molecular mechanism. Their combination connects the representation's algebra to the model's behavior at an identified residue.
+
+The images support statements about agreement with the crystallographic target and signed model contributions. Functional or dynamical interpretations would require independent residue-specific evidence. The companion protein supplies a second predetermined context and uses the same attribution definition and color scales.
+
+\section{Limitations and reproducibility}
+This study uses one historical structural collection and a coarse-grained coordinate representation. The observed \calpha\ sequence can omit disordered segments, and missing residues have no target row in the present analysis. The representation consequently describes the resolved portion of a deposited structure, not an entire protein sequence in solution. B-factor normalization removes between-protein mean and scale, but it does not remove static disorder, crystal contacts, or refinement effects. An independent dynamics benchmark would test a different and valuable claim, which is not supplied by improved correlation with this target.
+
+The sequence-cluster design reduces one form of train--test relatedness; it does not eliminate every dependency. Alignment thresholds are operational choices, observed-sequence coverage is affected by unresolved residues, and structures can share fold geometry without meeting the sequence rule. In particular, short-chain entries are protected against exact complete-sequence duplication but do not meet the 50-pair threshold for an alignment-based link. Small datasets also make feature comparisons sensitive to which clusters are difficult. Reporting the original and amended grouping graphs, the paired results, and the bootstrap intervals makes these effects inspectable. It does not turn cross-validation into an independent prospective experiment.
+
+All spectral summaries are lossy. Distinct weighted complexes can be cospectral, and six summary statistics discard considerably more information than the full spectrum. Minimum positive eigenvalues also depend on numerical separation from zero, particularly for persistent operators formed by eliminating dependent directions. Degenerate geometries and floating-point rank decisions therefore require explicit checks. Our mathematical identities constrain the implementation, while the released diagnostics record their numerical realization.
+
+The finite CPU budget limits the parameter grid and discourages an extensive search over radii, sheaf weights, and model hyperparameters. The timing pilot supported the full eligible cohort for the declared degree-one pairs, but this does not identify an optimal member of the entire descriptor family. Predictive comparisons should be read at that scope. Computational cost is reported as an experimental outcome because a small gain from a much more expensive representation may have a different practical value from the same gain using a simple graph summary.
+
+The repository supplies scripts, configurations, residue and fold manifests, and tables tracing reported values to regenerated predictions. Figures use those same outputs. Source hashes identify third-party structures; historical result snapshots remain separate from the corrected experiment. These records make the representation, data-selection amendments, numerical decisions, and evaluation jointly inspectable.
+
+\section{Conclusion}
+The native center-labeled descriptor has an explicit weighted-graph spectrum, while the compatible center-zero sheaf separates deletion and augmented weighted-link contributions. Fixed support makes degree-zero persistence redundant with its upper endpoint and directs a genuine persistence experiment to degree one. On the audited collection, the primary center-zero degree-zero increment is small and its paired interval includes zero. Degree-one persistence changes most spectral summary vectors but yields no resolved advantage over its static endpoint controls. These findings delimit predictive claims while providing an interpretable account of local sheaf spectra, supported by reproducible matrix checks, controlled experiments, and residue-level explanations tied to the evaluated model.
+
+\section*{Data and code availability}
+Code, exact configurations, generated metric tables, and figure sources for this study are available on the \href{https://github.com/ryan-charette/psl-protein-flexibility/tree/research-pivot}{research-pivot branch of the project repository}. The structural dataset is attributed to \citet{feng2025}; its recorded retrieval information and structure hashes accompany the data manifest. Supplementary material contains additional derivations, implementation checks, and detailed preprocessing and evaluation policies. The manuscript's numerical inputs are generated from the current analysis outputs rather than transcribed from earlier manuscript versions.
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\end{document}
