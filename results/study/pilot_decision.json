@@ -1,0 +1,23 @@
+{
+  "selection": "Two seeded-hash records from each maximum-support-size tercile, plus preset hero 1ULR",
+  "proteins": [
+    "1MF7",
+    "1PMY",
+    "1ULR",
+    "2NUH",
+    "2WUJ",
+    "3M3P",
+    "3T47"
+  ],
+  "eligible_proteins": 364,
+  "eligible_residues": 78223,
+  "maximum_support": 79,
+  "degree1_budget_seconds": 21600,
+  "projection_safety_factor": 2.0,
+  "projected_workers": 4,
+  "wall_seconds": 37.964241300011054,
+  "max_seconds_per_residue": 0.04534650487802559,
+  "conservative_full_suite_projection_seconds": 1773.569825536898,
+  "decision": "all",
+  "note": "Pilot includes degree-zero, graph, native, degree-one operators, eigensolvers and serialization. Full-suite projection upper-bounds degree-one-only cost."
+}
