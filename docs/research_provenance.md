@@ -3,7 +3,7 @@
 The research revision starts from main commit `0e59f81a38608b2e4bb82a1c1e4327d18a2a23a1`.
 `source_inventory.json` records SHA-256 hashes and members of the supplied manuscript
 archive, locally recovered research archives, and the MDG benchmark archive.
-Archives and absolute local paths are not redistributed.
+The original archives and their local source locations are not redistributed.
 
 ## Manuscript lineage
 

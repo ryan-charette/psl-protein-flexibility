@@ -1,262 +1,82 @@
-# PSL Protein Flexibility
+# Interpreting Local Sheaf Spectra for Protein B-Factor Prediction
 
-`psl-protein-flexibility` generates persistent sheaf Laplacian (PSL)
-descriptors from protein C-alpha geometry for residue-level flexibility
-modeling. The package can be used on a directory of ordinary PDB files, writes
-per-residue feature tables with residue identifiers and B-factors, and includes
-a small synthetic demo that runs without downloading the MDG_bfactor benchmark
-dataset.
+Research code, mathematical constructions, and figures for a manuscript by **Ryan Charette, Independent researcher**.
 
-The repository also contains the scripts and metric snapshots used for the
-accompanying protein-flexibility study, but the maintained software path is now
-self-contained: no upstream `PSL.py` file or external research-code checkout is
-required.
+**What information do local sheaf spectra capture, and does it improve protein B-factor prediction beyond simpler geometry?**
 
-## What the software does
+![Observed B-factors, held-out predictions, and signed sheaf-feature SHAP contributions on protein 1ULR](paper/figures/readme_hero.png)
 
-- Parses C-alpha coordinates and B-factors from PDB files.
-- Builds local center-labeled or constant-sheaf PSL descriptors around each
-  residue at user-selected radii.
-- Uses a native distance-threshold simplicial complex implementation with
-  degree 0, 1, and 2 Laplacian accessors.
-- Writes reviewer-friendly CSV outputs containing protein ID, residue metadata,
-  raw B-factor, within-protein z-scored B-factor, and PSL feature columns.
-- Provides a bundled toy demo with synthetic PDB files and a tiny
-  leave-one-protein-out ridge-regression smoke test.
+1ULR was chosen before inspecting predictive performance. The three aligned views show measured relative B-factor, the prediction from the actual sequence-cluster-held-out model, and the signed contribution of its sheaf features. Color is model attribution in the third view; it does not identify a causal mechanism or molecular motion.
 
-## Quick start
+## Paper and findings
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -U pip
-pip install -e ".[test]"
-pytest
+[Manuscript (PDF)](paper/manuscript.pdf) · [Supplement (PDF)](paper/supplement.pdf) · [LaTeX source](paper/manuscript.tex) · [Figures](paper/figures)
+
+The mathematical analysis separates a legacy weighted graph descriptor from a compatible cellular sheaf on genuine alpha complexes. Several legacy statistics reduce exactly to neighborhood size and graph density. The center-zero sheaf splits into a deletion block and an augmented weighted link block; in degree zero, its center term is an inverse-square packing scalar. On fixed vertices, degree-zero persistence duplicates the ordinary upper-radius operator, so the persistence experiment uses degree one.
+
+The fresh benchmark uses **364 structures, 78,400 residues, and 349 observed-sequence components**. Every model below uses the same five folds and fixed 200-tree Random Forest. The endpoint is the within-protein standardized crystallographic C-alpha B-factor.
+
+| Features | Mean protein Pearson correlation | 95% cluster-bootstrap interval |
+|---|---:|---:|
+| Graph geometry | 0.625 | [0.611, 0.639] |
+| Legacy graph spectra | 0.611 | [0.597, 0.625] |
+| Graph + legacy spectra | 0.628 | [0.614, 0.642] |
+| Center-zero sheaf spectra | 0.565 | [0.550, 0.580] |
+| Graph + identity sheaf | 0.629 | [0.615, 0.643] |
+| Graph + geometric sheaf | 0.631 | [0.617, 0.644] |
+| Graph + center-zero sheaf | 0.627 | [0.613, 0.641] |
+
+Adding center-zero degree-zero spectra to the graph baseline changes mean protein correlation by **+0.0018**, with paired 95% interval **[-0.0009, +0.0044]**. This primary comparison does not resolve an improvement in mean correlation. The paper also reports Spearman correlation, normalized RMSE, protein-only split sensitivity, ordinary/persistent degree-one comparisons, and scale/spectrum ablations. Full per-protein results and provenance are in [results/study](results/study); earlier numbers are separated in [results/historical](results/historical).
+
+Degree-one persistence changes the spectral descriptors, but all six paired
+comparisons with its lower and upper static controls have intervals containing
+zero. These results concern the tested scales, summaries, and fixed learner;
+they do not establish equivalence or imply that persistence contains no information.
+
+## Reproduce the study
+
+Use Python 3.12 and run scripts from the repository root. The exact executed package versions are in [environment.txt](results/study/environment.txt).
+
+```sh
+python -m pip install -r results/study/environment.txt
+python scripts/fetch_data.py
+python scripts/prepare_dataset.py
+python scripts/generate_study_features.py --degree1 --workers 4 --timing-name d1_timing.csv
+python scripts/augment_upper_features.py --workers 4
+python scripts/run_evaluations.py --jobs 4
+python scripts/explain_cases.py
+python scripts/explain_cases.py --verify-only
+python scripts/characterize_features.py
+python scripts/summarize_study.py
+python scripts/make_figures.py --all
+python scripts/audit_study.py --require-complete --require-cases --out results/study/final_audit.json
 ```
 
-On Windows PowerShell, activate the environment with:
+[Reproduction notes](docs/reproduction.md) explain the inputs, compute accounting, exact environment, outputs, and PDF build. Numerical checks run with `python -m pytest -q`; `python scripts/validate_operators.py` writes the independent operator audit. A small synthetic legacy-graph demonstration is available through `python scripts/run_toy_demo.py`.
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+The [final audit](results/study/final_audit.json) verifies all 14 feature blocks,
+160 forest fits, 2,508,800 held-out residue predictions, and both explanation cases.
+The 53 scientific tests pass. Timing measurements and their scope are recorded in
+[compute provenance](results/study/compute_provenance.json).
 
-## Run the toy demo
+Raw structures, feature matrices, complete prediction files, and fitted forests are regenerated outside Git. Compact metrics, full case-study SHAP tables, background identifiers, residue mappings, figure inputs, and source hashes are retained. Finalize all feature caches before fitting so their recorded hashes remain stable.
 
-The demo uses three synthetic PDB files under `examples/toy_proteins/`.
+## Scope and provenance
 
-```bash
-python scripts/run_toy_demo.py
-```
+This is one structural collection, one fixed split realization, and one fixed learner. B-factors include static disorder and crystallographic effects; this study does not validate solution dynamics. The sequence rule was amended before fitting because the original shorter-chain criterion connected the entire collection through tiny auxiliary chains. The final rule uses reciprocal coverage and a minimum aligned length, with exact whole-record duplicate control; short and fragmentary homologs can still escape grouping. Confidence intervals are conditional on the fitted models and folds.
 
-This writes:
-
-```text
-data/toy/processed/
-|-- toy_psl_features.csv
-|-- toy_demo_metrics.csv
-|-- toy_demo_summary.json
-|-- feature_config.json
-`-- feature_names.json
-```
-
-The demo is a smoke test, not a scientific benchmark. It verifies that a fresh
-checkout can parse PDB files, compute PSL features, and run a small grouped
-modeling workflow without the full MDG_bfactor data.
-
-## Generate features for your own proteins
-
-Place PDB files in a directory and run:
-
-```bash
-python scripts/compute_psl_features.py \
-  --pdb-dir path/to/pdb_files \
-  --out-dir data/my_psl_features \
-  --radii 6,9,12 \
-  --sheaf center_labeled \
-  --stats both
-```
-
-The same functionality is available after installation as:
-
-```bash
-psl-flexibility features \
-  --pdb-dir path/to/pdb_files \
-  --out-dir data/my_psl_features
-```
-
-Important options:
-
-| Option | Meaning |
-|---|---|
-| `--radii 6,9,12` | Neighborhood radii in Angstrom. |
-| `--sheaf center_labeled` | Label the target residue as 0 and neighbors as 1. Use `constant` for a constant-sheaf baseline. |
-| `--stats both` | Write max, min, mean, median, standard deviation, and zero-eigenvalue count. |
-| `--degrees 0` | PSL degrees to summarize. Degrees `1` and `2` are available for exploratory use. |
-| `--p-widths 0.0` | Optional distance-weight damping values for sensitivity checks. |
-
-The main CSV output is `psl_features.csv`. Each row is one C-alpha residue with
-the columns:
-
-```text
-protein_id,residue_index,chain_id,residue_number,insertion_code,residue_name,
-b_factor,z_b_factor,<PSL feature columns...>
-```
-
-## Python API
-
-```python
-from pathlib import Path
-
-from psl_flexibility.features import FeatureConfig, feature_names, features_for_residues
-from psl_flexibility.structure import parse_ca_pdb
-
-records = parse_ca_pdb(Path("examples/toy_proteins/toy_alpha.pdb"))
-config = FeatureConfig(radii=(6.0, 9.0, 12.0), sheaf="center_labeled", stats="both")
-features = features_for_residues(records, config)
-names = feature_names(config)
-```
-
-## Native PSL implementation
-
-The original analysis depended on a separate research implementation of
-persistent sheaf Laplacians. To keep this repository redistributable and useful
-for JOSS review, the needed feature-generation path is now implemented natively
-in `psl_flexibility.native_psl`.
-
-The native implementation intentionally focuses on the repository's required
-use case: local protein point clouds and spectral summaries at fixed radii. It
-accepts the small compatibility surface used by the original scripts
-(`build_filtration`, `build_simplicial_pair`, `build_matrices`, `psl_0`,
-`psl_1`, and `psl_2`) and constructs a Euclidean distance-threshold
-Vietoris-Rips style complex. `filtration_type="alpha"` is accepted by the
-compatibility class as an alias, but no external GUDHI or upstream `PSL.py`
-dependency is required.
-
-## Repository layout
-
-```text
-.
-|-- README.md
-|-- pyproject.toml
-|-- CONTRIBUTING.md
-|-- SUPPORT.md
-|-- GOVERNANCE.md
-|-- CHANGELOG.md
-|-- paper/
-|   |-- paper.md
-|   `-- paper.bib
-|-- examples/
-|   `-- toy_proteins/
-|-- scripts/
-|   |-- compute_psl_features.py
-|   |-- run_toy_demo.py
-|   |-- generate_psl_features.py
-|   |-- psl_variant_experiment.py
-|   |-- run_rf.py
-|   |-- run_baselines.py
-|   |-- hayes_protocol_runner.py
-|   |-- run_protocol_exactness_checks.py
-|   `-- run_biological_validation.py
-|-- src/
-|   `-- psl_flexibility/
-|       |-- cli.py
-|       |-- demo.py
-|       |-- features.py
-|       |-- metrics.py
-|       |-- native_psl.py
-|       |-- paths.py
-|       `-- structure.py
-|-- tests/
-`-- results/
-    `-- metrics/
-```
-
-Generated feature matrices, prediction tables, and toy-demo outputs should stay
-out of Git history.
-
-## Community and maintenance
-
-This is currently a single-maintainer research software project with public
-issue tracking, CI, tests, and documented contribution paths.
-
-- Use `CONTRIBUTING.md` for development setup, pull request expectations, data
-  policy, and release checklist.
-- Use `SUPPORT.md` for help and bug-reporting expectations.
-- Use `GOVERNANCE.md` for project scope, decision making, and release process.
-- Use `CODE_OF_CONDUCT.md` for conduct expectations.
-- Use `CHANGELOG.md` for release notes and notable source-level changes.
-
-## Reproducing the manuscript analyses
-
-The full study used the MDG_bfactor dataset, which is not redistributed here.
-To reproduce those benchmark analyses, place the dataset at:
-
-```text
-MDG_bfactor-main/
-  MDG_bfactor-main/
-    datasets/
-      list-small.txt
-      list-medium.txt
-      list-large.txt
-      list-365.txt
-      365/*.pdb
-    features/
-      features-blind-prediction/*.csv
-```
-
-Generate the main center-labeled PSL feature set:
-
-```bash
-python scripts/psl_variant_experiment.py \
-  --root . \
-  --dataset 365 \
-  --sheaf center_labeled \
-  --radii 6,9,12 \
-  --stat4 both \
-  --degrees 0 \
-  --out-dir data/processed/features_psl_labeled_6_9_12_both
-```
-
-Run the main grouped protein-level Random Forest evaluation:
-
-```bash
-python scripts/run_rf.py \
-  --feature-source psl \
-  --psl-dir data/processed/features_psl_labeled_6_9_12_both \
-  --run-name psl_labeled_6_9_12_both_rf2000_depth12_leaf2_sqrt \
-  --folds 5 \
-  --n-estimators 2000 \
-  --max-depth 12 \
-  --min-samples-leaf 2 \
-  --max-features sqrt \
-  --n-jobs 1 \
-  --no-shap
-```
-
-Additional scripts reproduce the baseline comparisons, biological validation,
-SHAP attribution workflow, and Hayes-style protocol checks described in
-`paper/paper.md`.
-
-## Curated metric snapshots
-
-The tracked files under `results/metrics/` summarize the manuscript analyses:
-
-| Analysis | Main result |
-|---|---:|
-| Main center-labeled PSL, grouped protein CV, within-protein normalized B | mean per-protein PCC 0.602; pooled PCC 0.571 |
-| PSL+SHAP attribution model | absolute-attribution PCC 0.482; top-20% Jaccard 0.338 |
-| Baseline, aligned 274-protein subset | PSL 0.608, classical structural 0.575, simple graph 0.629, classical+PSL 0.627 |
-| Hayes Table 1-style PSL-only audit | pooled OLS 0.520-0.555; per-protein OLS 0.707 |
-| Hayes blind-style raw-B protein split | GBDT 0.605; RF 0.600 mean per-protein PCC |
-| Hayes random residue raw-B split | GBDT 0.853; RF 0.898 pooled PCC |
-| Random-residue aggregation audit | mean per-protein PCC only 0.606 and 0.636 |
-| Split-dependence controls | classical and graph features also reach pooled random-residue PCC near 0.85 |
-
-Random residue-level pooled PCC should not be interpreted as
-protein-independent generalization. The manuscript and analysis scripts report
-protein-grouped metrics separately for that reason.
+The benchmark is acquired from the pinned [MDG_bfactor source](https://github.com/fenghon1/MDG_bfactor/tree/c987feb2c45c785799685c03d270ea8053e5706d). Full case structures come from the PDB. [Research provenance](docs/research_provenance.md) inventories the earlier manuscripts, implementations, and result snapshots. The current article uses newly generated results, and distinguishes mathematical identities from model attributions and biological interpretation.
 
 ## Citation
 
-Use `CITATION.cff` when citing this repository. The manuscript source is
-in `paper/paper.md`, with references in `paper/paper.bib`.
+```bibtex
+@unpublished{charette2026localsheaf,
+  author = {Ryan Charette},
+  title = {Interpreting Local Sheaf Spectra for Protein B-Factor Prediction},
+  year = {2026},
+  note = {Research manuscript},
+  url = {https://github.com/ryan-charette/psl-protein-flexibility/tree/research-pivot}
+}
+```
+
+Code is distributed under the [MIT license](LICENSE). Third-party data and prior methods retain their source attribution in [NOTICE.md](NOTICE.md) and the manuscript bibliography.

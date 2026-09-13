@@ -7,21 +7,10 @@ hashes. Full-atom RCSB structures for 1ULR and 1X3O provide the molecular
 renderings; the rendering code checks their residue identities and C-alpha
 coordinates against the benchmark before assigning colors.
 
-From the repository root, after installing `requirements.txt`, acquire the
-recorded inputs and run the study in this order:
-
-```bash
-python scripts/fetch_data.py
-python scripts/prepare_dataset.py
-python scripts/generate_study_features.py --degree1
-python scripts/augment_upper_features.py
-python scripts/run_evaluations.py
-python scripts/explain_cases.py
-python scripts/make_figures.py --all
-```
-
-These commands run the full benchmark, including the degree-one persistence
-comparisons. They require substantially more time than the toy example.
+Follow the [reproduction record](../docs/reproduction.md) for the environment,
+acquisition, feature generation, evaluation, explanations, figures and checks.
+That record includes the rendering dependencies and exact executed versions.
+The full benchmark requires substantially more time than the toy example.
 `fetch_data.py --archive path/to/MDG_bfactor.zip` can use a local copy of the
 upstream archive. `fetch_data.py --verify-only` checks existing inputs without
 downloading or writing them. Source mismatches cause an error.

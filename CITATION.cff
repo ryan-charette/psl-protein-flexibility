@@ -1,18 +1,18 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the repository and accompanying JOSS manuscript."
-title: "psl-protein-flexibility: Self-contained persistent sheaf Laplacian descriptors for protein flexibility analysis"
+message: "Please cite the accompanying research manuscript when using these analyses or figures."
+title: "Interpreting Local Sheaf Spectra for Protein B-Factor Prediction"
+type: software
 authors:
   - family-names: Charette
     given-names: Ryan
-version: 0.1.0
-date-released: 2026-05-16
+    affiliation: "Independent researcher"
 license: MIT
-url: "https://github.com/ryan-charette/psl-protein-flexibility"
+url: "https://github.com/ryan-charette/psl-protein-flexibility/tree/research-pivot"
 repository-code: "https://github.com/ryan-charette/psl-protein-flexibility"
-preferred-citation:
-  type: article
-  title: "psl-protein-flexibility: Self-contained persistent sheaf Laplacian descriptors for protein flexibility analysis"
-  authors:
-    - family-names: Charette
-      given-names: Ryan
-  year: 2026
+abstract: "Research code, mathematical constructions, controlled benchmarks, and residue-level model attributions for local sheaf spectral descriptors of crystallographic protein B-factors."
+keywords:
+  - protein structure
+  - sheaf Laplacian
+  - alpha complex
+  - persistent Laplacian
+  - crystallographic B-factor
