@@ -1,0 +1,7 @@
+-r requirements.txt
+pillow>=10
+pyvista>=0.44
+vtk>=9.3
+pymupdf>=1.24
+pypdf>=5
+requests>=2.32

@@ -47,3 +47,12 @@ results/biological_validation/
 .DS_Store
 .vscode/
 .idea/
+
+# Research inputs, feature caches, fitted models, and local rendering assets
+data/raw/
+data/features/
+results/study/models/
+results/study/predictions/
+results/study/shap_full/
+*.joblib
+paper/build/
