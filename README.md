@@ -6,7 +6,7 @@ Research code, mathematical constructions, and figures for a manuscript by **Rya
 
 ![Observed B-factors, held-out predictions, and signed sheaf-feature SHAP contributions on protein 1ULR](paper/figures/readme_hero.png)
 
-1ULR was chosen before inspecting predictive performance. The three aligned views show measured relative B-factor, the prediction from the actual sequence-cluster-held-out model, and the signed contribution of its sheaf features. Color is model attribution in the third view; it does not identify a causal mechanism or molecular motion.
+1ULR was chosen before inspecting predictive performance. The three aligned views show measured relative B-factor, the prediction from the actual sequence-cluster-held-out model, and the signed contribution of its sheaf features. Blue indicates lower values and red higher values, with white at zero. Color is model attribution in the third view; it does not identify a causal mechanism or molecular motion.
 
 ## Paper and findings
 

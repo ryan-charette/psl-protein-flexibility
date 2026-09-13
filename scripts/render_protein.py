@@ -30,7 +30,7 @@ from scipy.interpolate import CubicSpline
 from threadpoolctl import threadpool_limits
 
 
-PALETTE = ("#007f86", "#f1f2ec", "#db6a32")
+COLORMAP = "bwr"
 COORDINATE_TOLERANCE = 0.02
 
 
@@ -220,7 +220,7 @@ def render_protein(
     os.environ.setdefault("MPLCONFIGDIR", str(Path(__file__).resolve().parents[1] / "data" / "processed" / "mpl-cache"))
     import pyvista as pv
     import vtk
-    from matplotlib.colors import LinearSegmentedColormap
+    from matplotlib import colormaps
 
     required = {"chain_id", "residue_number", "insertion_code", "x", "y", "z", value_column}
     if not required.issubset(residue_df.columns):
@@ -266,7 +266,7 @@ def render_protein(
     camera = dict(camera) if camera is not None else _default_camera(np.array([row["atoms"]["CA"] for row in records]))
     vtk.vtkMultiThreader.SetGlobalMaximumNumberOfThreads(1)
     vtk.vtkSMPTools.Initialize(1)
-    cmap = LinearSegmentedColormap.from_list("psl_diverging", PALETTE, N=256)
+    cmap = colormaps[COLORMAP]
     with threadpool_limits(limits=1):
         plotter = pv.Plotter(off_screen=True, window_size=(size, size), lighting="none")
         try:
@@ -295,6 +295,7 @@ def render_protein(
         "maximum_coordinate_error_angstrom": float(errors.max()),
         "coordinate_tolerance_angstrom": COORDINATE_TOLERANCE,
         "secondary_structure_counts": {kind: sum(row["secondary"] == kind for row in records) for kind in ("helix", "sheet", "loop")},
+        "colormap": COLORMAP,
         "chains": sorted(chains), "color_limits": [-magnitude, magnitude],
         "clipped_value_count": int(np.count_nonzero(np.abs(values)>magnitude)),
         "image_size": [size, size], "transparent_background": transparent,

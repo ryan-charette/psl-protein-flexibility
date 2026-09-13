@@ -77,7 +77,7 @@ python scripts/explain_cases.py
 python scripts/explain_cases.py --verify-only
 python scripts/characterize_features.py
 python scripts/summarize_study.py
-python scripts/make_figures.py --all
+python scripts/make_figures.py --all --rerender
 python scripts/audit_study.py --require-complete --require-cases --out results/study/final_audit.json
 python scripts/validate_operators.py
 python -m pytest -q
@@ -151,3 +151,5 @@ text before compilation. It checks that every numerical token remains unchanged.
 The original generated inputs and experimental artifacts retain their saved hashes.
 Use `--tectonic PATH` to specify a Tectonic executable outside PATH. The original
 separate article and supplement remain in Git history at commit `bd1e404`.
+
+To update only the visual presentation from saved results, run `python scripts/make_figures.py --all --rerender`, followed by `python paper/build.py`. This preserves predictions and attributions. Plots use Matplotlib defaults and molecular values use its blue-white-red (`bwr`) colormap. The README composition contains only aligned molecular views; explanations are supplied in the surrounding text and manuscript captions.

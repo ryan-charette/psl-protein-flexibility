@@ -1452,7 +1452,7 @@
   "rendering": {
     "observed": {
       "path": "paper/figures/renders/1X3O_observed.png",
-      "sha256": "8d530f0f847dc714cc292a9b18beba3e225082ad45191a1502f11dd244ed2531",
+      "sha256": "6e15e39e977801f4c8dcde0637287024d07f9cec835876f4e8186ca4ba030a49",
       "mapping": {
         "pdb": "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\psl-protein-flexibility\\data\\raw\\figures\\1X3O.pdb",
         "column": "z_b_factor",
@@ -1466,6 +1466,7 @@
           "sheet": 0,
           "loop": 18
         },
+        "colormap": "bwr",
         "chains": [
           "A"
         ],
@@ -1485,7 +1486,7 @@
     },
     "predicted": {
       "path": "paper/figures/renders/1X3O_predicted.png",
-      "sha256": "14d7ef28870a8155d0b99eb162aa3a5025a759b45073a3cb512897b6972d6777",
+      "sha256": "db5c054164a395de68973a712b1a9b69ee40018fd470f56dce751eaa434bad94",
       "mapping": {
         "pdb": "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\psl-protein-flexibility\\data\\raw\\figures\\1X3O.pdb",
         "column": "prediction_z",
@@ -1499,6 +1500,7 @@
           "sheet": 0,
           "loop": 18
         },
+        "colormap": "bwr",
         "chains": [
           "A"
         ],
@@ -1518,7 +1520,7 @@
     },
     "shap": {
       "path": "paper/figures/renders/1X3O_shap.png",
-      "sha256": "debcbb1664383a592cb97f0a6f7d3cc14e9a1de12a26439e4f10b3e230fb1da0",
+      "sha256": "9bc27fca492fc651a000b07a8985360735d3961cbd103cec1260de71f8846d0b",
       "mapping": {
         "pdb": "C:\\Users\\ryana\\Documents\\Codex\\2026-09-13\\https-github-com-ryan-charette-psl-2\\work\\psl-protein-flexibility\\data\\raw\\figures\\1X3O.pdb",
         "column": "sheaf_shap",
@@ -1532,6 +1534,7 @@
           "sheet": 0,
           "loop": 18
         },
+        "colormap": "bwr",
         "chains": [
           "A"
         ],

@@ -1,13 +1,13 @@
 {
   "status": "passed",
-  "revision_scope": "Revision and editing of manuscript prose; scientific scope and experimental outputs unchanged.",
-  "previous_revision": "359fb5d4ebd04fb2786b8ae4b37e260679916a21",
+  "revision_scope": "Simplified figure styling and updated captions; no new experiments.",
+  "previous_revision": "0e1abff5881a83e07431b4d9fa57b627c0e00ae5",
   "renderer": "PyMuPDF 1.28.2",
-  "dpi": 120,
+  "dpi": 72,
   "documents": {
     "manuscript": {
       "path": "paper/manuscript.pdf",
-      "sha256": "d9e74b9bf8bd0727ffe492222440a22e0f52e3b43f54e69e8ed22502ee95f86e",
+      "sha256": "a88c4e5e18d04567660b55bc9aac20c2abac73fe3370eaaba979dcde75fffca2",
       "pages": 42,
       "visually_reviewed_pages": [
         1,
@@ -66,12 +66,12 @@
     "paper/generated_persistence_results.tex": "5a0516db9951c6bf20d10818b72e3dd8a87ceca721cf8d89fb89d373c2a3ee16",
     "paper/generated_results.tex": "9f6b83a6a7ac55d860797fd29a4c6da23ec68c8f0045c7b9bf1111b8d01068fa",
     "paper/generated_supplement_results.tex": "2f7534487d20670c16eae5350e5e67933a46492eae63ba27e811f781d9a07c8e",
-    "paper/manuscript.tex": "9954750d0a9053ce8606a85cf1822aedb6d4c0e05e4152325b1ed47a6d0e5825",
+    "paper/manuscript.tex": "d45b39249cbebda6e9c66ed6c85ae4cbe32c1151b7c853d879e950c0614cc3af",
     "paper/references.bib": "20e037d4d6ebc02118e0dcbd10775c7e01546ccceb3290e1a4eb31cd0b0c78eb",
     "paper/sections/attribution_details.tex": "5f6e5acdf86b584cc4ce127e10b0f4e46e95d5ef4d1ec9535531961e5056d59b",
     "paper/sections/biology_primer.tex": "8f55787217df5405c1795e2ceb459ffdee2a80d2d64863b37691c662396d1305",
     "paper/sections/case_results_integrated.tex": "39e7bc46ec5491cf7e7eb8551cfea4bf2ce4ee65840a29ba9bd236cc4bb8e851",
-    "paper/sections/companion_results.tex": "47a45bdaac7646000c008e5eafaf7e79daa57d29723d28736364de8faff87fb1",
+    "paper/sections/companion_results.tex": "a922327cba0b27752a06abc7bdd571f234df8f684e963fa6e4237a60039be15b",
     "paper/sections/compute_details.tex": "4fb7b6edc070b2534ef5b9711be2b16380023fa288bbb3deddfadee0d2b71587",
     "paper/sections/evaluation_guide.tex": "602e801bd45e58f561aebac52df9a89d5d8fcd38711219ad92179c0d993a5da5",
     "paper/sections/evidence_details.tex": "2e04d918308e9d33d7da434ec32ab812e35694d42e330d9998c49425b05691e9",
@@ -103,14 +103,14 @@
     "Evidence provenance": "evidence_details"
   },
   "checks": [
-    "Every final page visually inspected at 120 dpi, including figures and tables",
-    "No TeX box, citation, reference, or missing-character warnings",
-    "Documented paper/build.py command compiled successfully",
-    "Frozen analysis code, configurations, results, generated numerical inputs, references and figures unchanged from previous revision",
-    "Editorial generated inputs preserve ordered numerical tokens, verified during build",
-    "Displayed equation environments unchanged after newline normalization",
-    "Requested heading constructions, em dashes and repetitive contrastive phrasing removed from manuscript prose; published citation titles preserved",
-    "Former supplement remains integrated in the main manuscript"
+    "All pages reviewed as contact sheets; six figure pages also inspected individually",
+    "All seven figure compositions visually reviewed",
+    "No TeX box, missing-character, or unresolved-reference warnings",
+    "Figure manifest hashes verified",
+    "Case predictions, attributions, backgrounds, cameras, residue mapping, color limits and clipping counts unchanged",
+    "Frozen numerical outputs and scientific modules unchanged",
+    "README hero PDF contains no text",
+    "Documented figure regeneration and manuscript build commands completed"
   ],
-  "source_files_checked_unchanged": 132
+  "source_files_checked_unchanged": 99
 }
