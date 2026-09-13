@@ -1,9 +1,11 @@
-"""Native persistent sheaf Laplacian utilities.
+"""Historical distance-threshold graph comparator (not the corrected PSL model).
 
 The original project used an external research script named ``PSL.py``.  This
 module provides the small subset of that interface needed by this repository:
-construct a local distance-threshold simplicial complex and return degree 0, 1,
-and 2 Laplacian matrices at one or more radii.
+construct a local distance-threshold graph. The old class name is retained for
+internal legacy fixtures. Use ``sheaf.AlphaSheaf`` for actual alpha filtrations,
+compatible sheaf restrictions, and two-scale persistence. Here ``p`` only
+attenuates edge weights; it is not persistence width.
 """
 
 from __future__ import annotations
@@ -46,19 +48,18 @@ def _normalize_labels(labels: np.ndarray) -> np.ndarray:
 
 
 class NativePersistentSheafLaplacian:
-    """Small native PSL implementation for local protein descriptors.
+    """Historical graph implementation for explicitly labeled comparisons.
 
     Parameters mirror the upstream research class used by the original scripts.
-    ``filtration_type="alpha"`` is accepted as a compatibility alias; this
-    implementation uses a Euclidean distance-threshold, Vietoris-Rips style
-    complex because the maintained software path must be self-contained.
+    This is a Euclidean distance-threshold graph, with center-star reweighting
+    in nonconstant mode. Alpha is deliberately rejected rather than aliased.
     """
 
     def __init__(
         self,
         pts: Sequence[Sequence[float]] | np.ndarray,
         charges: Sequence[float] | np.ndarray | None = None,
-        filtration_type: str = "alpha",
+        filtration_type: str = "rips",
         radius_list: Sequence[float] | np.ndarray | None = None,
         p: float = 0.0,
         constant: bool = True,
@@ -71,8 +72,8 @@ class NativePersistentSheafLaplacian:
             raise ValueError("pts contains non-finite coordinates.")
 
         self.filtration_type = filtration_type.lower()
-        if self.filtration_type not in {"alpha", "rips", "distance"}:
-            raise ValueError("filtration_type must be 'alpha', 'rips', or 'distance'.")
+        if self.filtration_type not in {"rips", "distance"}:
+            raise ValueError("This historical graph supports only 'rips' or 'distance'; use AlphaSheaf for alpha.")
 
         if radius_list is None:
             self.radius_list = np.array([np.inf], dtype=float)
@@ -138,7 +139,10 @@ class NativePersistentSheafLaplacian:
         return self._l0
 
     def psl_1(self) -> list[np.ndarray]:
-        """Return degree-one Hodge-style Laplacian matrices, one per radius."""
+        """Unweighted flag-complex degree one, retained for legacy fixtures."""
+
+        if not self.constant or self.p != 0:
+            raise NotImplementedError("The historical weighted higher-degree matrices are not a cochain complex. Use AlphaSheaf.")
 
         if self._l1 is None:
             if self._complexes is None:
@@ -152,7 +156,10 @@ class NativePersistentSheafLaplacian:
         return self._l1
 
     def psl_2(self) -> list[np.ndarray]:
-        """Return degree-two Hodge-style Laplacian matrices, one per radius."""
+        """Unweighted two-skeleton degree two; this is not full Rips H2."""
+
+        if not self.constant or self.p != 0:
+            raise NotImplementedError("The historical weighted higher-degree matrices are not a cochain complex. Use AlphaSheaf.")
 
         if self._l2 is None:
             if self._complexes is None:

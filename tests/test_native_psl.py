@@ -1,8 +1,18 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from psl_flexibility.native_psl import NativePersistentSheafLaplacian
+
+
+def test_graph_comparator_cannot_silently_impersonate_alpha_or_weighted_hodge():
+    points=np.array([[0.,0.,0.],[1.,0.,0.],[0.,1.,0.]])
+    with pytest.raises(ValueError,match="AlphaSheaf"):
+        NativePersistentSheafLaplacian(points,filtration_type="alpha")
+    legacy=NativePersistentSheafLaplacian(points,charges=[0,1,1],constant=False)
+    with pytest.raises(NotImplementedError,match="cochain"):
+        legacy.psl_1()
 
 
 def test_two_point_constant_laplacian_has_expected_spectrum() -> None:

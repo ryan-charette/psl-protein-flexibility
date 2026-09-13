@@ -1,4 +1,4 @@
-"""Feature generation for PSL protein-flexibility descriptors."""
+"""Historical graph descriptors for toy fixtures; new study uses generate_study_features.py."""
 
 from __future__ import annotations
 
