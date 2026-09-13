@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "cases": [],
+    "dataset": {
+      "input_and_manifest_hashes": "verified",
+      "proteins": 364,
+      "residues": 78400,
+      "sequence_components": 349,
+      "sequence_edges": 16
+    },
+    "evaluations": [],
+    "features": {
+      "block_coverage": {
+        "center0": 364,
+        "center1": 364,
+        "center_p1": 364,
+        "center_upper1": 364,
+        "geometric0": 364,
+        "geometric1": 364,
+        "geometric_p1": 364,
+        "geometric_upper1": 364,
+        "graph": 364,
+        "identity0": 364,
+        "identity1": 364,
+        "identity_p1": 364,
+        "identity_upper1": 364,
+        "native0": 364,
+        "simplex_counts": 364
+      },
+      "source_signatures": "verified",
+      "verified_caches": 364
+    }
+  },
+  "failures": [],
+  "status": "inputs_verified_evaluations_pending"
+}

@@ -1,0 +1,6 @@
+{
+  "command": "python -m pytest -q --basetemp=.pytest_tmp/final-scientific",
+  "result": ".....................................................                    [100%]\n53 passed in 4.71s",
+  "python": "3.12.14",
+  "scope": "All scientific correctness, dataset, evaluation, and legacy smoke tests; no benchmark metric is asserted as a unit-test expectation."
+}
