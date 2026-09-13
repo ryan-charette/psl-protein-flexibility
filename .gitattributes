@@ -1,5 +1,5 @@
-# Numerical source hashes must not depend on checkout platform.
-*.py text eol=lf
+# Preserve the exact executed Python source bytes across checkout platforms.
+*.py -text
 # These research artifacts have recorded byte-level SHA-256 hashes.
 # Preserve the executed files exactly, including their line endings.
 results/study/** -text

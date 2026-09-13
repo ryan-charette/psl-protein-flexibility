@@ -140,8 +140,8 @@ rendering, and document preparation are separate. The compute record retains
 the individual measurements and clearly labels the historical degree-zero
 stage. No paid computation was used.
 
-Git attributes preserve the exact bytes of hashed result and figure artifacts.
-Scientific Python sources use LF line endings. A new execution on a different
+Git attributes preserve the exact bytes of Python sources and hashed result,
+manuscript, and figure artifacts, including their line endings. A new execution on a different
 platform can produce different file bytes or floating-point results; its own
 manifests and checks must be regenerated together rather than combined with
 the saved run's hashes.
