@@ -1,0 +1,259 @@
+{
+  "degree1_endpoint_comparisons": [
+    {
+      "construction": "identity",
+      "fraction_all_three_nullities_equal": 0.02746173469387755,
+      "fraction_lower_nullity_differs_from_upper": 0.8796428571428572,
+      "fraction_persistent_nullity_differs_from_lower": 0.9291964285714286,
+      "fraction_persistent_nullity_differs_from_upper": 0.8005102040816326,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.9960841836734694,
+      "fraction_positive_summaries_differ_from_upper": 0.9998086734693877,
+      "lower": 3,
+      "n_neighborhoods": 78400,
+      "upper": 4
+    },
+    {
+      "construction": "identity",
+      "fraction_all_three_nullities_equal": 0.642920918367347,
+      "fraction_lower_nullity_differs_from_upper": 0.349234693877551,
+      "fraction_persistent_nullity_differs_from_lower": 0.3439158163265306,
+      "fraction_persistent_nullity_differs_from_upper": 0.029464285714285714,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.9895790816326531,
+      "fraction_positive_summaries_differ_from_upper": 0.989375,
+      "lower": 5,
+      "n_neighborhoods": 78400,
+      "upper": 6
+    },
+    {
+      "construction": "geometric",
+      "fraction_all_three_nullities_equal": 0.02746173469387755,
+      "fraction_lower_nullity_differs_from_upper": 0.8796428571428572,
+      "fraction_persistent_nullity_differs_from_lower": 0.9291964285714286,
+      "fraction_persistent_nullity_differs_from_upper": 0.8005102040816326,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.9960841836734694,
+      "fraction_positive_summaries_differ_from_upper": 0.9998086734693877,
+      "lower": 3,
+      "n_neighborhoods": 78400,
+      "upper": 4
+    },
+    {
+      "construction": "geometric",
+      "fraction_all_three_nullities_equal": 0.642920918367347,
+      "fraction_lower_nullity_differs_from_upper": 0.349234693877551,
+      "fraction_persistent_nullity_differs_from_lower": 0.3439158163265306,
+      "fraction_persistent_nullity_differs_from_upper": 0.029464285714285714,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.9895790816326531,
+      "fraction_positive_summaries_differ_from_upper": 0.989375,
+      "lower": 5,
+      "n_neighborhoods": 78400,
+      "upper": 6
+    },
+    {
+      "construction": "center",
+      "fraction_all_three_nullities_equal": 0.021785714285714287,
+      "fraction_lower_nullity_differs_from_upper": 0.8803316326530612,
+      "fraction_persistent_nullity_differs_from_lower": 0.9427040816326531,
+      "fraction_persistent_nullity_differs_from_upper": 0.8285076530612245,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.997436224489796,
+      "fraction_positive_summaries_differ_from_upper": 0.9998086734693877,
+      "lower": 3,
+      "n_neighborhoods": 78400,
+      "upper": 4
+    },
+    {
+      "construction": "center",
+      "fraction_all_three_nullities_equal": 0.5529081632653061,
+      "fraction_lower_nullity_differs_from_upper": 0.4342091836734694,
+      "fraction_persistent_nullity_differs_from_lower": 0.42549744897959185,
+      "fraction_persistent_nullity_differs_from_upper": 0.04875,
+      "fraction_persistent_nullity_exceeds_lower": 0.0,
+      "fraction_persistent_nullity_exceeds_upper": 0.0,
+      "fraction_positive_summaries_differ_from_lower": 0.9896811224489795,
+      "fraction_positive_summaries_differ_from_upper": 0.989375,
+      "lower": 5,
+      "n_neighborhoods": 78400,
+      "upper": 6
+    }
+  ],
+  "identity_geometric_nullity_comparisons": [
+    {
+      "degree": 0,
+      "family": "ordinary",
+      "fraction_equal": 1.0,
+      "lower": 3,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 3
+    },
+    {
+      "degree": 0,
+      "family": "ordinary",
+      "fraction_equal": 1.0,
+      "lower": 4,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 4
+    },
+    {
+      "degree": 0,
+      "family": "ordinary",
+      "fraction_equal": 1.0,
+      "lower": 5,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 5
+    },
+    {
+      "degree": 0,
+      "family": "ordinary",
+      "fraction_equal": 1.0,
+      "lower": 6,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 6
+    },
+    {
+      "degree": 1,
+      "family": "ordinary_lower",
+      "fraction_equal": 1.0,
+      "lower": 3,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 3
+    },
+    {
+      "degree": 1,
+      "family": "ordinary_lower",
+      "fraction_equal": 1.0,
+      "lower": 5,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 5
+    },
+    {
+      "degree": 1,
+      "family": "persistent",
+      "fraction_equal": 1.0,
+      "lower": 3,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 4
+    },
+    {
+      "degree": 1,
+      "family": "persistent",
+      "fraction_equal": 1.0,
+      "lower": 5,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 6
+    },
+    {
+      "degree": 1,
+      "family": "ordinary_upper",
+      "fraction_equal": 1.0,
+      "lower": 4,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 4
+    },
+    {
+      "degree": 1,
+      "family": "ordinary_upper",
+      "fraction_equal": 1.0,
+      "lower": 6,
+      "maximum_absolute_difference": 0.0,
+      "n_equal": 78400,
+      "n_unequal": 0,
+      "upper": 6
+    }
+  ],
+  "method": "Descriptive pooled-residue summaries of all frozen feature caches; no targets or prediction results loaded; no spectra or models recomputed.",
+  "n_proteins": 364,
+  "n_residue_centered_neighborhoods": 78400,
+  "native_graph_redundancy": [
+    {
+      "fraction_max_equals_twice_vertex_count_for_n_ge_2": 1.0,
+      "fraction_nullity_one": 1.0,
+      "maximum_absolute_error_from_twice_vertex_count": 1.7763568394002505e-14,
+      "maximum_vertices": 14,
+      "median_vertices": 7.0,
+      "minimum_vertices": 2,
+      "n_at_least_two_vertices": 78400,
+      "n_neighborhoods": 78400,
+      "n_one_vertex": 0,
+      "radius_angstrom": 6
+    },
+    {
+      "fraction_max_equals_twice_vertex_count_for_n_ge_2": 1.0,
+      "fraction_nullity_one": 1.0,
+      "maximum_absolute_error_from_twice_vertex_count": 4.973799150320701e-14,
+      "maximum_vertices": 30,
+      "median_vertices": 14.0,
+      "minimum_vertices": 2,
+      "n_at_least_two_vertices": 78400,
+      "n_neighborhoods": 78400,
+      "n_one_vertex": 0,
+      "radius_angstrom": 9
+    },
+    {
+      "fraction_max_equals_twice_vertex_count_for_n_ge_2": 1.0,
+      "fraction_nullity_one": 1.0,
+      "maximum_absolute_error_from_twice_vertex_count": 1.1368683772161603e-13,
+      "maximum_vertices": 64,
+      "median_vertices": 30.0,
+      "minimum_vertices": 4,
+      "n_at_least_two_vertices": 78400,
+      "n_neighborhoods": 78400,
+      "n_one_vertex": 0,
+      "radius_angstrom": 12
+    }
+  ],
+  "native_radius6_size_agreement_with_graph_contact_count_plus_one": 1.0,
+  "nullity_interpretation": "Identity-sheaf degree-one nullity describes ordinary or persistent first homology of the local alpha filtration. Geometric and center-label sheaf nullities describe their corresponding sheaf homology; center-label nullity must not be equated to the number of geometric loops.",
+  "positive_summary_comparison": {
+    "absolute_tolerance": 1e-10,
+    "meaning": "At least one of five stored positive-spectrum summaries differs numerically. Equality of summaries does not prove equality of full spectra or matrices; upper and lower operators may have different chain-space dimensions. Zero summaries can represent empty positive spectra.",
+    "relative_tolerance": 1e-08,
+    "statistics": [
+      "min_positive",
+      "max",
+      "mean",
+      "median",
+      "std"
+    ]
+  },
+  "provenance": {
+    "feature_files": 364,
+    "feature_set_digest_definition": "SHA256 of compact JSON mapping sorted protein IDs to complete NPZ SHA256 digests",
+    "feature_set_sha256": "f170a2fd15202818c9abe5f58879eab6f8839de61e1633def300bc2688a8c5aa",
+    "manifest_sha256": {
+      "dataset_config.json": "43157a2b025f68871868c6fe180e446300149e77f8889b240075ce2c0c154f00",
+      "proteins.csv": "b9e3a96c5481b755a33b2040eea17dfc2c0a41701dfe0eea3dcc86ed94a10880",
+      "residues.csv": "9176fe82b51e126e72c0f30a147f5a85ce9fa8bb995ed8c5097a49509613cc1c"
+    },
+    "nullity_csv_sha256": "f8c3eff6e90032e6e07a36c31463b9805a2dace2e54096a346506b9b7ab010d2",
+    "script_sha256": "d158f4efbbb2dd237fed6c18c678c59ad3535a0b57e35e67fb50e43ac47ffc4d"
+  },
+  "status": "complete",
+  "weighting": "Each residue-centered neighborhood receives equal weight; overlapping neighborhoods and residues within proteins are dependent."
+}
