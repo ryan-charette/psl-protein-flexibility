@@ -1,0 +1,2 @@
+protocol,mode,n_proteins,n_clusters,n_residues,mean_pcc,pcc_ci95_low,pcc_ci95_high,n_valid_pcc,mean_spearman,spearman_ci95_low,spearman_ci95_high,n_valid_spearman,mean_rmse_z,rmse_z_ci95_low,rmse_z_ci95_high,n_valid_rmse_z,pooled_pcc,pooled_spearman,pooled_rmse_z
+cluster,graph+center0,364,349,78400,0.6267630476645336,0.6127349196539045,0.6401917289463055,364,0.6061304759123005,0.5908159818178725,0.6210802893353967,364,0.7852531571743868,0.7749082300670699,0.7958612653353536,364,0.6115746846033091,0.6141937801119535,0.7917426901106592

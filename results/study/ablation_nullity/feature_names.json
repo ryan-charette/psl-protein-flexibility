@@ -1,0 +1,21 @@
+{
+  "graph+center0": [
+    "graph:contact_count_r6",
+    "graph:contact_fraction_r6",
+    "graph:contact_count_r8",
+    "graph:contact_fraction_r8",
+    "graph:contact_count_r10",
+    "graph:contact_fraction_r10",
+    "graph:contact_count_r12",
+    "graph:contact_fraction_r12",
+    "graph:clustering_r8",
+    "graph:clustering_r12",
+    "graph:mean_distance_nearest4",
+    "graph:mean_distance_nearest8",
+    "graph:mean_distance_nearest12",
+    "center0:center0_a3_d0_nullity",
+    "center0:center0_a4_d0_nullity",
+    "center0:center0_a5_d0_nullity",
+    "center0:center0_a6_d0_nullity"
+  ]
+}

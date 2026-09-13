@@ -1,0 +1,6 @@
+protocol,mode,fold,n_train_proteins,n_test_proteins,n_train_residues,n_test_residues,fit_predict_seconds
+cluster,graph+center0,1,293,71,62719,15681,15.10899999999674
+cluster,graph+center0,2,292,72,62720,15680,18.84399999998277
+cluster,graph+center0,3,288,76,62721,15679,17.34399999998277
+cluster,graph+center0,4,292,72,62720,15680,18.25
+cluster,graph+center0,5,291,73,62720,15680,14.937000000034459

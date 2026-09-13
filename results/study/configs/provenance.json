@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "recorded_numerical_source_sha256": "4ba5c6c1b1c1402ae0a21b5fcaba5b07beba0c533360328afa434d7ac3387c8c",
+      "sha256": "fa23f8c50b558c6b8968c4c2a2f445a475a5dbb4fa4801b5dfb5b167625d559b",
+      "snapshot": "results/study/configs/feature_config_d0.json",
+      "source": "data/features/feature_config_d0.json"
+    },
+    {
+      "recorded_numerical_source_sha256": "4ba5c6c1b1c1402ae0a21b5fcaba5b07beba0c533360328afa434d7ac3387c8c",
+      "sha256": "13b63c679707e128935d9096948f3214b71e2c38b290e5618f373be25e938641",
+      "snapshot": "results/study/configs/feature_config_d1.json",
+      "source": "data/features/feature_config_d1.json"
+    },
+    {
+      "recorded_numerical_source_sha256": "e241849f1a86c4e5c9ef17d4ab0619645bf2aadfddd08e142463f83cd306f4e6",
+      "sha256": "7998bc0f55a805ea8844984404a2516c34768205b2bcfbd6877ab86b0dd1965b",
+      "snapshot": "results/study/configs/upper_control_config.json",
+      "source": "data/features/upper_control_config.json"
+    }
+  ],
+  "policy": "Byte-exact immutable snapshots of completed feature-generation configurations; source cache files unchanged. Existing differing snapshots are rejected.",
+  "status": "verified"
+}

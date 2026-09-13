@@ -1,0 +1,183 @@
+{
+  "checks": {
+    "cases": [
+      {
+        "background_rows": 100,
+        "effective_arrays_equal_exact_float32_cast": true,
+        "effective_input_dtype": "float32",
+        "features": 37,
+        "held_out_cluster": "cluster_1ULR",
+        "maximum_SHAP_reconstruction_error": 3.3013527800385134e-08,
+        "original_and_effective_matrix_hashes": "verified",
+        "protein_id": "1ULR",
+        "residues": 87,
+        "seeded_training_background": "verified",
+        "status": "verified"
+      },
+      {
+        "background_rows": 100,
+        "effective_arrays_equal_exact_float32_cast": true,
+        "effective_input_dtype": "float32",
+        "features": 37,
+        "held_out_cluster": "cluster_1X3O",
+        "maximum_SHAP_reconstruction_error": 4.1817858731363344e-08,
+        "original_and_effective_matrix_hashes": "verified",
+        "protein_id": "1X3O",
+        "residues": 80,
+        "seeded_training_background": "verified",
+        "status": "verified"
+      }
+    ],
+    "dataset": {
+      "input_and_manifest_hashes": "verified",
+      "proteins": 364,
+      "residues": 78400,
+      "sequence_components": 349,
+      "sequence_edges": 16
+    },
+    "evaluations": [
+      {
+        "directory": "ablation_a3",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "ablation_a4",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "ablation_a5",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "ablation_a6",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "ablation_nullity",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "ablation_positive",
+        "modes": 1,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 78400,
+        "status": "verified"
+      },
+      {
+        "directory": "core",
+        "modes": 7,
+        "proteins": 364,
+        "protocols": [
+          "cluster",
+          "protein"
+        ],
+        "residue_predictions": 1097600,
+        "status": "verified"
+      },
+      {
+        "directory": "d1",
+        "modes": 12,
+        "proteins": 364,
+        "protocols": [
+          "cluster"
+        ],
+        "residue_predictions": 940800,
+        "status": "verified"
+      }
+    ],
+    "features": {
+      "block_coverage": {
+        "center0": 364,
+        "center1": 364,
+        "center_p1": 364,
+        "center_upper1": 364,
+        "geometric0": 364,
+        "geometric1": 364,
+        "geometric_p1": 364,
+        "geometric_upper1": 364,
+        "graph": 364,
+        "identity0": 364,
+        "identity1": 364,
+        "identity_p1": 364,
+        "identity_upper1": 364,
+        "native0": 364,
+        "simplex_counts": 364
+      },
+      "feature_set_sha256": "f170a2fd15202818c9abe5f58879eab6f8839de61e1633def300bc2688a8c5aa",
+      "source_signatures": "verified",
+      "verified_caches": 364
+    },
+    "fixed_study_plan": {
+      "expected_forest_fits": 160,
+      "required_runs": [
+        "core",
+        "d1",
+        "ablation_nullity",
+        "ablation_positive",
+        "ablation_a3",
+        "ablation_a4",
+        "ablation_a5",
+        "ablation_a6"
+      ],
+      "status": "verified"
+    }
+  },
+  "failures": [],
+  "provenance": {
+    "audit_script_sha256": "077106917a1316d36fc89a530911d3f5ea3878494a35806c0a0cbed0cf71c9cc",
+    "required_blocks": [
+      "graph",
+      "native0",
+      "identity0",
+      "geometric0",
+      "center0",
+      "identity1",
+      "identity_p1",
+      "identity_upper1",
+      "geometric1",
+      "geometric_p1",
+      "geometric_upper1",
+      "center1",
+      "center_p1",
+      "center_upper1"
+    ],
+    "required_cases": true,
+    "required_completed_evaluations": true,
+    "required_fixed_study": true,
+    "scope": "File hashes, residue identities, frozen folds, finite features, per-protein metrics and macro means, paired means, and saved held-out SHAP reconstruction; no refitting."
+  },
+  "status": "verified"
+}

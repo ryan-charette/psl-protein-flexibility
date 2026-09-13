@@ -1,0 +1,272 @@
+{
+  "evaluations": [
+    {
+      "evaluation_config_sha256": "a77d59ec9113428bb4a5944cf9bed097dc1b970c8a1aae447a163f32819adca4",
+      "fold_timing_file": "results/study/ablation_a3/fold_timings.csv",
+      "fold_timing_sha256": "89f7eccc9152595560297c4a4d0d294d70af9181a065f1f9430b1130b50fddc8",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 12.735000000044238,
+      "median_fit_predict_elapsed_seconds": 11.39000000001397,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_a3",
+      "sum_fit_predict_elapsed_seconds": 56.60899999999674,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "4bffe8172bf38a3726391e9c1c3b6b7e40975cac59f304a20e04cbf1472bebd5",
+      "fold_timing_file": "results/study/ablation_a4/fold_timings.csv",
+      "fold_timing_sha256": "76090c76bf25ea75e756cebab6a0fd7808d6be23e5c7caf59558d4b7f8518249",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 14.09399999998277,
+      "median_fit_predict_elapsed_seconds": 11.10999999998603,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_a4",
+      "sum_fit_predict_elapsed_seconds": 58.06300000002375,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "c9d18634f062c65186dce29360fc1fc2c63d1bd94b324ec83c47c98b2ab4fd39",
+      "fold_timing_file": "results/study/ablation_a5/fold_timings.csv",
+      "fold_timing_sha256": "fb40b6ab4a83ca127167e59b57baa78d0203e5a14f4fddc8126af6be365b1ccb",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 12.938000000023749,
+      "median_fit_predict_elapsed_seconds": 11.25,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_a5",
+      "sum_fit_predict_elapsed_seconds": 58.40700000000652,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "543248eb8a3e27e5991e06ec87205f5c008bc3f53ffbbbcfad670f57b89b646a",
+      "fold_timing_file": "results/study/ablation_a6/fold_timings.csv",
+      "fold_timing_sha256": "fa35b99e75e68ae1dbd4d79f018e77196483411ef278d6babcaa07b97829d665",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 13.202999999979513,
+      "median_fit_predict_elapsed_seconds": 11.51600000000326,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_a6",
+      "sum_fit_predict_elapsed_seconds": 59.18799999996554,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "2d7a57f462defefa82fa18a4c3a618422adb9507f9e3ab3f269a51d6eb52eff2",
+      "fold_timing_file": "results/study/ablation_nullity/fold_timings.csv",
+      "fold_timing_sha256": "d511524a40597ba499c0a9df3230846ccf81f15ba3c85f6f97673415cc997f6f",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 9.297000000020487,
+      "median_fit_predict_elapsed_seconds": 8.75,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_nullity",
+      "sum_fit_predict_elapsed_seconds": 44.375,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "fd7d7be8381cc2001e17d9b0d425c4dcdaa2873745118b65f37578887588b6d5",
+      "fold_timing_file": "results/study/ablation_positive/fold_timings.csv",
+      "fold_timing_sha256": "8e5cc96dc351adee5689e75929bd1fe344005cf1e545e4f088be21d4c55fdcb8",
+      "forest_fits": 5,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 18.84399999998277,
+      "median_fit_predict_elapsed_seconds": 17.34399999998277,
+      "modes": 1,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "ablation_positive",
+      "sum_fit_predict_elapsed_seconds": 84.48399999999674,
+      "trees_fitted": 1000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "77378e0d2c6ca88686b91bbf67e0553400c61662ea2d57667c3b21cbf2868d4c",
+      "fold_timing_file": "results/study/core/fold_timings.csv",
+      "fold_timing_sha256": "5a2a36f88178708e56b3bbe9ee0d7b9622f8562157c0b8eed56fee7780922958",
+      "forest_fits": 70,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 22.31300000002375,
+      "median_fit_predict_elapsed_seconds": 12.773500000010245,
+      "modes": 7,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster",
+        "protein"
+      ],
+      "run": "core",
+      "sum_fit_predict_elapsed_seconds": 909.7369999999646,
+      "trees_fitted": 14000,
+      "trees_per_forest": 200
+    },
+    {
+      "evaluation_config_sha256": "c5bb7f40e86826a5d0df4d6d0cea98d2dd8e81e8a97f076ecfeb2e544521c36e",
+      "fold_timing_file": "results/study/d1/fold_timings.csv",
+      "fold_timing_sha256": "c47314577bbae7ae8a56399047fe7508ce4dea60c1afbeef476906f86a4b7cd2",
+      "forest_fits": 60,
+      "forest_jobs": 4,
+      "maximum_fit_predict_elapsed_seconds": 26.17099999997299,
+      "median_fit_predict_elapsed_seconds": 18.640500000008615,
+      "modes": 12,
+      "n_proteins": 364,
+      "n_residues": 78400,
+      "protocols": [
+        "cluster"
+      ],
+      "run": "d1",
+      "sum_fit_predict_elapsed_seconds": 1135.4849999999278,
+      "trees_fitted": 12000,
+      "trees_per_forest": 200
+    }
+  ],
+  "feature_generation_stages": [
+    {
+      "interpretation": "Historical pre-amendment geometry; 78,223 residues. This stage is retained as executed, not a standalone timing benchmark for the final parser.",
+      "proteins": 364,
+      "residues": 78223,
+      "stage": "original_degree_zero",
+      "sum_worker_elapsed_seconds": 2007.1661358994315,
+      "timing_table": "results/study/d0_timing.csv",
+      "timing_table_sha256": "218bcf79e0a2c5680a3c6d3f400eb092104a2d64ac839f67ccb16267075a4735",
+      "wall_elapsed_seconds": 508.5803,
+      "wall_evidence_strength": "transcribed_execution_report",
+      "wall_source": "Execution report transcribed from the original run; no saved original stdout file",
+      "worker_processes": 4
+    },
+    {
+      "interpretation": "All final 78,400 residues; includes recomputation of degree-zero blocks for 24 chemically amended structures, with other degree-zero blocks reused.",
+      "original_log_relative_to_repo": "..\\final_features.log",
+      "original_log_sha256": "5bf60b661bd365081f48026cef4a8f7dc13e379dfbf5be1f23633eae5d3b6a6d",
+      "preserved_execution_summary": {
+        "proteins": 364,
+        "wall_seconds": 1066.1860192000167,
+        "worker_seconds": 4209.508096600883
+      },
+      "proteins": 364,
+      "residues": 78400,
+      "stage": "production_degree_one_and_resumed_degree_zero",
+      "sum_worker_elapsed_seconds": 4209.508096600883,
+      "timing_table": "results/study/d1_timing.csv",
+      "timing_table_sha256": "295f7f230ecb7dca96095ac37bd72d514fa9e79322217a555b929a6921c483d2",
+      "wall_elapsed_seconds": 1066.1860192000167,
+      "wall_source": "Preserved execution stdout summary",
+      "worker_processes": 4
+    },
+    {
+      "interpretation": "All final 78,400 residues; ordinary degree-one controls at alpha radii4 and6.",
+      "original_log_relative_to_repo": "..\\upper_features.log",
+      "original_log_sha256": "55909eb47d55e45f5f7ae163aebee6420d9e904cf2765791fdf08f5a77418562",
+      "preserved_execution_summary": {
+        "wall_seconds": 843.0115770000266,
+        "worker_seconds": 3338.1801959995064
+      },
+      "proteins": 364,
+      "residues": 78400,
+      "stage": "ordinary_upper_degree_one",
+      "sum_worker_elapsed_seconds": 3338.1801959995064,
+      "timing_table": "results/study/upper_timing.csv",
+      "timing_table_sha256": "04c63f0aaca16998e561e589e9d1d27ac1926da6dda42021cbf74a164b8f6055",
+      "wall_elapsed_seconds": 843.0115770000266,
+      "wall_source": "Preserved execution stdout summary",
+      "worker_processes": 4
+    }
+  ],
+  "limitations": [
+    "The summed fit/predict durations omit feature loading, output serialization and cluster-bootstrap summaries; no end-to-end evaluation wall duration is claimed.",
+    "Historical degree-zero and final production runs used different preprocessing states and resume behavior; a clean reproduction combines work differently.",
+    "These records do not measure total CPU time, peak memory, downloading, all dataset preparation, operator validation, SHAP, rendering or manuscript preparation.",
+    "The original degree-zero wall time is transcribed; later wall reports are preserved verbatim within this JSON with original log hashes."
+  ],
+  "pilot": {
+    "decision": "full cohort",
+    "decision_file_sha256": "00a829f8b5ddc2eaa91dc5909a9b144e10682c1ddef5b5c5f1c67e11a76f9998",
+    "proteins": 7,
+    "residues": 998,
+    "sum_worker_elapsed_seconds": 37.94365209998796,
+    "timing_file_sha256": "5c07988d878c57298e88268bc8831f66e98a44291a0024bf5f37d20c2fdbb10c",
+    "wall_elapsed_seconds": 37.964241300011054
+  },
+  "platform": {
+    "architecture": "AMD64",
+    "logical_processors": 8,
+    "operating_system": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14"
+  },
+  "provenance": {
+    "environment_file": "results/study/environment.txt",
+    "environment_sha256": "c7e8931f70bfbdf4082e379721b936fb38b4a8f8e552336517dd61040d170393",
+    "feature_config_snapshot_manifest_sha256": "3d7820e929341241d2d0ce388e01bd5b092ea7731fde98bbb923af85781b3edc",
+    "feature_config_snapshots": [
+      {
+        "recorded_numerical_source_sha256": "4ba5c6c1b1c1402ae0a21b5fcaba5b07beba0c533360328afa434d7ac3387c8c",
+        "sha256": "fa23f8c50b558c6b8968c4c2a2f445a475a5dbb4fa4801b5dfb5b167625d559b",
+        "snapshot": "results/study/configs/feature_config_d0.json",
+        "source": "data/features/feature_config_d0.json"
+      },
+      {
+        "recorded_numerical_source_sha256": "4ba5c6c1b1c1402ae0a21b5fcaba5b07beba0c533360328afa434d7ac3387c8c",
+        "sha256": "13b63c679707e128935d9096948f3214b71e2c38b290e5618f373be25e938641",
+        "snapshot": "results/study/configs/feature_config_d1.json",
+        "source": "data/features/feature_config_d1.json"
+      },
+      {
+        "recorded_numerical_source_sha256": "e241849f1a86c4e5c9ef17d4ab0619645bf2aadfddd08e142463f83cd306f4e6",
+        "sha256": "7998bc0f55a805ea8844984404a2516c34768205b2bcfbd6877ab86b0dd1965b",
+        "snapshot": "results/study/configs/upper_control_config.json",
+        "source": "data/features/upper_control_config.json"
+      }
+    ],
+    "numerical_source_sha256": {
+      "scripts/augment_upper_features.py": "ee4ea1b5435c47d4bde51fb33e7439392a166aa06cf2709b347d1e491b4ee9c9",
+      "scripts/generate_study_features.py": "b48595be8945258fc2da61ad577020129c7722a24fe26b2c0a53f47eb2c3f8cd",
+      "scripts/run_evaluations.py": "7cc4c6c0c6fa217a2f512d21cde722ef3ff856c34f63ef0989bd567886542dd4",
+      "src/psl_flexibility/dataset.py": "854c7733d22d712b72363aa8fa359414a1c84bf2f662b802789a4a3d81049a88",
+      "src/psl_flexibility/evaluation.py": "bd9a130ad6fb50aa16e55855b4f6e643b70616fc84f1c9043ee85a4106293820",
+      "src/psl_flexibility/sheaf.py": "f0bc12e9a28ceb66b92c4a0f2c2c6c89fc0310c620b3f5d54828d4ecc8f4e7e1"
+    }
+  },
+  "status": "complete",
+  "timing_semantics": "All times are elapsed durations, not process CPU time. Feature worker durations sum overlapping worker calls; fold durations sum sequential fit-and-predict calls, each with its recorded internal parallelism. Do not add worker sums to wall times.",
+  "totals": {
+    "forest_fits": 160,
+    "sum_forest_fit_predict_elapsed_seconds": 2406.3479999998817,
+    "sum_recorded_feature_stage_wall_seconds": 2417.7778962000434,
+    "sum_recorded_feature_worker_elapsed_seconds": 9554.85442849982,
+    "trees_fitted": 32000
+  }
+}

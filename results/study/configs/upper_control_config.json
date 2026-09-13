@@ -1,0 +1,17 @@
+{
+  "purpose": "Disentangle two-scale persistence from access to upper-radius ordinary degree-one information",
+  "pairs": [
+    [
+      4,
+      4
+    ],
+    [
+      6,
+      6
+    ]
+  ],
+  "support": 13,
+  "source_sha256": "e241849f1a86c4e5c9ef17d4ab0619645bf2aadfddd08e142463f83cd306f4e6",
+  "selection": "full audited cohort, all three sheaf constructions",
+  "decided": "before predictive evaluation"
+}

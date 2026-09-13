@@ -22,6 +22,33 @@ from scipy.stats import pearsonr, spearmanr
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_BLOCKS = ["graph", "native0", "identity0", "geometric0", "center0"]
+STUDY_BLOCKS = CORE_BLOCKS + [kind + suffix for kind in ("identity", "geometric", "center")
+                             for suffix in ("1", "_p1", "_upper1")]
+
+
+def require_fixed_study_plan(study: Path) -> dict:
+    """Reject a truncated study, including absent runs or omitted model modes."""
+    core = {"graph", "native0", "graph+native0", "center0", "graph+identity0", "graph+geometric0", "graph+center0"}
+    degree1 = {mode for kind in ("identity", "geometric", "center") for mode in
+               (f"graph+{kind}0", f"graph+{kind}0+{kind}1", f"graph+{kind}0+{kind}_p1", f"graph+{kind}0+{kind}_upper1")}
+    ablations = {"nullity": r"^graph:|_nullity$", "positive": r"^graph:|_(?:min_positive|max|mean|median|std)$",
+                 **{f"a{a}": rf"^graph:|center0_a{a}_" for a in (3, 4, 5, 6)}}
+    expected = {"core": (core, {"cluster", "protein"}, None, "core"),
+                "d1": (degree1, {"cluster"}, None, "d1"),
+                **{f"ablation_{name}": ({"graph+center0"}, {"cluster"}, regex, "ablation") for name, regex in ablations.items()}}
+    for name, (modes, protocols, regex, phase) in expected.items():
+        path = study / name / "evaluation_config.json"
+        require(path.exists(), f"Missing required fixed-study evaluation: {name}")
+        config = json.loads(path.read_text())
+        require(config.get("complete") is True, f"Required fixed-study evaluation is incomplete: {name}")
+        require(set(config["modes"]) == modes and len(config["modes"]) == len(modes), f"{name}: required study modes differ")
+        require(set(config["protocols"]) == protocols and len(config["protocols"]) == len(protocols), f"{name}: required protocols differ")
+        require(config["feature_columns"] == regex and config["exclude_feature_columns"] is None, f"{name}: feature selection differs from fixed plan")
+        require(config["phase"] == phase and config["cohort"] == "all" and config["missing_policy"] == "error", f"{name}: fixed study phase/cohort changed")
+        for key, value in {"seed": 20260913, "n_folds": 5, "n_estimators": 200, "max_depth": 12,
+                           "min_samples_leaf": 2, "max_features": "sqrt", "bootstrap": True, "bootstrap_repetitions": 2000}.items():
+            require(config[key] == value, f"{name}: fixed {key} differs")
+    return {"status": "verified", "required_runs": list(expected), "expected_forest_fits": 160}
 
 
 def digest(path: Path) -> str:
@@ -39,6 +66,12 @@ def require(condition, message: str) -> None:
 
 def close(a, b, tolerance=1e-10) -> bool:
     return bool(np.allclose(a, b, atol=tolerance, rtol=tolerance, equal_nan=True))
+
+
+def matrix_digest(matrix: np.ndarray) -> str:
+    """Match the explanation archive's documented shape-plus-float64 digest."""
+    array = np.ascontiguousarray(matrix, dtype="<f8")
+    return hashlib.sha256(str(array.shape).encode() + array.tobytes()).hexdigest()
 
 
 def metrics(y, predicted) -> dict:
@@ -129,7 +162,9 @@ def audit_features(directory: Path, residue_groups: dict, required_blocks: list[
                 coverage[block] += 1
             if "upper_source_sha256" in cache:
                 require(str(cache["upper_source_sha256"]) == upper_hash, f"{protein}: stale upper-endpoint source hash")
-    return {"verified_caches": len(hashes), "block_coverage": dict(coverage), "source_signatures": "verified"}, hashes
+    feature_set_hash = hashlib.sha256(json.dumps(hashes, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return {"verified_caches": len(hashes), "block_coverage": dict(coverage), "source_signatures": "verified",
+            "feature_set_sha256": feature_set_hash}, hashes
 
 
 def audit_run(directory: Path, manifest: Path, residue_groups: dict, metadata: dict, feature_hashes: dict) -> dict:
@@ -146,6 +181,10 @@ def audit_run(directory: Path, manifest: Path, residue_groups: dict, metadata: d
         require(digest(directory / name) == expected, f"{directory.name}: completed output hash changed: {name}")
     cohort = pd.read_csv(directory / "evaluation_fold_manifest.csv", keep_default_na=False)
     require(set(cohort.protein_id) == set(config["feature_files"]), f"{directory.name}: evaluated feature/cohort mismatch")
+    if config.get("cohort") == "all" and config.get("missing_policy") == "error":
+        require(set(cohort.protein_id) == set(metadata), f"{directory.name}: full-cohort evaluation omitted proteins")
+    require(config["n_proteins"] == len(cohort) and config["n_residues"] == sum(len(residue_groups[p]) for p in cohort.protein_id),
+            f"{directory.name}: configured evaluation sample sizes differ")
     require(not cohort.protein_id.duplicated().any(), f"{directory.name}: repeated cohort IDs")
     for row in cohort.itertuples():
         expected = metadata[row.protein_id]
@@ -213,9 +252,11 @@ def feature_matrix(directory: Path, protein: str, qualified_names: list[str]) ->
 
 def audit_case(directory: Path, protein: str, features: Path, residue_groups: dict, metadata: dict, hashes: dict) -> dict:
     provenance = json.loads((directory / f"{protein}_provenance.json").read_text())
+    require(digest(ROOT / "scripts/explain_cases.py") == provenance["source_sha256"], f"{protein}: explanation source changed")
     for suffix, expected in provenance["output_sha256"].items():
         require(digest(directory / f"{protein}_{suffix}") == expected, f"{protein}: case output changed: {suffix}")
     train, test = set(provenance["train_ids"]), set(provenance["test_ids"])
+    require(len(train) == len(provenance["train_ids"]) and len(test) == len(provenance["test_ids"]), f"{protein}: repeated model partition IDs")
     require(not train & test and train | test == set(metadata), f"{protein}: model train/test partition invalid")
     require(provenance["protocol"] == "cluster" and provenance["mode"] == "graph+center0", f"{protein}: unexpected case model/protocol")
     require(protein in test and protein not in train, f"{protein}: case was not held out")
@@ -236,16 +277,39 @@ def audit_case(directory: Path, protein: str, features: Path, residue_groups: di
         names = case["feature_names"].astype(str).tolist()
         require(names == provenance["feature_names"], f"{protein}: feature names differ across explanation artifacts")
         require(values.shape == shap.shape and np.isfinite(values).all() and np.isfinite(shap).all(), f"{protein}: invalid SHAP arrays")
+        require(matrix_digest(values) == provenance["case_input_matrix_sha256"], f"{protein}: original input matrix hash differs")
         require(np.array_equal(case["residue_keys"], residue_groups[protein].residue_key.to_numpy(str)), f"{protein}: SHAP residue mapping differs")
         require(close(values, feature_matrix(features, protein, names)), f"{protein}: explained inputs differ from evaluated cache")
+        effective_values = case["effective_feature_values"]
+        require(provenance["effective_input_dtype"] == "float32" and effective_values.dtype == np.dtype("float32"),
+                f"{protein}: incorrect effective foreground precision")
+        require(np.array_equal(effective_values, values.astype(np.float32)), f"{protein}: effective foreground is not the exact model-precision cast")
+        require(matrix_digest(effective_values) == provenance["effective_feature_matrix_sha256"], f"{protein}: effective foreground hash differs")
+        require(provenance["source_and_effective_predictions_identical"] is True, f"{protein}: model-precision prediction equivalence was not checked")
+        require(close(float(case["expected_value"]), provenance["expected_value"]) and
+                abs(float(case["expected_value"]) - provenance["background_prediction_mean"]) < 1e-6,
+                f"{protein}: inconsistent explanation baseline")
         residual = case["prediction_z"] - float(case["expected_value"]) - shap.sum(axis=1)
         maximum = float(np.max(np.abs(residual)))
         require(maximum < 1e-6, f"{protein}: SHAP reconstruction fails ({maximum:g})")
         background_ids = case["background_protein_ids"].astype(str)
         background_keys = case["background_residue_keys"].astype(str)
         background = case["background_values"]
+        require(matrix_digest(background) == provenance["background_matrix_sha256"], f"{protein}: original background hash differs")
+        effective_background = case["effective_background_values"]
+        require(effective_background.dtype == np.dtype("float32") and np.array_equal(effective_background, background.astype(np.float32)),
+                f"{protein}: effective background is not the exact model-precision cast")
+        require(matrix_digest(effective_background) == provenance["effective_background_matrix_sha256"], f"{protein}: effective background hash differs")
         require(len(background) == 100 and len(set(zip(background_ids, background_keys))) == 100, f"{protein}: background does not contain 100 unique rows")
         require(set(background_ids).issubset(train), f"{protein}: background includes held-out residues")
+        training_keys = pd.concat([residue_groups[pid][["protein_id", "residue_key", "row_index"]]
+                                   for pid in provenance["train_ids"]], ignore_index=True)
+        expected_seed = int(provenance["training_seed"]) + int(provenance["fold"])
+        require(provenance["background_seed"] == expected_seed, f"{protein}: inconsistent background seed")
+        indices = np.random.default_rng(expected_seed).choice(len(training_keys), 100, replace=False)
+        sampled = training_keys.iloc[indices]
+        require(np.array_equal(background_ids, sampled.protein_id.to_numpy(str)) and
+                np.array_equal(background_keys, sampled.residue_key.to_numpy(str)), f"{protein}: background does not match the seeded training sample")
         for pid in sorted(set(background_ids)):
             rows = residue_groups[pid].set_index("residue_key")
             indices = rows.loc[background_keys[background_ids == pid], "row_index"].to_numpy(int)
@@ -271,6 +335,8 @@ def audit_case(directory: Path, protein: str, features: Path, residue_groups: di
             f"{protein}: explained predictions differ from the main held-out predictions")
     return {"protein_id": protein, "residues": len(values), "features": len(names), "background_rows": 100,
             "held_out_cluster": metadata[protein]["cluster_id"], "maximum_SHAP_reconstruction_error": maximum,
+            "original_and_effective_matrix_hashes": "verified", "effective_input_dtype": "float32",
+            "effective_arrays_equal_exact_float32_cast": True, "seeded_training_background": "verified",
             "status": "verified"}
 
 
@@ -281,16 +347,26 @@ def main() -> int:
     parser.add_argument("--raw-data", type=Path, default=ROOT / "data/raw/MDG_bfactor-main")
     parser.add_argument("--study", type=Path, default=ROOT / "results/study")
     parser.add_argument("--cases", type=Path, default=ROOT / "results/study/cases")
-    parser.add_argument("--required-blocks", default=",".join(CORE_BLOCKS))
-    parser.add_argument("--require-complete", action="store_true", help="Fail if no completed evaluation exists or any discovered run is incomplete")
+    parser.add_argument("--required-blocks", help="Comma-separated override; complete/fixed study audits default to all 14 blocks, otherwise the five core blocks")
+    parser.add_argument("--require-complete", action="store_true", help="Require complete evaluations; at the default study directory also require all eight fixed-plan runs and modes")
+    parser.add_argument("--require-fixed-study", action="store_true", help="Require all eight fixed-plan runs, modes and settings even at a custom study directory")
     parser.add_argument("--require-cases", action="store_true", help="Require both 1ULR and 1X3O explanation artifacts")
     parser.add_argument("--out", type=Path, help="Write this JSON report; study inputs and results stay unchanged")
     args = parser.parse_args()
-    report = {"status": "failed", "checks": {}, "failures": []}
+    fixed_study = args.require_fixed_study or (args.require_complete and args.study.resolve() == (ROOT / "results/study").resolve())
+    required_blocks = ([b.strip() for b in args.required_blocks.split(",") if b.strip()] if args.required_blocks is not None
+                       else list(STUDY_BLOCKS if args.require_complete or fixed_study else CORE_BLOCKS))
+    report = {"status": "failed", "checks": {}, "failures": [],
+              "provenance": {"audit_script_sha256": digest(Path(__file__)), "required_blocks": required_blocks,
+                             "required_completed_evaluations": args.require_complete, "required_cases": args.require_cases,
+                             "required_fixed_study": fixed_study,
+                             "scope": "File hashes, residue identities, frozen folds, finite features, per-protein metrics and macro means, paired means, and saved held-out SHAP reconstruction; no refitting."}}
     try:
+        if fixed_study:
+            report["checks"]["fixed_study_plan"] = require_fixed_study_plan(args.study)
         manifest_report, residues, metadata = audit_manifests(args.manifest, args.raw_data)
         report["checks"]["dataset"] = manifest_report
-        feature_report, hashes = audit_features(args.features, residues, [b.strip() for b in args.required_blocks.split(",") if b.strip()])
+        feature_report, hashes = audit_features(args.features, residues, required_blocks)
         report["checks"]["features"] = feature_report
         runs = [audit_run(path.parent, args.manifest, residues, metadata, hashes)
                 for path in sorted(args.study.rglob("evaluation_config.json"))]
