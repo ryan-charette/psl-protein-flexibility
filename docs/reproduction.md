@@ -81,8 +81,7 @@ python scripts/make_figures.py --all
 python scripts/audit_study.py --require-complete --require-cases --out results/study/final_audit.json
 python scripts/validate_operators.py
 python -m pytest -q
-tectonic -X compile paper/manuscript.tex
-tectonic -X compile paper/supplement.tex
+python paper/build.py
 ```
 
 Tectonic 0.17.0 compiled the delivered PDFs. A conventional LaTeX/BibTeX
@@ -145,3 +144,10 @@ manuscript, and figure artifacts, including their line endings. A new execution 
 platform can produce different file bytes or floating-point results; its own
 manifests and checks must be regenerated together rather than combined with
 the saved run's hashes.
+
+The single integrated manuscript includes the former supplement. `paper/build.py`
+refreshes an editorial rendering of the frozen generated persistence text before
+compilation; it changes only document-location wording and punctuation for line breaking.
+All numerical inputs remain those of the completed study. Use `--tectonic PATH`
+to specify a Tectonic executable outside PATH. The original separate article and
+supplement remain available in Git history at commit `bd1e404`.

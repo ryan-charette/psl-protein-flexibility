@@ -1,0 +1,17 @@
+\subsection{Full weighted identification and reduced cohomology}
+\label{sec:link_details}
+For the center-zero geometric sheaf, order simplices by whether they contain $c$. A restriction crossing from a simplex without $c$ to a coface with $c$ vanishes, while the reverse containment is impossible. Therefore the cochain complex splits orthogonally. Within the deletion, all labels are one and the restriction is $F(\sigma)/F(\tau)$. Define $T_q$ to multiply the coordinate on $\sigma$ by $F(\sigma)$. Then
+\begin{equation}
+T_{q+1}d_qT_q^{-1}=d_q^{\mathrm{ordinary}}.
+\end{equation}
+Since every $F(\sigma)>0$, this is an invertible cochain identification. It proves equality of cohomology dimensions, but $T_q$ need not be orthogonal. Consequently it does not replace the weighted Laplacian spectrum by an unweighted spectrum under the original inner product.
+
+For the center-containing block, write each simplex as $c*\sigma=\{c\}\cup\sigma$, put $c$ first in the orientation, and define $G(\sigma)=F(c*\sigma)$. The induced link restriction is $G(\sigma)/G(\tau)$. The empty simplex belongs to the augmented link complex, has degree $-1$, and corresponds to $c$. In particular, $G(\emptyset)=F(c)=1$, and the map from the empty simplex to a link vertex $v$ has coefficient $1/r_{cv}$. Omitting that map would incorrectly remove the center scalar from the degree-zero sheaf operator.
+
+A signed permutation between center-containing simplices and augmented link simplices preserves the Euclidean inner product, giving a spectral identification with this \emph{weighted} augmented link complex. Multiplication by $G$ then supplies a separate, generally nonorthogonal identification with ordinary augmented link cochains. Hence the zero multiplicities are governed by reduced link cohomology. For a nonempty link, $\widetilde H^{-1}(J)=0$; for a link with no vertices, the augmented complex retains the empty-simplex coordinate and $\widetilde H^{-1}(J)=\R$. This yields
+\begin{equation}
+\dim\ker L_q=\beta_q(D)+\widetilde\beta_{q-1}(J),\qquad q\geq0,
+\end{equation}
+with that convention at degree zero. In degree one, the link contribution counts independent component differences, not the link's ordinary un-reduced component count.
+
+This derivation is a direct specialization of compatible weighted/sheaf complexes, in relation to prior relative sheaf theory \citep{hansen2019}, weighted homology \citep{renwu2021}, and local/link Laplacian constructions \citep{liu2026}. It is included to interpret this molecular representation and verify its implementation; it is not presented as a new general local-homology theorem.

@@ -1,0 +1,5 @@
+\subsection{Attribution precision and rendering integrity}
+\label{sec:attribution_details}
+The precision conversion above is an auditable numerical step. The original 64-bit source feature arrays and the effective 32-bit attribution arrays are both retained with data-type and hash provenance. Predictions from the two representations must agree exactly. The additive reconstruction check then compares the expected value plus all feature contributions with the actual forest prediction. This separates an attribution error from an input-representation mismatch.
+
+Source-residue keys determine the mapping to coordinates. Each plot states whether its colors represent the observed target, model prediction, signed feature-group contribution, or absolute attribution magnitude. An unsigned map must not be labeled a signed contribution. Secondary-structure names or functional assignments are used only when independently annotated or sourced; color and visual shape alone do not establish a hinge mechanism. Image rendering is deterministic from the deposited structure and the tabulated prediction/attribution values.

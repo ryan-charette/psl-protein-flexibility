@@ -1,0 +1,25 @@
+\section{From a representation to a scientific comparison}
+\label{sec:evaluation-guide}
+\subsection{What is one example, and what is one independent unit?}
+The learner receives one feature row and one target per retained residue. Yet residues from the same protein share a structure, local environments, and a target normalization. They are not interchangeable independent samples for estimating generalization to an unseen protein. A random residue split could place very similar environments from the same structure in both training and test sets. Holding out entire protein entries addresses that direct dependence; holding out detected sequence-related entries together addresses an additional source of relatedness.
+
+The term ``protein'' in the result tables refers to an analyzed structure entry, which can contain multiple chains. This operational unit matters. The mean of within-entry correlations weights entries equally; it does not give every residue the same weight. The sequence-cluster bootstrap then changes the uncertainty calculation to respect the retained groups. There is no contradiction between training on residue rows and evaluating a protein-level estimand, provided both levels are stated.
+
+\subsection{What normalization permits the model to predict}
+The target is each residue's B-factor relative to the mean and standard deviation of its own retained structure. A value of one means one within-protein standard deviation above that mean, rather than one angstrom of displacement. This removes the absolute scale from the prediction task. It does not separate thermal motion from static disorder or remove every crystallographic effect.
+
+Test-target normalization uses the measured test outcome to define what will be scored. It does not give the test protein's mean or variance to the model as an input. This distinction is important: the experiment assesses relative profile prediction, not the ability to infer a new protein's absolute B-factor distribution from coordinates alone. It is a narrower and explicitly defined endpoint.
+
+\subsection{Why the same learner and folds are used}
+A forest averages predictions from many decision trees. Each tree partitions feature space using threshold decisions, and its terminal leaves supply predictions based on training responses. Bootstrap sampling of training rows and random feature subsets make the trees differ. Averaging reduces dependence on any one tree. This study fixes the forest settings across feature families, following the general ensemble construction of \citet{breiman2001}.
+
+The comparison asks whether adding specified descriptors helps this learning rule on the same held-out structures. If the sheaf model and baseline were tested on different proteins, a difference could reflect cohort difficulty instead of the representation. If their settings were separately optimized using the reported test scores, the comparison would additionally reflect that search. Fixed folds and fixed settings do not remove every source of uncertainty, but they make the intended contrast easier to identify.
+
+An ablation answers a related but different question. A nullity-only ablation keeps the graph features and the sheaf zero counts while removing the positive-spectrum summaries. A single-scale ablation keeps one declared radius instead of all four. These are retrained models. Their performance is not the same object as a SHAP subtotal computed from the full model, which leaves that model fixed.
+
+\subsection{How to read correlations, errors, and intervals}
+Pearson correlation measures linear profile agreement within a protein. It does not penalize every calibration error: multiplying a prediction by a positive constant or adding a constant does not change its correlation with the target. Spearman correlation compares the ordering of residues and is insensitive to monotone transformations that preserve their ranks. Normalized RMSE measures differences in the target's standardized units and is sensitive to amplitude and offset. Reporting all three helps avoid treating one aspect of agreement as the whole task.
+
+For the primary question, the relevant quantity is the per-protein difference between graph-plus-center-zero and graph-only correlation. Taking the mean of these paired differences compares like with like. The confidence interval resamples whole sequence groups from the fixed held-out results. It does not retrain forests in every bootstrap sample and therefore does not cover training randomness or all possible choices of folds.
+
+An interval containing zero means that this uncertainty calculation does not resolve the sign of the mean difference. It does not prove that the two predictors are equivalent, and it does not imply that every individual protein changes little. Likewise, an interval above zero for an exploratory comparison is not evidence that the representation has a uniquely biological interpretation. The mathematics, prediction comparison, and biological interpretation remain separate layers of the argument.

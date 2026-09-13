@@ -1,0 +1,23 @@
+\subsection{A two-vertex example: labeling is not deletion}
+Consider one edge of length $2\,\angstrom$, oriented from the target $c$ to its neighbor $v$. With all-one geometric labels, the coboundary and Laplacian are
+\begin{equation}
+D_0=(-1/2,1/2),\qquad
+L_0=\frac14\begin{pmatrix}1&-1\\-1&1\end{pmatrix}.
+\end{equation}
+Their energy is $(z_v-z_c)^2/4$, and the eigenvalues are $0$ and $1/2$. The zero-energy assignment is constant on the two vertices.
+
+Set the center label to zero while retaining the neighbor label one. The same edge now has
+\begin{equation}
+D_0=(-1/2,0),\qquad L_0=\begin{pmatrix}1/4&0\\0&0\end{pmatrix}.
+\end{equation}
+The energy is $z_c^2/4$. It penalizes the center coordinate but imposes no condition on the neighbor coordinate. Both vertices and the edge still exist. The kernel is now spanned by $(0,1)^T$, rather than by the constant assignment. This example explains why it would be incorrect to describe a zero center label as simply removing the target or fixing a measured physical displacement.
+
+It also exposes the contrast with the historical native rule. Increasing the center-edge weight in an ordinary graph strengthens the disagreement penalty between the two endpoints. The center-zero restriction instead removes the cross-term between them. Both constructions yield positive-semidefinite matrices, but they encode different comparisons. Positive semidefiniteness alone cannot establish that an implementation realizes the intended sheaf.
+
+\subsection{Equal topology does not imply equal positive spectra}
+For all-one geometric restrictions, an invertible rescaling of cochain coordinates can transform the coboundary maps into ordinary incidence maps. This is often called a \emph{gauge change}. Invertibility preserves kernels and images up to isomorphism, so the cohomology dimensions agree. It does not generally preserve the Euclidean length of vectors. The transformed adjoint is therefore not obtained by merely applying the same change to a matrix transpose.
+
+The two-vertex example already demonstrates the issue: the unweighted edge Laplacian has eigenvalues $0$ and $2$, while the length-two geometric edge has eigenvalues $0$ and $1/2$. Their complexes and cohomology agree, but their positive spectra differ. An orthogonal change of basis would preserve eigenvalues; a general diagonal rescaling need not. Later, this distinction explains why identity and geometric sheaves have matching nullities while still supplying different positive-spectrum features.
+
+\paragraph{What reaches the predictor.}
+For each residue and each declared scale, the operator is reduced to six numbers: nullity and five summaries of its positive eigenvalues. These features are not the cochain assignment $z$ used to define energy. They are measurements of the operator itself. The same construction is repeated with each retained residue as the target, giving one feature row per residue. Only then is a forest trained to relate those rows to standardized B-factors.

@@ -1,0 +1,17 @@
+\subsection{Independent derivation and numerical boundary cases}
+\label{sec:persistent_details}
+The detailed calculations below use the same cochain convention as the preceding tutorial: $d_q$ maps $q$-simplex assignments to $(q+1)$-simplex assignments, and all displayed matrices use orthonormal simplex bases. This makes matrix transpose the adjoint. Reversing a simplex orientation changes signed basis vectors and yields orthogonally equivalent operators; changing a stalk metric generally changes the numerical spectrum.
+
+Write $D_q^b=[A\ B]$ with columns indexing old and new $q$-simplices. A vector $z$ in $(q+1)$-cochains has adjoint coboundary supported on the old simplices precisely when $B^Tz=0$. If the columns of $Z$ form an orthonormal basis of $\ker B^T$, the persistent coboundary has matrix $Z^TA$, and its upper Laplacian is $A^TZZ^TA$. Singular-value decomposition gives $ZZ^T=I-BB^\dagger$. This proves the projector form without forming normal equations.
+
+Let $H=(D_q^b)^TD_q^b$. Because $B(B^TB)^\dagger B^T=BB^\dagger$, the projector form equals
+\begin{equation}
+H_{AA}-H_{AB}H_{BB}^\dagger H_{BA}.
+\end{equation}
+The lower term is formed from $d_{q-1}$ on the lower complex. In degree one this is $D_0^a(D_0^a)^T$, on the old edge space. Substituting the upper-complex lower term would generally change dimensions or the intended pair. The derivation follows the generalized Schur-complement principle for persistent Laplacians and its sheaf counterpart \citep{memoli2022,wei2025}.
+
+Positive semidefiniteness follows directly from $x^TA^TZZ^TAx=\|Z^TAx\|^2$. When there are no new $q$-simplices, $B$ has zero columns and $ZZ^T=I$. When there are no old $q$-simplices, the output is the empty operator. At equal endpoints, the ordinary sheaf Laplacian is recovered. The implementation checks these limits, compares the Schur operator with a nullspace-based construction, and checks numerical symmetry and eigenvalues. The reported rank tolerance is part of the computation: forming $B^TB$ squares singular values, so its threshold must be interpreted consistently rather than copied blindly from an SVD threshold on $B$.
+
+For the center-zero sheaf, the old/new ordering can be refined by center membership. Both $A$ and $B$ are then block diagonal with respect to the two independent cochain complexes. Orthogonal projection onto $\ker B^T$ respects the same split, and so does the persistent operator. This justifies comparing the union of block spectra with the full spectrum at nonzero width. It does not justify using an independently chosen metric for the link block.
+
+At degree zero, every scale in the fixed-support alpha filtration has exactly the same vertex set. The new-vertex column block is empty, and $L_0^{a,b}=L_0^{b,b}$. This identity relies on the fixed support and common restrictions. It need not hold when vertices are introduced during a filtration, neighborhoods are rebuilt independently at each scale, or stalks change between complexes. It explains the present choice to use degree one for the positive-width experiment.

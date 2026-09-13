@@ -1,0 +1,20 @@
+\subsection{Persistence as a question about a pair}
+At one radius, cohomology describes the complex present at that radius. Persistence asks which classes connect two radii in a compatible way. In the ordinary picture, a cycle can be present before a collection of triangles fills it. Merely comparing the dimensions of the two cohomology spaces does not determine which classes persist: classes can disappear while different ones appear. The map induced by inclusion is the additional information.
+
+For cochains the natural restriction goes from the upper complex to the lower one. Restricting a cocycle on $K_b$ to $K_a$ gives a cocycle, and restricting a coboundary gives a coboundary. This induces a map $H^q(K_b)\to H^q(K_a)$. The dimension of its image is the persistent cohomological quantity represented by the operator's nullity. It is bounded by the cohomology dimension at either endpoint. The ordinary homology picture uses the opposite arrow; over the real numbers the corresponding persistence ranks agree. The present formulas consistently use the cochain convention.
+
+The persistent Laplacian retains more than this image dimension: it also has positive eigenvalues. Understanding its construction requires identifying the correct space before multiplying matrices. The operator acts on the old $q$-cells, those already present at $a$, but it uses information from $(q+1)$-cells present at $b$. Their adjoint coboundaries can involve new $q$-cells. The persistent construction restricts to combinations whose new-cell components cancel, so that they can be compared on the old-cell space.
+
+\subsection{Projection, least squares, and elimination}
+The relevant projection can be understood using familiar least squares. Let $A$ contain the columns associated with old cells and $B$ those associated with new cells. For an old-cell assignment $x$, consider minimizing
+\begin{equation}
+\min_y\|Ax+By\|^2.
+\label{eq:tutorial-elimination}
+\end{equation}
+The new-cell variables $y$ can cancel the component of $Ax$ lying in the column space of $B$. They cannot cancel its orthogonal component. The minimum is therefore $\|(I-BB^\dagger)Ax\|^2$. This is the quadratic form of the persistent upper term. The same matrix also arises by projecting onto the admissible cochains described above. The least-squares interpretation is an algebraic explanation, not an extra fitted model in the protein study.
+
+For a small illustration, take $A=(1,0)^T$ and $B=(1,1)^T$. Then $\|Ax+By\|^2=(x+y)^2+y^2$, minimized at $y=-x/2$, with value $x^2/2$. Keeping only the principal old-column term $A^TA$ would instead give $x^2$. Eliminating the new direction changes the operator. This two-column calculation illustrates why a principal submatrix is not generally the persistent operator; it is not asserted to be a protein complex.
+
+The pseudoinverse is needed because several columns of $B$ can describe dependent directions. An ordinary inverse would fail in that case, while the orthogonal projection onto the column space remains well defined. In floating-point arithmetic, deciding which singular values count as nonzero is part of the computation. The detailed numerical conventions below make that rank decision auditable.
+
+The ordinary lower Laplacian term is a separate ingredient: it uses the lower complex's map from degree $q-1$ into the old degree-$q$ space. The elimination above concerns the upper term only. Keeping these two terms distinct avoids accidentally replacing the intended pair operator by an ordinary operator at one endpoint.

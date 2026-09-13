@@ -1,0 +1,64 @@
+\section{From a contact graph to a cochain complex}
+\label{sec:foundations}
+\subsection{Incidence matrices turn local differences into linear algebra}
+Begin with an undirected graph whose vertices are residues and whose edges are selected contacts. Assign a real number $z_i$ to every vertex. At this stage $z$ is an arbitrary test assignment, not a vector of observed B-factors. Give each edge an arbitrary orientation solely to define a matrix. The row of the incidence matrix $D_0$ associated with an oriented edge $i\to j$ contains $-1$ in column $i$, $+1$ in column $j$, and zeros elsewhere. Then $(D_0z)_{ij}=z_j-z_i$.
+
+The graph Laplacian is $L_0=D_0^TD_0$. For nonnegative edge weights $w_{ij}$, replace each incidence row by $\sqrt{w_{ij}}$ times that row. In either case,
+\begin{equation}
+z^TL_0z=\|D_0z\|^2=\sum_{ij}w_{ij}(z_j-z_i)^2.
+\label{eq:graph-tutorial-energy}
+\end{equation}
+The matrix measures a sum of local disagreements. Reversing one edge changes the sign of a row of $D_0$ but does not change $D_0^TD_0$. Thus the arbitrary orientation does not become a physical direction of interaction. This elementary observation is the starting point for orientation invariance in the more general construction.
+
+If all graph weights are positive, the energy is zero exactly when the assignment is constant on each connected component. A connected graph therefore has a one-dimensional kernel, spanned by the all-ones vector. If the graph has several components, one constant can be chosen independently on each. This explains the familiar equality between graph-Laplacian nullity and component count without appealing to topology terminology.
+
+\subsection{What an eigenvalue measures}
+Because $L_0$ is real symmetric, it has an orthonormal eigenbasis. Write a unit-norm assignment as $z=\sum_k\alpha_kv_k$, with $L_0v_k=\lambda_kv_k$. Its energy is $\sum_k\lambda_k\alpha_k^2$. A small positive eigenvalue identifies a direction of low disagreement relative to the chosen norm; a large eigenvalue identifies a direction of higher disagreement. Multiplying every edge weight by a positive constant multiplies every eigenvalue by that constant while leaving the graph's connectivity unchanged.
+
+Consequently, the kernel and positive spectrum answer different questions. Kernel dimension records exact zero-energy freedoms. Positive eigenvalues measure the scale of nonzero disagreement and depend on the weights and inner product. In this manuscript, eigenvalues become descriptors only after they have been summarized. The learner does not receive the full eigenvectors, so a good prediction from spectral summaries is not itself evidence that a particular eigenvector describes a molecular motion.
+
+\subsection{Why a graph is not enough to describe a filled triangle}
+A simplicial complex extends a graph by specifying which collections of vertices form higher-dimensional cells. A vertex is a zero-simplex, an edge a one-simplex, and a filled triangle a two-simplex. A tetrahedron is a three-simplex. Every face of an included simplex must also be included. Three edges forming a triangular outline and the same three edges together with a filled triangle are different complexes, although their contact graphs are identical.
+
+To see the distinction as linear algebra, order the vertices as $0,1,2$ and edges as $01,02,12$. For either complex the vertex-to-edge matrix is
+\begin{equation}
+D_0=\begin{pmatrix}-1&1&0\\-1&0&1\\0&-1&1\end{pmatrix}.
+\end{equation}
+If the triangle is filled, the edge-to-triangle matrix is $D_1=(1,-1,1)$. Its action on edge values $w$ is $w_{01}-w_{02}+w_{12}$, the signed circulation around the triangle. Multiplication gives $D_1D_0=0$: differences of vertex values have zero circulation. If the triangle is not filled, there is no triangle row and $D_1$ is the zero map into a zero-dimensional space.
+
+\subsection{Cochains, cocycles, and the quotient called cohomology}
+A \emph{cochain} is simply an assignment to cells of one dimension: vertex values at degree zero, edge values at degree one, and triangle values at degree two. The vector space of these assignments is denoted $C^q$. A \emph{coboundary map} $d_q:C^q\to C^{q+1}$ compares an assignment around the next-dimensional cells. Its matrix is $D_q$. The identity $d_{q+1}d_q=0$ says that applying two consecutive comparisons gives zero.
+
+A \emph{cocycle} lies in $\ker d_q$. A \emph{coboundary} lies in $\im d_{q-1}$, meaning that it came from an assignment one degree below. Every coboundary is a cocycle because consecutive maps compose to zero. Cohomology is the quotient
+\begin{equation}
+H^q=\ker d_q/\im d_{q-1}.
+\label{eq:tutorial-cohomology}
+\end{equation}
+The quotient identifies cocycles that differ only by a coboundary. It measures zero-comparison assignments that cannot be explained entirely as differences of lower-degree assignments. This is a vector-space construction: one can compute its dimension using ranks, without first developing general algebraic topology.
+
+For ordinary real cochains, $\dim H^q$ is the Betti number $\beta_q$. In low dimensions, $\beta_0$ counts connected components and $\beta_1$ counts independent cycles not filled by two-dimensional cells. We use cohomology because face-to-coface comparison maps naturally produce cochains. Over the real numbers its ordinary dimensions agree with those obtained from homology, whose boundary maps run in the opposite direction. The map direction matters again when a pair of complexes is considered.
+
+\subsection{The Hodge Laplacian selects representatives of cohomology}
+With Euclidean inner products, define
+\begin{equation}
+L_q=D_q^TD_q+D_{q-1}D_{q-1}^T.
+\end{equation}
+For an assignment $w$, its quadratic form is $\|D_qw\|^2+\|D_{q-1}^Tw\|^2$. Therefore $w$ lies in the kernel precisely when it is a cocycle and is orthogonal to every coboundary. Such a vector is called \emph{harmonic}. Here the word describes these two linear conditions, not an oscillating trajectory.
+
+Why does every cohomology class have exactly one harmonic representative? Start with a cocycle and subtract its orthogonal projection onto $\im d_{q-1}$. The remainder stays a cocycle, since the subtracted vector is also a cocycle, and is orthogonal to all coboundaries. Two such remainders representing the same class would differ by a vector both in and orthogonal to $\im d_{q-1}$; that difference must be zero. This proves the kernel interpretation by finite-dimensional linear algebra. Cellular sheaf Laplacians use the same argument once their maps satisfy the cochain identity \citep{hansen2019}.
+
+Return to the triangle. For its unfilled outline, $h=(1,-1,1)^T$ satisfies $D_0^Th=0$ and is a nonzero harmonic edge assignment. Thus the edge Laplacian has a one-dimensional kernel. Filling the triangle adds $D_1^TD_1=hh^T$. Direct multiplication gives
+\begin{equation}
+L_1^{\mathrm{outline}}=D_0D_0^T,
+\qquad L_1^{\mathrm{filled}}=D_0D_0^T+hh^T=3I_3.
+\end{equation}
+The outline has edge spectrum $\{0,3,3\}$, whereas the filled triangle has $\{3,3,3\}$. Both have the same vertex spectrum $\{0,3,3\}$. A degree-one operator can therefore distinguish a filling that a degree-zero graph operator cannot see. These exact matrices are teaching examples, not additional protein experiments.
+
+\subsection{From distances to a filtration}
+A filtration is a nested sequence of complexes: a cell, once included, stays included as the parameter increases. One simple construction connects all pairs at distance below a threshold and includes every clique as a simplex; this is a Vietoris--Rips construction. An alpha complex instead uses the geometry of a Delaunay triangulation and restricted balls. The distinction is consequential: neither the meaning of the radius nor the higher-dimensional cells can be inferred merely from a parameter named \texttt{alpha}.
+
+For intuition about alpha complexes, associate each point with its Voronoi region, consisting of locations at least as close to that point as to any other. Intersect a radius-$a$ ball around each point with its Voronoi region. The alpha complex encodes common intersections of these restricted regions through simplices in the Delaunay structure \citep{edelsbrunner1994,gudhi}. This produces a finite geometric representation of the growing union of balls. In particular, the radius parameter is a ball radius, not simply an edge cutoff.
+
+With only two points at distance $d$, the balls first meet at $a=d/2$. With more points, Voronoi restrictions also matter, so an arbitrary pair within distance $2a$ is not automatically an alpha edge. The code therefore constructs the alpha complex itself rather than converting a threshold graph into an alleged alpha filtration. GUDHI stores squared filtration radii; the manuscript reports the unsquared radii in angstroms.
+
+A final distinction concerns which points are allowed to enter this construction. The support radius $R$ first fixes the residue neighborhood. The alpha radius $a$ then changes the cells within that same point set. Keeping $R$ fixed lets changes across $a$ be attributed to the filtration rather than to an independently changing sample of residues. The next section specifies both choices for the protein descriptors.

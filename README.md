@@ -10,7 +10,9 @@ Research code, mathematical constructions, and figures for a manuscript by **Rya
 
 ## Paper and findings
 
-[Manuscript (PDF)](paper/manuscript.pdf) · [Supplement (PDF)](paper/supplement.pdf) · [LaTeX source](paper/manuscript.tex) · [Figures](paper/figures)
+[Self-contained manuscript (PDF)](paper/manuscript.pdf) · [LaTeX source](paper/manuscript.tex) · [Figures](paper/figures)
+
+The manuscript includes a graduate-level tutorial, worked matrix examples, and all extended proofs, methods, and results previously supplied separately.
 
 The mathematical analysis separates a legacy weighted graph descriptor from a compatible cellular sheaf on genuine alpha complexes. Several legacy statistics reduce exactly to neighborhood size and graph density. The center-zero sheaf splits into a deletion block and an augmented weighted link block; in degree zero, its center term is an inverse-square packing scalar. On fixed vertices, degree-zero persistence duplicates the ordinary upper-radius operator, so the persistence experiment uses degree one.
 
