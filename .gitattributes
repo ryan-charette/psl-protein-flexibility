@@ -7,3 +7,4 @@ paper/figures/** -text
 paper/*.tex -text
 paper/*.bib -text
 paper/sections/** -text
+paper/editorial_replacements.json -text

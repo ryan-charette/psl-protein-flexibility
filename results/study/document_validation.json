@@ -1,14 +1,14 @@
 {
   "status": "passed",
-  "revision_scope": "Graduate-level exposition and integration of the former supplement; no new experiments.",
-  "previous_revision": "bd1e404a479989dcd92a5557eca0be88a8c005c6",
+  "revision_scope": "Revision and editing of manuscript prose; scientific scope and experimental outputs unchanged.",
+  "previous_revision": "359fb5d4ebd04fb2786b8ae4b37e260679916a21",
   "renderer": "PyMuPDF 1.28.2",
-  "dpi": 130,
+  "dpi": 120,
   "documents": {
     "manuscript": {
       "path": "paper/manuscript.pdf",
-      "sha256": "aad40a9b62e7bb0e746409b5ee962bd7704b7527a277b79bb5567db62f166963",
-      "pages": 43,
+      "sha256": "d9e74b9bf8bd0727ffe492222440a22e0f52e3b43f54e69e8ed22502ee95f86e",
+      "pages": 42,
       "visually_reviewed_pages": [
         1,
         2,
@@ -51,41 +51,45 @@
         39,
         40,
         41,
-        42,
-        43
+        42
       ],
       "missing_content_markers": false
     }
   },
   "source_sha256": {
-    "paper/build.py": "d9762e73a0c904f627aeb6ccfab4a4055501ec76f46f8fe38d6b64370d04cfa1",
+    "paper/build.py": "22317af34b6fa0ab96ba9296416127ec044f385b452f6138bba2c9429d7ad0e4",
+    "paper/editorial_replacements.json": "be76b00e35d8f2976aed4d7dde2809304fb62a62531a1b729e871341ed7f4f5c",
+    "paper/figures/renders/1ULR_camera.json": "408acfac03aa4b596b379a450a69f8ab2d38d06bdbd6ce49fef399fa1239c49e",
+    "paper/figures/renders/1X3O_camera.json": "d708fc80b14ba26068d6d0423b8c199fdb8430ce243204ffb7ac3927243379ea",
     "paper/generated_case_results.tex": "0eb618037d32291ee4dfc2e49899063bd27d670042a6171b23ce1cd5dd9fdf9a",
     "paper/generated_main_results.tex": "c852b77797f484d7b08c483a6796bf7d6be6546442e5fa51fac98150b8b42119",
     "paper/generated_persistence_results.tex": "5a0516db9951c6bf20d10818b72e3dd8a87ceca721cf8d89fb89d373c2a3ee16",
     "paper/generated_results.tex": "9f6b83a6a7ac55d860797fd29a4c6da23ec68c8f0045c7b9bf1111b8d01068fa",
     "paper/generated_supplement_results.tex": "2f7534487d20670c16eae5350e5e67933a46492eae63ba27e811f781d9a07c8e",
-    "paper/manuscript.tex": "ab09e69a7d2bc52144d78fdb280d82aaadd7a5d627d413cb7c0c12aaaecc6e22",
+    "paper/manuscript.tex": "9954750d0a9053ce8606a85cf1822aedb6d4c0e05e4152325b1ed47a6d0e5825",
     "paper/references.bib": "20e037d4d6ebc02118e0dcbd10775c7e01546ccceb3290e1a4eb31cd0b0c78eb",
     "paper/sections/attribution_details.tex": "5f6e5acdf86b584cc4ce127e10b0f4e46e95d5ef4d1ec9535531961e5056d59b",
-    "paper/sections/biology_primer.tex": "58b4060d1e9c59353fe791d94a9b8b66fea5f3b8bd6a91c42db73508dbb8813d",
+    "paper/sections/biology_primer.tex": "8f55787217df5405c1795e2ceb459ffdee2a80d2d64863b37691c662396d1305",
+    "paper/sections/case_results_integrated.tex": "39e7bc46ec5491cf7e7eb8551cfea4bf2ce4ee65840a29ba9bd236cc4bb8e851",
     "paper/sections/companion_results.tex": "47a45bdaac7646000c008e5eafaf7e79daa57d29723d28736364de8faff87fb1",
     "paper/sections/compute_details.tex": "4fb7b6edc070b2534ef5b9711be2b16380023fa288bbb3deddfadee0d2b71587",
-    "paper/sections/evaluation_guide.tex": "55232c921227486a9f59b99dd3209b96b09a343590d446b288b658ec1efc4f57",
+    "paper/sections/evaluation_guide.tex": "602e801bd45e58f561aebac52df9a89d5d8fcd38711219ad92179c0d993a5da5",
     "paper/sections/evidence_details.tex": "2e04d918308e9d33d7da434ec32ab812e35694d42e330d9998c49425b05691e9",
-    "paper/sections/feature_details.tex": "e632458a33efd405ab569103c5610a5e15a71faed6c7971a678d878668b57841",
-    "paper/sections/fold_details.tex": "4252dd70c757da8f0649c43cf075f6eb1596e5ab0a55c8b839490a1b88e5029b",
-    "paper/sections/foundations.tex": "7696c16d258f4bd43118516d0ca38e6dd7e142984a72188ae1f2c37be98262f9",
+    "paper/sections/feature_details.tex": "fbbbaee1ece39f66388e7c8b93b74e99864bf781730609b019a20b4a2c0e4348",
+    "paper/sections/fold_details.tex": "0265fc2d33832617e23378dcc69b20692b9109ae337f6216a47f83b546dcd204",
+    "paper/sections/foundations.tex": "40add6ac709cda2593c39750296538dfd8da71d44a500ed25019008c7bc476d5",
     "paper/sections/identity_details.tex": "1fe03c5a67cf33621eddbe8f194ca509c13ef8bd4c6e4bdca7415d89779f0400",
-    "paper/sections/link_details.tex": "a75ad9dc7e9bbd4f8107dce06bb7b76a6e33cfb491c9b109fea2f10a59047061",
-    "paper/sections/link_tutorial.tex": "062292441bdf4a6aa49fb7abafdf0ba944d01ec7d02fd2adb24011ab1f04fe9e",
-    "paper/sections/native_details.tex": "206cfb30f551e1f6534942ca7d201f8dd07a6cb823fd39398ea1505fc1e849d3",
-    "paper/sections/persistence_results_integrated.tex": "cdcf4e8fdd2908e78913658d67752fe167cc786f0eb8da1a99dd2dab9d252115",
-    "paper/sections/persistence_tutorial.tex": "2298dfe98179920ca92beb992971ca7176abebb35f2824d435d869d7ba7bc4ef",
-    "paper/sections/persistent_details.tex": "7662d013454883929298d586f2ef00e79b839345a2c4b3d252bc3b8c083b6f83",
-    "paper/sections/reading_guide.tex": "a59e2ef58d6ad9904af752622635bf9a8d0e7ef9db165b5f0a4fe9eb95f69074",
-    "paper/sections/sheaf_examples.tex": "380cc54cf8f542b8ffd6e21c8cbc3c1965636993764bca55681bacdf4d860981",
-    "paper/sections/sheaf_tutorial.tex": "2f83a9d3ab2d4383c246e678e55f0d81fd7ee79e2543fa798b555a04b5d8b299",
-    "paper/sections/survey_bridge.tex": "eb52ba687b94fe523ffad83d8d76cdaecbbc6cab10fa80c3faf78ac504ea3666"
+    "paper/sections/link_details.tex": "5b4bfdd4129fe84e3048b798135c3adddc797d3dd71a2046138a7c90638b1fc2",
+    "paper/sections/link_tutorial.tex": "206dd98286f73d9f7360a7445765b9bf232a064108329eb8d2cd8ca480c485e7",
+    "paper/sections/main_results_integrated.tex": "1bca4c411fd4d827fbf2c301897f478e5f2f218c6a7d906591c81b02cbee8047",
+    "paper/sections/native_details.tex": "1f810b46bf547226e8dd951b93cfdc5ba8de7677ca8d5b305cf43c2a9d20f4f0",
+    "paper/sections/persistence_results_integrated.tex": "62cc4c4772a495a16df5a9b568d236352128208a3aa1322b1b483046b88baa63",
+    "paper/sections/persistence_tutorial.tex": "c53bd78073babdb90b52b8b5944cbe56170d4e2cf981c5960a557a6a9d3c891c",
+    "paper/sections/persistent_details.tex": "64da0434932a36cbc80b4ffc7cc520c533405d011ddf26b4965040c8375b13e5",
+    "paper/sections/reading_guide.tex": "a944eb7b67ba5eecf4a18b6582e3499d746b5666a22ba8c6c728a56728e0b638",
+    "paper/sections/sheaf_examples.tex": "c5aa0ef3e7ceb098bc7ad91f3cc0f7fce1112e2ccfbf1948873208c1627c889f",
+    "paper/sections/sheaf_tutorial.tex": "3a3f6ead64a2b73cc4127d6543cd279299add41777d3e9ee4f5a98b06979a305",
+    "paper/sections/survey_bridge.tex": "d3ec1add96ae7b7d80d4c74ddca11008d0739846405d5f384942416c31d5e4b2"
   },
   "former_supplement_sections": {
     "The universal-center spectrum in a broader form": "native_details",
@@ -99,13 +103,14 @@
     "Evidence provenance": "evidence_details"
   },
   "checks": [
-    "Every final page visually inspected at 130 dpi, including figures and tables",
+    "Every final page visually inspected at 120 dpi, including figures and tables",
     "No TeX box, citation, reference, or missing-character warnings",
     "Documented paper/build.py command compiled successfully",
     "Frozen analysis code, configurations, results, generated numerical inputs, references and figures unchanged from previous revision",
-    "Editorial persistence input has exactly the same ordered numerical tokens as its generated source",
-    "Triangle, two-vertex sheaf, and least-squares teaching matrices checked independently with NumPy",
-    "Former supplement content integrated into mathematical, methodological, and results sections; duplicate exposition consolidated"
+    "Editorial generated inputs preserve ordered numerical tokens, verified during build",
+    "Displayed equation environments unchanged after newline normalization",
+    "Requested heading constructions, em dashes and repetitive contrastive phrasing removed from manuscript prose; published citation titles preserved",
+    "Former supplement remains integrated in the main manuscript"
   ],
   "source_files_checked_unchanged": 132
 }

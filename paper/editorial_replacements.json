@@ -1,0 +1,44 @@
+{
+  "generated_main_results.tex": [
+    [
+      "The square-cycle example changes from ordinary nullity one to persistent nullity zero as its filling enters.",
+      "The square-cycle example has ordinary nullity one; its persistent nullity is zero once its filling enters."
+    ],
+    [
+      "Table~\\ref{tab:core} reports the mean of within-protein metrics, rather than treating all residues as independent examples in the performance summary.",
+      "Table~\\ref{tab:core} averages the within-protein metrics with equal weight for each protein."
+    ]
+  ],
+  "generated_case_results.tex": [
+    [
+      "Consequently its spatial pattern describes this feature group's use by the held-out model, rather than repeating the entire prediction or identifying the influence of neighboring residues.",
+      "Its spatial pattern shows how the held-out model uses this feature group. The map omits the graph contribution and background expectation; neighboring-residue influence would require a separate analysis."
+    ]
+  ],
+  "generated_persistence_results.tex": [
+    [
+      "This compares stored summaries, not full matrices of potentially different dimensions; equal summary vectors would not establish spectral equivalence.",
+      "The comparison uses stored summaries. The underlying matrices can have different dimensions, and identical summaries can occur even when their spectra differ."
+    ],
+    [
+      "The supplement reports",
+      "The detailed comparison tables below report"
+    ],
+    [
+      "included in the supplement.",
+      "included in the detailed comparison tables below."
+    ],
+    [
+      ") (identity),",
+      ") for identity;"
+    ],
+    [
+      ") (geometric),",
+      ") for geometric;"
+    ],
+    [
+      ") (center-zero).",
+      ") for center-zero."
+    ]
+  ]
+}

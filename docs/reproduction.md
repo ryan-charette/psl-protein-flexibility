@@ -146,8 +146,8 @@ manifests and checks must be regenerated together rather than combined with
 the saved run's hashes.
 
 The single integrated manuscript includes the former supplement. `paper/build.py`
-refreshes an editorial rendering of the frozen generated persistence text before
-compilation; it changes only document-location wording and punctuation for line breaking.
-All numerical inputs remain those of the completed study. Use `--tectonic PATH`
-to specify a Tectonic executable outside PATH. The original separate article and
-supplement remain available in Git history at commit `bd1e404`.
+applies the prose edits in `paper/editorial_replacements.json` to generated result
+text before compilation. It checks that every numerical token remains unchanged.
+The original generated inputs and experimental artifacts retain their saved hashes.
+Use `--tectonic PATH` to specify a Tectonic executable outside PATH. The original
+separate article and supplement remain in Git history at commit `bd1e404`.

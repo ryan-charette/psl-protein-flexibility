@@ -2,15 +2,15 @@
 \addcontentsline{toc}{section}{How to read this manuscript}
 This manuscript combines a tutorial survey with an original computational study. Its intended reader has graduate-level familiarity with linear algebra, basic probability, and algorithms, but need not have studied algebraic topology, sheaf theory, crystallography, or protein modeling. Familiarity with eigenvalues, least squares, and train--test evaluation is enough to begin. Definitions are developed before they are used in the research analysis, and the extended derivations and experimental details are included in this document.
 
-The central question is deliberately concrete: when a protein neighborhood is converted into a sheaf Laplacian and then into a few eigenvalue statistics, what has been measured, and does that measurement improve prediction of a crystallographic B-factor profile? Answering the first part requires mathematics. Answering the second requires a controlled experiment. Neither answer can substitute for the other.
+The central question is: when a protein neighborhood is converted into a sheaf Laplacian and then into a few eigenvalue statistics, what has been measured, and does that measurement improve prediction of a crystallographic B-factor profile? We use mathematics to characterize the descriptors and a controlled experiment to assess their predictive value.
 
 \paragraph{A route through the argument.}
-Part I introduces the biological observable and surveys the existing approaches already cited in this study. Part II builds the mathematical machinery from graph incidence matrices to simplicial cochains and sheaves. Part III develops the specific spectral characterizations and persistent pair operators. Part IV explains the experimental design and reports the unchanged benchmark and attribution results. The final discussion separates what the algebra proves, what the experiment supports, and what remains unknown.
+Part I introduces the biological observable and surveys the existing approaches already cited in this study. Part II develops graph incidence matrices, simplicial cochains, and sheaves. Part III develops the specific spectral characterizations and persistent pair operators. Part IV explains the experimental design and reports the unchanged benchmark and attribution results. The final discussion separates what the algebra proves, what the experiment supports, and what remains unknown.
 
 For a first pass, follow the worked examples and the interpretations immediately after the formulas. On a second pass, examine the full derivations and numerical conventions. A reader interested primarily in prediction can read Part I, the graph and sheaf examples in Part II, and then Part IV, returning to the operator derivations when needed. A reader interested primarily in topology should still read the definition of the target and the evaluation design: these determine what a predictive comparison can mean.
 
 \paragraph{Three distinctions to keep in view.}
-First, a protein coordinate is an experimental structural input, whereas a cochain coordinate is an abstract variable on a vertex, edge, or triangle. Second, a zero eigenvalue has a cohomological interpretation, whereas a positive eigenvalue also depends on geometric weights and inner products. Third, a model attribution explains a fitted predictor, whereas an incremental performance comparison asks whether adding features helps that predictor on held-out data. Many apparent paradoxes disappear once these objects are kept separate.
+First, a protein coordinate is an experimental structural input, whereas a cochain coordinate is an abstract variable on a vertex, edge, or triangle. Second, a zero eigenvalue has a cohomological interpretation, whereas a positive eigenvalue also depends on geometric weights and inner products. Third, a model attribution explains a fitted predictor, whereas an incremental performance comparison asks whether adding features helps that predictor on held-out data. These definitions determine how the results should be interpreted.
 
 \clearpage
 \subsection*{Notation at a glance}
@@ -24,7 +24,7 @@ $a\leq b,\ K_a\subseteq K_b$ & Alpha radii and their nested simplicial complexes
 $\sigma,\tau$ & Simplices, with $\sigma\subseteq\tau$ a face relation.\\
 $q$ & Cochain degree: vertices at degree zero, edges at degree one.\\
 $q_v$ & A vertex label in the restriction rule; the subscript distinguishes it from degree.\\
-$\rho_{\sigma\tau}$ & Linear comparison map from the stalk on a face to its coface.\\
+$\rho_{\sigma\tau}$ & Linear map with domain the face's stalk and codomain the coface's stalk.\\
 $C^q,\ d_q,\ D_q$ & Cochain space, coboundary map, and its matrix in an oriented basis.\\
 $L_q,\ L_q^{a,b}$ & Ordinary and persistent sheaf Laplacians.\\
 $\beta_q,\widetilde\beta_q$ & Ordinary and reduced Betti numbers, respectively.\\
@@ -32,7 +32,7 @@ $B_{ip},\ y_{ip}$ & Measured B-factor and its within-protein standardized value.
 $f(x),\phi_j(x)$ & Model prediction and attribution of feature $j$; here $x$ is a feature vector.\\\bottomrule
 \end{tabularx}
 \end{center}
-The same letter can occur in separate, explicitly identified contexts. In particular, the block $B$ in a matrix partition is not a crystallographic B-factor, and the historical native parameter $p$ is not a protein index. In the matrix derivations, a superscript $T$ denotes transpose and $\dagger$ denotes the Moore--Penrose pseudoinverse. Unless stated otherwise, cochain coordinates have the standard Euclidean inner product, so transpose is also the adjoint.
+The same letter can occur in separate, explicitly identified contexts. For example, $B$ denotes a block in matrix partitions and a B-factor in target notation; $p$ denotes the historical attenuation parameter or a protein index according to context. In the matrix derivations, a superscript $T$ denotes transpose and $\dagger$ denotes the Moore--Penrose pseudoinverse. Unless stated otherwise, cochain coordinates have the standard Euclidean inner product, so transpose is also the adjoint.
 
 \paragraph{Status of the material.}
-The background and worked examples explain established constructions. The research contribution is the interpretation of the specified local operators and their controlled assessment on the audited collection. The expanded exposition does not introduce a new benchmark, a new parameter search, or additional empirical claims. The numerical results are the same generated results used in the shorter research article.
+The background and worked examples explain established constructions. The research contribution is the interpretation of the specified local operators and their controlled assessment on the audited collection. The expanded exposition uses the completed study and its generated numerical results.

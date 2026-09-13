@@ -20,6 +20,8 @@ The former supplement is integrated as follows:
 
 The former notation/scope material is included in the reading guide and persistent-operator derivation. The companion figure and generated detailed result tables are included through `paper/sections/companion_results.tex`. Repeated method descriptions were consolidated without dropping their substantive conditions.
 
-Build from the repository root with `python paper/build.py` (Tectonic required). `--tectonic PATH` selects an executable outside PATH. The builder derives an editorial version of the frozen persistence results, updating document-location wording and line breaking while preserving every numerical token.
+Build from the repository root with `python paper/build.py` (Tectonic required). `--tectonic PATH` selects an executable outside PATH. The builder applies the recorded prose edits to the frozen generated result text and checks that every numerical token is preserved.
 
 The original separate article and supplement remain in Git history at `bd1e404`. The current PDF was compiled and every page visually reviewed; the record is `results/study/document_validation.json`.
+
+A further prose revision simplifies headings and captions, removes em dashes, and replaces repetitive contrastive phrasing with direct descriptions. Mathematical conditions, scientific qualifications, equations, and experimental results are retained. Published reference titles remain verbatim.

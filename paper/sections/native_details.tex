@@ -10,9 +10,9 @@ The orthogonal decomposition
 \oplus\operatorname{span}\{(m,-\mathbf1)^T\}
 \oplus\{(0,v)^T:v\perp\mathbf1\}
 \end{equation}
-is invariant under $L_t$. The three restrictions have eigenvalues $0$, $t(m+1)$, and $t+\lambda_j(H)$ for $j=2,\ldots,m$, respectively. Choosing one all-ones eigenvector for $\lambda_1(H)=0$ leaves any additional neighbor-component zero modes inside the last subspace. They become eigenvalues $t$, rather than extra zero eigenvalues. Thus the universal center makes the graph connected irrespective of whether its neighbors connect to one another.
+is invariant under $L_t$. The three restrictions have eigenvalues $0$, $t(m+1)$, and $t+\lambda_j(H)$ for $j=2,\ldots,m$, respectively. Choosing one all-ones eigenvector for $\lambda_1(H)=0$ leaves any additional neighbor-component zero modes inside the last subspace. Each becomes an eigenvalue $t$. Thus the universal center makes the graph connected irrespective of whether its neighbors connect to one another.
 
-For the native setting $t=2$, $\lambda_j(H)\leq m$ implies the largest eigenvalue is $2(m+1)$. A short proof of the bound uses the complement graph: on $\mathbf1^\perp$, $L_H+L_{\overline H}=mI$, and both Laplacians are positive semidefinite. The trace is $2|E(H)|+4m$, yielding positive-spectrum mean $4+2|E(H)|/m$. With $t=1$, the corresponding maximum is $m+1$ and mean is $2+2|E(H)|/m$. These results apply to the complete spectrum, not only to asymptotic approximations. A solitary center has the separate spectrum $\{0\}$.
+For the native setting $t=2$, $\lambda_j(H)\leq m$ implies the largest eigenvalue is $2(m+1)$. A short proof of the bound uses the complement graph: on $\mathbf1^\perp$, $L_H+L_{\overline H}=mI$, and both Laplacians are positive semidefinite. The trace is $2|E(H)|+4m$, yielding positive-spectrum mean $4+2|E(H)|/m$. With $t=1$, the corresponding maximum is $m+1$ and mean is $2+2|E(H)|/m$. These formulas describe the complete spectrum exactly. A solitary center has the separate spectrum $\{0\}$.
 
 The other summaries cannot generally be reduced to those two counts. Let the neighbor graph be either the four-vertex path $P_4$ or the three-leaf star $K_{1,3}$, both with four vertices and three edges. Adding the native weight-two universal center gives the respective positive spectra
 \begin{equation}
@@ -22,7 +22,7 @@ Both operators have nullity one, maximum ten, and positive mean $11/2$. Their mi
 
 Both graphs are realizable by the local Euclidean rule, so this counterexample applies within the construction's geometric scope. With target at the origin and cutoff $R=1$, place the path neighbors at radius $0.9$ and planar angles $0,60,120,180$ degrees. Only consecutive neighbors are within the cutoff. For the star, use neighbor hub $(0.1,0,0)$ and leaves $(0,0.9,0)$, $(0,-0.45,0.45\sqrt3)$, and $(0,-0.45,-0.45\sqrt3)$. Every target distance is below one; hub--leaf distances are $\sqrt{0.82}<1$ and leaf--leaf distances are $0.9\sqrt3>1$. These are theoretical examples, separate from the protein benchmark.
 
-The historical native attenuation parameter $p$ divides edge weights by a distance-dependent factor when $p>0$. Such reweighting is a graph operation, not persistence between complexes. The previous higher-degree interface combined a weighted vertex--edge incidence matrix with an unweighted triangle boundary. For a triangle $[c,u,v]$ with the native center weights, its degree-zero coboundary rows were
+The historical native attenuation parameter $p$ divides edge weights by a distance-dependent factor when $p>0$. This operation reweights a single graph. The previous higher-degree interface combined a weighted vertex--edge incidence matrix with an unweighted triangle boundary. For a triangle $[c,u,v]$ with the native center weights, its degree-zero coboundary rows were
 \begin{equation}
 D_0=\begin{pmatrix}-\sqrt2&\sqrt2&0\\-\sqrt2&0&\sqrt2\\0&-1&1\end{pmatrix},
 \qquad D_1=(1,-1,1),

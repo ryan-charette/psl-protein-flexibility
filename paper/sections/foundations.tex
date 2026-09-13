@@ -1,7 +1,7 @@
-\section{From a contact graph to a cochain complex}
+\section{Graphs, cochains, and Laplacians}
 \label{sec:foundations}
 \subsection{Incidence matrices turn local differences into linear algebra}
-Begin with an undirected graph whose vertices are residues and whose edges are selected contacts. Assign a real number $z_i$ to every vertex. At this stage $z$ is an arbitrary test assignment, not a vector of observed B-factors. Give each edge an arbitrary orientation solely to define a matrix. The row of the incidence matrix $D_0$ associated with an oriented edge $i\to j$ contains $-1$ in column $i$, $+1$ in column $j$, and zeros elsewhere. Then $(D_0z)_{ij}=z_j-z_i$.
+Begin with an undirected graph whose vertices are residues and whose edges are selected contacts. Assign a real number $z_i$ to every vertex. At this stage $z$ is an arbitrary test assignment used to examine the operator. Give each edge an arbitrary orientation solely to define a matrix. The row of the incidence matrix $D_0$ associated with an oriented edge $i\to j$ contains $-1$ in column $i$, $+1$ in column $j$, and zeros elsewhere. Then $(D_0z)_{ij}=z_j-z_i$.
 
 The graph Laplacian is $L_0=D_0^TD_0$. For nonnegative edge weights $w_{ij}$, replace each incidence row by $\sqrt{w_{ij}}$ times that row. In either case,
 \begin{equation}
@@ -17,7 +17,7 @@ Because $L_0$ is real symmetric, it has an orthonormal eigenbasis. Write a unit-
 
 Consequently, the kernel and positive spectrum answer different questions. Kernel dimension records exact zero-energy freedoms. Positive eigenvalues measure the scale of nonzero disagreement and depend on the weights and inner product. In this manuscript, eigenvalues become descriptors only after they have been summarized. The learner does not receive the full eigenvectors, so a good prediction from spectral summaries is not itself evidence that a particular eigenvector describes a molecular motion.
 
-\subsection{Why a graph is not enough to describe a filled triangle}
+\subsection{The triangular outline and its filling}
 A simplicial complex extends a graph by specifying which collections of vertices form higher-dimensional cells. A vertex is a zero-simplex, an edge a one-simplex, and a filled triangle a two-simplex. A tetrahedron is a three-simplex. Every face of an included simplex must also be included. Three edges forming a triangular outline and the same three edges together with a filled triangle are different complexes, although their contact graphs are identical.
 
 To see the distinction as linear algebra, order the vertices as $0,1,2$ and edges as $01,02,12$. For either complex the vertex-to-edge matrix is
@@ -43,7 +43,7 @@ With Euclidean inner products, define
 \begin{equation}
 L_q=D_q^TD_q+D_{q-1}D_{q-1}^T.
 \end{equation}
-For an assignment $w$, its quadratic form is $\|D_qw\|^2+\|D_{q-1}^Tw\|^2$. Therefore $w$ lies in the kernel precisely when it is a cocycle and is orthogonal to every coboundary. Such a vector is called \emph{harmonic}. Here the word describes these two linear conditions, not an oscillating trajectory.
+For an assignment $w$, its quadratic form is $\|D_qw\|^2+\|D_{q-1}^Tw\|^2$. Therefore $w$ lies in the kernel precisely when it is a cocycle and is orthogonal to every coboundary. Such a vector is called \emph{harmonic}. Here the word describes these two linear conditions.
 
 Why does every cohomology class have exactly one harmonic representative? Start with a cocycle and subtract its orthogonal projection onto $\im d_{q-1}$. The remainder stays a cocycle, since the subtracted vector is also a cocycle, and is orthogonal to all coboundaries. Two such remainders representing the same class would differ by a vector both in and orthogonal to $\im d_{q-1}$; that difference must be zero. This proves the kernel interpretation by finite-dimensional linear algebra. Cellular sheaf Laplacians use the same argument once their maps satisfy the cochain identity \citep{hansen2019}.
 
@@ -52,13 +52,13 @@ Return to the triangle. For its unfilled outline, $h=(1,-1,1)^T$ satisfies $D_0^
 L_1^{\mathrm{outline}}=D_0D_0^T,
 \qquad L_1^{\mathrm{filled}}=D_0D_0^T+hh^T=3I_3.
 \end{equation}
-The outline has edge spectrum $\{0,3,3\}$, whereas the filled triangle has $\{3,3,3\}$. Both have the same vertex spectrum $\{0,3,3\}$. A degree-one operator can therefore distinguish a filling that a degree-zero graph operator cannot see. These exact matrices are teaching examples, not additional protein experiments.
+The outline has edge spectrum $\{0,3,3\}$, whereas the filled triangle has $\{3,3,3\}$. Both have the same vertex spectrum $\{0,3,3\}$. A degree-one operator can therefore distinguish a filling that a degree-zero graph operator cannot see. These exact matrices illustrate the definitions.
 
-\subsection{From distances to a filtration}
-A filtration is a nested sequence of complexes: a cell, once included, stays included as the parameter increases. One simple construction connects all pairs at distance below a threshold and includes every clique as a simplex; this is a Vietoris--Rips construction. An alpha complex instead uses the geometry of a Delaunay triangulation and restricted balls. The distinction is consequential: neither the meaning of the radius nor the higher-dimensional cells can be inferred merely from a parameter named \texttt{alpha}.
+\subsection{Geometric filtrations}
+A filtration is a nested sequence of complexes: a cell, once included, stays included as the parameter increases. One simple construction connects all pairs at distance below a threshold and includes every clique as a simplex; this is a Vietoris--Rips construction. An alpha complex uses the geometry of a Delaunay triangulation and restricted balls. The radius convention and the rule for including higher-dimensional cells must therefore be specified explicitly.
 
-For intuition about alpha complexes, associate each point with its Voronoi region, consisting of locations at least as close to that point as to any other. Intersect a radius-$a$ ball around each point with its Voronoi region. The alpha complex encodes common intersections of these restricted regions through simplices in the Delaunay structure \citep{edelsbrunner1994,gudhi}. This produces a finite geometric representation of the growing union of balls. In particular, the radius parameter is a ball radius, not simply an edge cutoff.
+For intuition about alpha complexes, associate each point with its Voronoi region, consisting of locations at least as close to that point as to any other. Intersect a radius-$a$ ball around each point with its Voronoi region. The alpha complex encodes common intersections of these restricted regions through simplices in the Delaunay structure \citep{edelsbrunner1994,gudhi}. This produces a finite geometric representation of the growing union of balls. The radius parameter specifies the size of these balls.
 
-With only two points at distance $d$, the balls first meet at $a=d/2$. With more points, Voronoi restrictions also matter, so an arbitrary pair within distance $2a$ is not automatically an alpha edge. The code therefore constructs the alpha complex itself rather than converting a threshold graph into an alleged alpha filtration. GUDHI stores squared filtration radii; the manuscript reports the unsquared radii in angstroms.
+With only two points at distance $d$, the balls first meet at $a=d/2$. With more points, Voronoi restrictions also matter, so an arbitrary pair within distance $2a$ is not automatically an alpha edge. The code uses this alpha-complex construction directly. GUDHI stores squared filtration radii; the manuscript reports the unsquared radii in angstroms.
 
-A final distinction concerns which points are allowed to enter this construction. The support radius $R$ first fixes the residue neighborhood. The alpha radius $a$ then changes the cells within that same point set. Keeping $R$ fixed lets changes across $a$ be attributed to the filtration rather than to an independently changing sample of residues. The next section specifies both choices for the protein descriptors.
+A final distinction concerns which points are allowed to enter this construction. The support radius $R$ first fixes the residue neighborhood. The alpha radius $a$ then changes the cells within that same point set. Keeping $R$ fixed holds the residue sample constant while $a$ varies the filtration. The next section specifies both choices for the protein descriptors.
