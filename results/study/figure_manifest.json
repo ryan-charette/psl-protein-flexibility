@@ -1,6 +1,6 @@
 {
   "source_sha256": {
-    "scripts/make_figures.py": "2318d6ded73f5971923bd7677f81e679c31484c4faae98834f9c3c1c5fd759e6",
+    "scripts/make_figures.py": "4b21fae055b95b20d72886ac17a2e6957862ef9b18721eb5220a913a04dd5f4f",
     "scripts/summarize_study.py": "90c528ecee0c4d600381f7536af2e6e1c38255b02fa78b78bf6c6ecd0b3942a1",
     "scripts/render_protein.py": "5e6c939764893b2df8e34a452e8524fbffecc8d224bd4d3a8404dd1633ff4815",
     "src/psl_flexibility/sheaf.py": "f0bc12e9a28ceb66b92c4a0f2c2c6c89fc0310c620b3f5d54828d4ecc8f4e7e1"
@@ -55,26 +55,26 @@
     "paper/figures/renders/1X3O_shap.png": "9bc27fca492fc651a000b07a8985360735d3961cbd103cec1260de71f8846d0b"
   },
   "exports_sha256": {
-    "paper/figures/fig1_protein.pdf": "79771708cbcc1d9531944d804d3d8b2a0ffeea37fa74356a5bde08ff1dff8f96",
-    "paper/figures/fig1_protein.png": "a04865916a3914f6f5dd2a27ad1fa818b96e9f3602625cf558bfdf6229cfa1d6",
-    "paper/figures/fig1_protein.svg": "6f6cc077691c74f2e75ef6aae83ec5b627dac8abf876e22211f1d9813864c029",
-    "paper/figures/fig2_pipeline.pdf": "56e1f07655a8d6bf1dc305b458a12f1608aa1e17104b626f37c6725c6039ac04",
-    "paper/figures/fig2_pipeline.png": "05850512b46bb4b0f7b09afeade7598f3022536b702ddcbd3f44d3c7d048f76d",
-    "paper/figures/fig2_pipeline.svg": "d58193e19ded63941f63098add1fd83e50ea0b67632227bd271d03dc5e2c77c6",
-    "paper/figures/fig3_decomposition.pdf": "49ac202a4c8127ef29464cf3c8a05363d09aff477d505c5dbea3e8c4c3128564",
-    "paper/figures/fig3_decomposition.png": "36abdfad78a622e02689072806a93a38e05745ead454895a39eadc8011b7b3c9",
-    "paper/figures/fig3_decomposition.svg": "8fe8b9db332cf0b700475d590e099d99551c7d16fa0c08fcd7fcbb2405e62d16",
-    "paper/figures/fig4_performance.pdf": "6698409ece3f2abb1f3a716090dcd5608030e9c7d8b1ce5befdd7b4b878ef10a",
-    "paper/figures/fig4_performance.png": "5e1e0c1b76a5d35a9825a02a2eb0918e70a3d7f49921f485d325a2aa93af8b72",
-    "paper/figures/fig4_performance.svg": "664611c2470b83180a1c4c06d8aeacc0c54aaab4b508f9f75f59d4f6dbea2a06",
-    "paper/figures/fig5_persistence.pdf": "a72e9833f3994a1c45a9db76b2c9ae088532b3112d2d17fe8f5a11c3a00cf851",
-    "paper/figures/fig5_persistence.png": "73653068ac67ca20c369f21654b561d2d515f015ddc1d6c2946640f6beae9351",
-    "paper/figures/fig5_persistence.svg": "950b06d4e177a2c2d030900ca13b433874bacb0f054d745c21b6d410fe9a5608",
+    "paper/figures/fig1_protein.pdf": "d1d2591ec086929e09c5d6d2132898f01ffcff54acdce5d9dff3bade05e831be",
+    "paper/figures/fig1_protein.png": "a0b0032b2f799c13de67db1d238c1636f09f48730e45253a74c77ab59c58a6b6",
+    "paper/figures/fig1_protein.svg": "c4d1a12cb67fb6cf158ffac764ae7855daa43387a345528d8df3da0fbba61153",
+    "paper/figures/fig2_pipeline.pdf": "0b05bec2a9125919a17b9ed246214bfbf8d6ff7c81b020bc38f06348896fbf9f",
+    "paper/figures/fig2_pipeline.png": "c7cf65e253d3d9e24a7e916e7bc6f9fb8f9b53941346922a7e6b4c756919823e",
+    "paper/figures/fig2_pipeline.svg": "097708dd4abfc1ad231325b4b07bf648ff7754c47b2b9bf04588427b5f55a041",
+    "paper/figures/fig3_decomposition.pdf": "20c003f9e5ea58eb7b313a7acc88e49b0916d102154d797aadfbb24e72cc0bbb",
+    "paper/figures/fig3_decomposition.png": "0731f71d3e9a0ee564c074993f19e6364d5b143d8a0c3a9af634bbc903e29586",
+    "paper/figures/fig3_decomposition.svg": "c9d5ff3d756e408e9e4e3b7cc774e07407ee1816acf2ef17058be8d08f5fcd2e",
+    "paper/figures/fig4_performance.pdf": "42f5aeff317f516d0c27de8853caa78533edf990912b754a6433aec579607d8f",
+    "paper/figures/fig4_performance.png": "fefa893a54c94e92f7d7c83b8c59170e0d2e16d92f3ee4b10bc911fb5171e971",
+    "paper/figures/fig4_performance.svg": "312c4d129d3a89d02bb71e795fa65e289dc4abf2670f039a18661dd58ff53c3e",
+    "paper/figures/fig5_persistence.pdf": "fa9e31c0f888ab199323d58cd86a08f5ff956490b75da99fb20133acf0c76d47",
+    "paper/figures/fig5_persistence.png": "face4efeecdd13317d7f21a21a3684202ffb720869fed93e7681f517cacbbd4f",
+    "paper/figures/fig5_persistence.svg": "41b72d55f1bfee74f9ecf76f2c6e681dc67b14a2602a2dc9a3c9fa4ba431b97d",
     "paper/figures/readme_hero.pdf": "c162cea2d0f5eef3542e2a0152e409f8a05a200b7f9eee941434235dd4d3793a",
     "paper/figures/readme_hero.png": "74b26ae41b371e4f329ae08b5a08f73e286c627b6384b862d84cab5ca743b9f2",
     "paper/figures/readme_hero.svg": "13cb291cbf88c263ee836c136e4713ddbd769470e2be1f78403cfeef24ce7995",
-    "paper/figures/supp_1X3O.pdf": "ead531e7a4abc76b48ff2934f65dcc0a1c3d8aed08f3afdf5b77edd9e931309b",
-    "paper/figures/supp_1X3O.png": "99803361b06d76055f9d9b5701f2d23309f46958b937f8828fca471442579360",
-    "paper/figures/supp_1X3O.svg": "a2570502259943661b0a65d1f172a2bff7ad2150b186c785ce544bee042acd90"
+    "paper/figures/supp_1X3O.pdf": "066e38f70e7e007e96d3e22ba5249f18e9d23ca60b0acf5753dc074d1b4ed83d",
+    "paper/figures/supp_1X3O.png": "221a78c7bdac466116d7f8eb9cefc3546cf8bc38e3383ed6e930a3e660047b3a",
+    "paper/figures/supp_1X3O.svg": "04a2ad8e90e187921f0efc64b30581f74bf24a2ef4734308d52589b010aa2997"
   }
 }

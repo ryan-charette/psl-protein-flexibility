@@ -153,3 +153,5 @@ Use `--tectonic PATH` to specify a Tectonic executable outside PATH. The origina
 separate article and supplement remain in Git history at commit `bd1e404`.
 
 To update only the visual presentation from saved results, run `python scripts/make_figures.py --all --rerender`, followed by `python paper/build.py`. This preserves predictions and attributions. Plots use Matplotlib defaults and molecular values use its blue-white-red (`bwr`) colormap. The README composition includes aligned molecular views, panel titles, color scales and the case PCC. Regenerate only this composition with `python scripts/make_figures.py --hero`. Extended explanations are supplied in the surrounding text and manuscript captions.
+
+Use `python scripts/make_figures.py --paper` to regenerate the six manuscript figures without changing the README hero. Paper panels retain concise descriptive titles, axes, legends, and color scales; detailed interpretation and protocol information remain in the captions.

@@ -34,7 +34,8 @@ def save(fig,name):
     plt.close(fig)
 
 def title(ax,letter,label):
-    ax.set_title(letter,loc='left',pad=10,fontsize=12)
+    ax.set_title(f'{letter}  {label}',loc='left',pad=10,
+                 fontsize=10 if ax.figure.get_figwidth()<8 else 12)
 
 
 def cloud(ax,pts,sheaf=None,radius=None,center=True):
@@ -59,7 +60,7 @@ def theory_figures():
     local=pts[ids];s=AlphaSheaf(local,kind='center_zero')
     fig=plt.figure(figsize=(10.8,6.2));grid=fig.add_gridspec(2,3,hspace=.45,wspace=.42)
     ax=fig.add_subplot(grid[0,0],projection='3d');ax.plot(*pts.T,color='#acb8bc',lw=1.6)
-    cloud(ax,local);title(ax,'a','The 13 Å neighborhood')
+    cloud(ax,local);title(ax,'a','13 Å neighborhood')
     for j,a in enumerate((3.,4.),start=1):
         ax=fig.add_subplot(grid[0,j],projection='3d');cloud(ax,local,s,a)
         title(ax,chr(97+j),f'Alpha complex: {a:g} Å')
@@ -94,11 +95,11 @@ def theory_figures():
             ax.text(j,i,label_value,ha='center',va='center',fontsize=13,color=INK if abs(v)<.7*limit else 'white')
         ax.set_xticks(range(5),['c','1','2','3','4']);ax.set_yticks(range(5),['c','1','2','3','4']);title(ax,chr(97+col),label)
         if col==2:ax.axhline(.5,color=RED,lw=1.8);ax.axvline(.5,color=RED,lw=1.8)
-    ax=fig.add_subplot(g[1,0]);title(ax,'d','Different spectra')
+    ax=fig.add_subplot(g[1,0]);title(ax,'d','Eigenvalue spectra')
     ax.plot(range(5),np.linalg.eigvalsh(native),'o-',c=RED,label='Historical graph')
     ax.plot(range(5),np.linalg.eigvalsh(L),'s-',c=BLUE,label='Geometric sheaf')
     ax.set_xlabel('Ordered eigenvalue');ax.set_ylabel('Eigenvalue');ax.legend(frameon=True,fontsize=11,loc='upper left')
-    ax=fig.add_subplot(g[1,1:]);ax.axis('off');title(ax,'e','Interpreting the blocks')
+    ax=fig.add_subplot(g[1,1:]);ax.axis('off');title(ax,'e','Block decomposition')
     ax.text(0,.82,r'$L_0=\left[\sum_{j\sim c}d_{cj}^{-2}\right]\;\oplus\;L_{\mathrm{neighbors}}$',fontsize=16,va='center')
     save(fig,'fig3_decomposition')
     (STUDY/'theory_figure_inputs.json').write_text(json.dumps({'case':'1ULR','center_residue':int(case.iloc[idx].residue_number),'support_residue_keys':case.iloc[ids].residue_key.tolist(),'example_points':points.tolist(),'native_laplacian':native.tolist(),'sheaf_laplacian':L.tolist()},indent=2)+'\n',encoding='utf-8')
@@ -132,7 +133,7 @@ def performance_figure():
     ax.axvline(0,color=GRAY,lw=1,ls='--');ax.set_yticks(range(6),[LABELS[m] for m in ORDER[1:]],fontsize=12);ax.invert_yaxis()
     ax.set_xlabel('Paired change in Pearson correlation');ax.grid(axis='x',alpha=.13)
     p=per[per.protocol=='cluster'].pivot(index='protein_id',columns='mode',values='pcc')
-    ax=axs[1,0];title(ax,'c','Each point is a held-out protein')
+    ax=axs[1,0];title(ax,'c','Per-protein comparison')
     ax.plot([-1,1],[-1,1],color=GRAY,lw=1,ls='--');ax.scatter(p['graph'],p['graph+center0'],s=13,c=BLUE,alpha=.45,edgecolors='none')
     for pid in ('1ULR','1X3O'):
         x,y=p.loc[pid,['graph','graph+center0']];ax.scatter(x,y,c=RED,s=45,zorder=4,edgecolors='white')
@@ -150,7 +151,7 @@ def performance_figure():
 def persistence_figure():
     summary=verified_result('d1','summary.csv');pairs=verified_result('d1','paired_differences.csv')
     fig,axs=plt.subplots(2,2,figsize=(10.8,7.4),gridspec_kw={'wspace':.9,'hspace':.6})
-    ax=axs[0,0];title(ax,'a','Degree one: matched additions')
+    ax=axs[0,0];title(ax,'a','Degree-one additions')
     for y,kind in enumerate(('identity','geometric','center')):
         base=f'graph+{kind}0'
         for shift,suffix,c,label in [(-.22,'1',GRAY,'Ordinary lower'),(0,'_upper1',RED,'Ordinary upper'),(.22,'_p1',BLUE,'Persistent')]:
@@ -158,7 +159,7 @@ def persistence_figure():
     ax.axvline(0,c=GRAY,ls='--',lw=1);ax.set_yticks(range(3),['Identity','Geometric','Center-zero']);ax.invert_yaxis()
     ax.set_xlabel('PCC change from graph + degree zero')
     ax.legend(frameon=True,facecolor='white',edgecolor='none',framealpha=1,fontsize=10.5,loc='lower right');ax.set_ylim(4.1,-.45)
-    ax=axs[0,1];title(ax,'b','Persistence versus upper endpoint')
+    ax=axs[0,1];title(ax,'b','Persistence vs. upper endpoint')
     for y,kind in enumerate(('identity','geometric','center')):
         base=f'graph+{kind}0';interval(ax,y,paired(pairs,base+'+'+kind+'_upper1',base+'+'+kind+'_p1'),BLUE)
     ax.axvline(0,c=GRAY,ls='--',lw=1);ax.set_yticks(range(3),['Identity','Geometric','Center-zero']);ax.invert_yaxis()
@@ -198,15 +199,15 @@ def hero_figure(pid='1ULR',readme=False):
         save(fig,'readme_hero');return
     fig=plt.figure(figsize=(7.0,5.6))
     top=.94;bottom=.43
-    for k,name in enumerate(('observed','predicted','shap')):
+    for k,(name,label) in enumerate((('observed','Observed B-factor'),('predicted','Held-out prediction'),('shap','Sheaf contribution'))):
         ax=fig.add_axes([.01+k/3,bottom,.32,top-bottom])
         ax.imshow(plt.imread(OUT/f'renders/{pid}_{name}.png'));ax.axis('off')
-        title(ax,chr(97+k),'')
+        title(ax,chr(97+k),label)
     for left,width,label,field in [(.15,.39,'B-factor z score','observed'),(.746,.17,'SHAP value','shap')]:
         limit=audit['rendering'][field]['mapping']['color_limits'][1];cax=fig.add_axes([left,bottom-.06,width,.018])
         fig.colorbar(ScalarMappable(norm=TwoSlopeNorm(vmin=-limit,vcenter=0,vmax=limit),cmap=CMAP),cax=cax,orientation='horizontal',ticks=[-limit,0,limit],format='%.2g')
         cax.set_xlabel(label,fontsize=10,labelpad=2);cax.tick_params(labelsize=10,pad=2,length=3)
-    ax=fig.add_axes([.075,.06,.58,.17]);title(ax,'d','A residue-by-residue check')
+    ax=fig.add_axes([.075,.06,.58,.17]);title(ax,'d','Residue profiles')
     ax.plot(data.residue_number,data.z_b_factor,c=GRAY,lw=1.2,label='Observed')
     ax.plot(data.residue_number,data.prediction_z,c=BLUE,lw=1.5,label='Prediction')
     ax.set_xlabel('Residue number',fontsize=10.5);ax.set_ylabel('B-factor z score',fontsize=10.5)
@@ -215,12 +216,12 @@ def hero_figure(pid='1ULR',readme=False):
     case=load_case(pid);pts=case[['x','y','z']].to_numpy(float);center=int(np.argmin(abs(case.residue_number.to_numpy()-43)))
     dist=np.linalg.norm(pts-pts[center],axis=1);ids=np.r_[center,np.flatnonzero((dist<=13)&(np.arange(len(pts))!=center))]
     local=pts[ids];s=AlphaSheaf(local,kind='center_zero')
-    ax=fig.add_axes([.72,.01,.24,.23],projection='3d');cloud(ax,local,s,4);title(ax,'e','A local alpha complex')
+    ax=fig.add_axes([.72,.01,.24,.23],projection='3d');cloud(ax,local,s,4);title(ax,'e','Local complex')
     save(fig,'fig1_protein' if pid=='1ULR' else 'supp_1X3O')
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    for flag in ('theory','results','cases','hero','all'):p.add_argument('--'+flag,action='store_true')
+    for flag in ('theory','results','cases','hero','paper','all'):p.add_argument('--'+flag,action='store_true')
     p.add_argument('--rerender',action='store_true',help='Re-render saved case values without refitting or recomputing SHAP')
     args=p.parse_args()
     if args.rerender:
@@ -230,9 +231,10 @@ def main():
         audits={pid:check_case_inputs(pid) for pid in ids}
         render_cases(frames,audits,STUDY/'cases',OUT/'renders',ROOT/'data/raw/figures')
     if args.hero:hero_figure(readme=True)
-    if args.theory or args.all:theory_figures()
-    if args.results or args.all:performance_figure();persistence_figure()
-    if args.cases or args.all:hero_figure();hero_figure('1X3O');hero_figure(readme=True)
+    if args.theory or args.paper or args.all:theory_figures()
+    if args.results or args.paper or args.all:performance_figure();persistence_figure()
+    if args.cases or args.paper or args.all:hero_figure();hero_figure('1X3O')
+    if args.cases or args.all:hero_figure(readme=True)
     previous=json.loads((STUDY/'figure_manifest.json').read_text(encoding='utf-8')) if (STUDY/'figure_manifest.json').exists() else {}
     manifest={'source_sha256':{str(p.relative_to(ROOT)).replace('\\','/'):sha256_file(p) for p in [Path(__file__),ROOT/'scripts/summarize_study.py',ROOT/'scripts/render_protein.py',ROOT/'src/psl_flexibility/sheaf.py']},
         'data_sha256':{**previous.get('data_sha256',{}),**SOURCES,'results/study/dataset/residues.csv':sha256_file(STUDY/'dataset/residues.csv')},

@@ -1,13 +1,13 @@
 {
   "status": "passed",
-  "revision_scope": "Simplified figure styling and updated captions; no new experiments.",
-  "previous_revision": "0e1abff5881a83e07431b4d9fa57b627c0e00ae5",
+  "revision_scope": "Restored concise titles to manuscript figures; colors and approved README hero unchanged.",
+  "previous_revision": "dfc80c4e2bc1008d516b058cb6069e2f190cee50",
   "renderer": "PyMuPDF 1.28.2",
   "dpi": 72,
   "documents": {
     "manuscript": {
       "path": "paper/manuscript.pdf",
-      "sha256": "a88c4e5e18d04567660b55bc9aac20c2abac73fe3370eaaba979dcde75fffca2",
+      "sha256": "0f4041d4b385b4a74e8864b5164b7b784f900591f9bc626039074172fd72c0cc",
       "pages": 42,
       "visually_reviewed_pages": [
         1,
@@ -103,14 +103,12 @@
     "Evidence provenance": "evidence_details"
   },
   "checks": [
-    "All pages reviewed as contact sheets; six figure pages also inspected individually",
-    "All seven figure compositions visually reviewed",
-    "No TeX box, missing-character, or unresolved-reference warnings",
+    "Six changed manuscript pages visually reviewed at 72 dpi; other 36 pages pixel-identical to previous validated PDF",
+    "All six manuscript figure exports visually reviewed",
     "Figure manifest hashes verified",
-    "Case predictions, attributions, backgrounds, cameras, residue mapping, color limits and clipping counts unchanged",
-    "Frozen numerical outputs and scientific modules unchanged",
-    "README hero revised with panel titles, PCC annotation and labeled blue-white-red scales; visually inspected",
-    "Documented figure regeneration and manuscript build commands completed"
+    "No TeX box, missing-character or unresolved-reference warnings",
+    "README hero, molecular renders, predictions, attributions and manuscript text unchanged",
+    "Documented --paper regeneration and manuscript build commands completed"
   ],
   "source_files_checked_unchanged": 99
 }
