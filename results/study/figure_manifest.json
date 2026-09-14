@@ -1,6 +1,6 @@
 {
   "source_sha256": {
-    "scripts/make_figures.py": "4b21fae055b95b20d72886ac17a2e6957862ef9b18721eb5220a913a04dd5f4f",
+    "scripts/make_figures.py": "aef38df5d257a03037d63ea289342131599200caf8867fe79fe9d36496cfd98a",
     "scripts/summarize_study.py": "90c528ecee0c4d600381f7536af2e6e1c38255b02fa78b78bf6c6ecd0b3942a1",
     "scripts/render_protein.py": "5e6c939764893b2df8e34a452e8524fbffecc8d224bd4d3a8404dd1633ff4815",
     "src/psl_flexibility/sheaf.py": "f0bc12e9a28ceb66b92c4a0f2c2c6c89fc0310c620b3f5d54828d4ecc8f4e7e1"
@@ -55,9 +55,9 @@
     "paper/figures/renders/1X3O_shap.png": "9bc27fca492fc651a000b07a8985360735d3961cbd103cec1260de71f8846d0b"
   },
   "exports_sha256": {
-    "paper/figures/fig1_protein.pdf": "d1d2591ec086929e09c5d6d2132898f01ffcff54acdce5d9dff3bade05e831be",
-    "paper/figures/fig1_protein.png": "a0b0032b2f799c13de67db1d238c1636f09f48730e45253a74c77ab59c58a6b6",
-    "paper/figures/fig1_protein.svg": "c4d1a12cb67fb6cf158ffac764ae7855daa43387a345528d8df3da0fbba61153",
+    "paper/figures/fig1_protein.pdf": "abc6f120a1d05c62d66ae8496f353c86a52a62a4262952753f1d6b429203f5ba",
+    "paper/figures/fig1_protein.png": "2dce909725abe1a2bd4b42d3c6f73576930fc9d80a1b34fd1e8c80fbad41a650",
+    "paper/figures/fig1_protein.svg": "7c75f74859ce0d731b3169129b54ce04893936986246b7a67dc8607ff7f1b8bf",
     "paper/figures/fig2_pipeline.pdf": "0b05bec2a9125919a17b9ed246214bfbf8d6ff7c81b020bc38f06348896fbf9f",
     "paper/figures/fig2_pipeline.png": "c7cf65e253d3d9e24a7e916e7bc6f9fb8f9b53941346922a7e6b4c756919823e",
     "paper/figures/fig2_pipeline.svg": "097708dd4abfc1ad231325b4b07bf648ff7754c47b2b9bf04588427b5f55a041",
@@ -73,8 +73,8 @@
     "paper/figures/readme_hero.pdf": "c162cea2d0f5eef3542e2a0152e409f8a05a200b7f9eee941434235dd4d3793a",
     "paper/figures/readme_hero.png": "74b26ae41b371e4f329ae08b5a08f73e286c627b6384b862d84cab5ca743b9f2",
     "paper/figures/readme_hero.svg": "13cb291cbf88c263ee836c136e4713ddbd769470e2be1f78403cfeef24ce7995",
-    "paper/figures/supp_1X3O.pdf": "066e38f70e7e007e96d3e22ba5249f18e9d23ca60b0acf5753dc074d1b4ed83d",
-    "paper/figures/supp_1X3O.png": "221a78c7bdac466116d7f8eb9cefc3546cf8bc38e3383ed6e930a3e660047b3a",
-    "paper/figures/supp_1X3O.svg": "04a2ad8e90e187921f0efc64b30581f74bf24a2ef4734308d52589b010aa2997"
+    "paper/figures/supp_1X3O.pdf": "4c17227406878996172f3e02cc05e6a736f2934c719b9986e5eb63b48605a8c0",
+    "paper/figures/supp_1X3O.png": "0cd4b261b9005afa8456cd749d96fd7afebaf6cdc497e5a98b59176f971490f1",
+    "paper/figures/supp_1X3O.svg": "4b2655845fed6c6870104801e8f42509dabf680b1a368d3884615a752893ba37"
   }
 }

@@ -1,13 +1,13 @@
 {
   "status": "passed",
-  "revision_scope": "Restored concise titles to manuscript figures; colors and approved README hero unchanged.",
-  "previous_revision": "dfc80c4e2bc1008d516b058cb6069e2f190cee50",
+  "revision_scope": "Restored radius and support labels on the two protein local-complex insets.",
+  "previous_revision": "1f9a1c05bcfd931cb9afdaaadcc1f023fa66356a",
   "renderer": "PyMuPDF 1.28.2",
   "dpi": 72,
   "documents": {
     "manuscript": {
       "path": "paper/manuscript.pdf",
-      "sha256": "0f4041d4b385b4a74e8864b5164b7b784f900591f9bc626039074172fd72c0cc",
+      "sha256": "3457990b4b812eacfc3775065f92c18b6d59cf714268baf4d15aa5a9bbd7f8b1",
       "pages": 42,
       "visually_reviewed_pages": [
         1,
@@ -103,12 +103,11 @@
     "Evidence provenance": "evidence_details"
   },
   "checks": [
-    "Six changed manuscript pages visually reviewed at 72 dpi; other 36 pages pixel-identical to previous validated PDF",
-    "All six manuscript figure exports visually reviewed",
+    "Pages 7 and 37 visually reviewed; remaining 40 pages pixel-identical to previous validated PDF",
+    "Radius 4 angstrom and support 13 angstrom labels agree with plotted complexes",
     "Figure manifest hashes verified",
-    "No TeX box, missing-character or unresolved-reference warnings",
-    "README hero, molecular renders, predictions, attributions and manuscript text unchanged",
-    "Documented --paper regeneration and manuscript build commands completed"
+    "No TeX box or unresolved-reference warnings",
+    "Scientific inputs, molecular renders and approved README hero unchanged"
   ],
   "source_files_checked_unchanged": 99
 }

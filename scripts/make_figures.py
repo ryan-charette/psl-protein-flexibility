@@ -217,6 +217,8 @@ def hero_figure(pid='1ULR',readme=False):
     dist=np.linalg.norm(pts-pts[center],axis=1);ids=np.r_[center,np.flatnonzero((dist<=13)&(np.arange(len(pts))!=center))]
     local=pts[ids];s=AlphaSheaf(local,kind='center_zero')
     ax=fig.add_axes([.72,.01,.24,.23],projection='3d');cloud(ax,local,s,4);title(ax,'e','Local complex')
+    ax.text2D(.5,-.04,'Radius: 4 \u00c5\nSupport: 13 \u00c5',transform=ax.transAxes,
+              ha='center',va='top',fontsize=9)
     save(fig,'fig1_protein' if pid=='1ULR' else 'supp_1X3O')
 
 def main():
