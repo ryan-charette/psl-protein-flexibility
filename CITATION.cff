@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: Charette
     given-names: Ryan
-    affiliation: "Independent researcher"
+    affiliation: "The University of Texas at Austin"
 license: MIT
 url: "https://github.com/ryan-charette/psl-protein-flexibility/tree/research-pivot"
 repository-code: "https://github.com/ryan-charette/psl-protein-flexibility"

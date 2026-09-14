@@ -1,13 +1,13 @@
 {
   "status": "passed",
-  "revision_scope": "Restored radius and support labels on the two protein local-complex insets.",
-  "previous_revision": "1f9a1c05bcfd931cb9afdaaadcc1f023fa66356a",
+  "revision_scope": "Corrected author affiliation to The University of Texas at Austin.",
+  "previous_revision": "51c2936b1e8c5b1f4913bd2e461402dc06056ac2",
   "renderer": "PyMuPDF 1.28.2",
   "dpi": 72,
   "documents": {
     "manuscript": {
       "path": "paper/manuscript.pdf",
-      "sha256": "3457990b4b812eacfc3775065f92c18b6d59cf714268baf4d15aa5a9bbd7f8b1",
+      "sha256": "f130774023ebc01d051c7e21fafe006691e30d1e7ae5ba8d6be316dc3114c665",
       "pages": 42,
       "visually_reviewed_pages": [
         1,
@@ -66,7 +66,7 @@
     "paper/generated_persistence_results.tex": "5a0516db9951c6bf20d10818b72e3dd8a87ceca721cf8d89fb89d373c2a3ee16",
     "paper/generated_results.tex": "9f6b83a6a7ac55d860797fd29a4c6da23ec68c8f0045c7b9bf1111b8d01068fa",
     "paper/generated_supplement_results.tex": "2f7534487d20670c16eae5350e5e67933a46492eae63ba27e811f781d9a07c8e",
-    "paper/manuscript.tex": "d45b39249cbebda6e9c66ed6c85ae4cbe32c1151b7c853d879e950c0614cc3af",
+    "paper/manuscript.tex": "c341a7af79fcd2f8279f4cb99f44be0b30bddb94a31646f59846123f0c9bffcf",
     "paper/references.bib": "20e037d4d6ebc02118e0dcbd10775c7e01546ccceb3290e1a4eb31cd0b0c78eb",
     "paper/sections/attribution_details.tex": "5f6e5acdf86b584cc4ce127e10b0f4e46e95d5ef4d1ec9535531961e5056d59b",
     "paper/sections/biology_primer.tex": "8f55787217df5405c1795e2ceb459ffdee2a80d2d64863b37691c662396d1305",
@@ -103,11 +103,9 @@
     "Evidence provenance": "evidence_details"
   },
   "checks": [
-    "Pages 7 and 37 visually reviewed; remaining 40 pages pixel-identical to previous validated PDF",
-    "Radius 4 angstrom and support 13 angstrom labels agree with plotted complexes",
-    "Figure manifest hashes verified",
-    "No TeX box or unresolved-reference warnings",
-    "Scientific inputs, molecular renders and approved README hero unchanged"
+    "Title page visually reviewed; other 41 pages pixel-identical to previous validated PDF",
+    "Affiliation consistent in manuscript, README and CITATION.cff",
+    "Documented manuscript build completed successfully"
   ],
   "source_files_checked_unchanged": 99
 }

@@ -1,6 +1,6 @@
 # Interpreting Local Sheaf Spectra for Protein B-Factor Prediction
 
-Research code, mathematical constructions, and figures for a manuscript by **Ryan Charette, Independent researcher**.
+Research code, mathematical constructions, and figures for a manuscript by **Ryan Charette, The University of Texas at Austin**.
 
 **What information do local sheaf spectra capture, and does it improve protein B-factor prediction beyond simpler geometry?**
 
